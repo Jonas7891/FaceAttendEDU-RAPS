@@ -397,3 +397,404 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
   - Asignación exitosa habilita acciones sobre la ficha.
   - Remoción inmediata o programada revoca acceso según vigencia.
 - **Casos borde:** Responsable retirado con justificaciones pendientes, asignación circular, ficha sin responsable.
+
+#### ERF 2.3.2 Asignar jornadas
+
+- **Propósito:** Vincular responsables a franjas horarias o turnos.
+- **Entradas:** Responsable, jornada, ambiente opcional, ficha opcional, vigencia.
+- **Reglas de negocio:**
+  - Una jornada define inicio, fin, día o patrón recurrente.
+  - Debe validarse zona horaria.
+  - No se permiten solapamientos que generen ambigüedad de responsabilidad, salvo excepción aprobada.
+- **Criterios de aceptación:**
+  - El sistema calcula correctamente la jornada activa por fecha y hora.
+  - La asignación impacta reportes de asistencia y retardos.
+- **Casos borde:** Cambio de horario de verano, jornada cruzada de medianoche, responsable con múltiples jornadas simultáneas.
+
+## RF 3 Generar registros de entradas y salidas
+
+**Finalidad:** Capturar eventos de ingreso y egreso de personal registrado y no registrado, con soporte biométrico móvil y alternativas controladas.
+
+**Plataformas:** Móvil principalmente; web para supervisión y auditoría.
+
+**Dependencias principales:** RF 1, RF 2, RF 4.5, RF 4.7, RF 6.
+
+### ERF 3.1 Registrar ingresos y salidas
+
+- **Propósito:** Crear evento de asistencia con dirección entrada o salida.
+- **Plataforma:** Móvil y API.
+- **Entradas mínimas:** Usuario o credencial temporal, tipo de evento, marca temporal, dispositivo, método, ubicación o ambiente si aplica.
+- **Reglas de negocio:**
+  - Un mismo usuario no puede registrar dos entradas consecutivas sin salida, salvo corrección autorizada.
+  - La marca temporal debe usar hora servidor o sincronización confiable.
+  - El evento debe ser idempotente ante reintentos de red.
+- **Criterios de aceptación:**
+  - Registro exitoso devuelve confirmación y guarda evidencia.
+  - Registro duplicado es detectado y rechazado o corregido según política.
+  - El evento queda vinculado a ficha, ambiente o jornada cuando aplique.
+- **Seguridad:** Firmar payload móvil, validar dispositivo, prevenir replay attacks.
+- **Casos borde:** Sin conexión, reloj del dispositivo alterado, cambio brusco de ubicación, usuario desactivado durante intento.
+
+#### ERF 3.1.1 Registro facial (Móvil)
+
+- **Propósito:** Identificar o verificar al usuario mediante reconocimiento facial en móvil.
+- **Plataforma:** Móvil.
+- **Flujo:** Captura facial, detección de vitalidad, extracción de plantilla, comparación con plantilla registrada, decisión.
+- **Reglas de negocio:**
+  - Requiere consentimiento y registro de enrolamiento previo.
+  - Debe aplicar umbral de coincidencia configurable.
+  - Si falla, habilita ruta alterna: huella, credencial o registro asistido.
+- **Criterios de aceptación:**
+  - Usuario válido es reconocido dentro de umbral aprobado.
+  - Suplantación básica con foto o pantalla debe ser rechazada por mecanismos de liveness.
+  - No se almacena imagen cruda innecesariamente; se conserva plantilla cifrada y metadatos de auditoría.
+- **Seguridad y privacidad:**
+  - Cifrado de plantillas biométricas.
+  - Retención definida.
+  - Prohibición de compartir plantillas entre finalidades no autorizadas.
+  - Registro de intentos fallidos.
+- **Casos borde:** Luz insuficiente, rostro parcialmente cubierto, cambios fisiológicos, dispositivo rooteado o con emulator, fallo de sensor.
+
+#### ERF 3.1.2 Registro alterno (Huella)
+
+- **Propósito:** Usar huella dactilar como método alternativo o complementario.
+- **Plataforma:** Móvil con sensor compatible.
+- **Reglas de negocio:**
+  - Solo disponible si el dispositivo y sistema operativo lo soportan.
+  - Debe respetar enclave seguro del dispositivo cuando exista.
+  - Falla de sensor habilita método alterno.
+- **Criterios de aceptación:**
+  - Huella válida registra asistencia.
+  - Huella no registrada genera error seguro y opción alterna.
+  - No se almacena imagen dactilar cruda fuera del sistema operativo si la plataforma ofrece plantilla segura.
+- **Casos borde:** Dedo húmedo o lesionado, sensor sucio, cambio de dispositivo, usuario con múltiples dedos registrados.
+
+### ERF 3.2 Control de ingresos de personal no registrado
+
+- **Propósito:** Gestionar ingreso de visitantes, contratistas o personas sin cuenta permanente.
+- **Plataforma:** Móvil o web operativa.
+- **Reglas de negocio:**
+  - Requiere anfitrión o responsable que valide el ingreso.
+  - Debe generarse credencial temporal, QR o registro equivalente.
+  - El acceso se limita a zonas, tiempos y finalidades aprobadas.
+- **Criterios de aceptación:**
+  - El sistema registra identidad mínima, motivo, empresa si aplica, hora de ingreso y salida.
+  - No permite acceso a funciones internas sensibles.
+  - La permanencia vencida genera alerta.
+- **Seguridad:** No solicitar datos biométricos salvo base legal y técnica aprobada.
+
+#### ERF 3.2.1 Registro alternativo enfocado a usuarios no registrados
+
+- **Propósito:** Capturar manualmente o con apoyo documental a personas externas.
+- **Entradas mínimas:** Documento, nombres, apellidos, motivo, empresa opcional, anfitrión, vigencia, foto opcional.
+- **Reglas de negocio:**
+  - El registro temporal expira automáticamente.
+  - Debe permitir checkout manual o automático por geocercas si está disponible.
+  - No crea usuario permanente salvo conversión autorizada.
+- **Criterios de aceptación:**
+  - Se genera identificador temporal único.
+  - El anfitrión recibe notificación si la política lo exige.
+  - Queda trazabilidad completa del ingreso y egreso.
+- **Casos borde:** Visitante sin documento, anfitrión no disponible, salida no registrada, extensión de permanencia.
+
+## RF 4 Configuración del sistema
+
+**Finalidad:** Administrar preferencias móviles, alertas, idioma, temas, parámetros de usuario, fallos IoT, cambios de rol y reglas de retardos o justificaciones.
+
+**Plataformas:** Móvil y web administrativa.
+
+**Dependencias principales:** RF 1, RF 3, RF 5, RF 6, RF 7.
+
+### ERF 4.1 Configurar alertas (Móvil)
+
+- **Propósito:** Permitir al usuario gestionar notificaciones del sistema.
+- **Plataforma:** Móvil.
+- **Tipos de alerta:** Asistencia, justificación aprobada o rechazada, fallo IoT, cambio de rol, recordatorios académicos, alertas críticas de seguridad.
+- **Reglas de negocio:**
+  - Las alertas críticas de seguridad o cumplimiento pueden ser no desactivables.
+  - La configuración debe sincronizarse entre dispositivo y servidor si el usuario cambia de móvil.
+- **Criterios de aceptación:**
+  - El usuario activa o desactiva categorías permitidas.
+  - El sistema respeta permisos del sistema operativo.
+  - Las preferencias persisten tras reinicio de app.
+
+#### ERF 4.1.1 Activar/Desactivar alertas
+
+- **Propósito:** Controlar recepción por tipo de evento.
+- **Reglas de negocio:**
+  - Desactivar no suprime registro de auditoría server-side.
+  - Debe existir valor predeterminado seguro.
+- **Criterios de aceptación:**
+  - Cambio inmediato reflejado en próxima notificación.
+  - Alertas obligatorias no pueden desactivarse desde interfaz de usuario final.
+- **Casos borde:** Permiso de notificación denegado por SO, usuario con múltiples dispositivos, sincronización conflictiva.
+
+#### ERF 4.1.2 Cambio en el tono de la notificación
+
+- **Propósito:** Personalizar sonido o vibración.
+- **Reglas de negocio:**
+  - Solo sonidos locales o assets certificados.
+  - Debe respetar accesibilidad y volumen del sistema.
+- **Criterios de aceptación:**
+  - El usuario previsualiza el tono.
+  - La selección persiste por usuario o dispositivo según política.
+  - Si el tono no está disponible, aplica default.
+
+### ERF 4.2 Configurar idiomas (Móvil)
+
+- **Propósito:** Permitir selección de idioma de interfaz.
+- **Idiomas mínimos sugeridos:** Español e inglés; portugués opcional según contexto.
+- **Reglas de negocio:**
+  - Fallback automático a español si traducción falta.
+  - Fechas, números y moneda se formatean según locale.
+- **Criterios de aceptación:**
+  - Cambio de idioma actualiza interfaz sin reinicio obligatorio, o informa si requiere reinicio.
+  - Mensajes de error también se traducen.
+- **Casos borde:** Locale no soportado, texto truncado, mezcla de idiomas por recursos faltantes.
+
+### ERF 4.3 Actualización paletas de colores (Móvil)
+
+- **Propósito:** Aplicar temas visuales y paletas institucionales.
+- **Reglas de negocio:**
+  - Debe mantener contraste accesible.
+  - Modo claro y oscuro recomendados.
+  - Paleta no debe alterar semántica de estados: éxito, advertencia, error.
+- **Criterios de aceptación:**
+  - El usuario selecciona tema y se aplica inmediatamente.
+  - Los componentes críticos conservan legibilidad.
+  - La preferencia persiste.
+- **Casos borde:** Tema personalizado con bajo contraste, actualización de app con paleta incompatible.
+
+### ERF 4.4 Actualización de parámetros del usuario (Móvil)
+
+- **Propósito:** Centralizar ajustes personales del usuario en móvil.
+- **Parámetros:** Idioma, tema, notificaciones, datos de contacto opcionales, enrolamiento biométrico, cambio de contraseña, privacidad.
+- **Reglas de negocio:**
+  - Cambios sensibles requieren reautenticación.
+  - Debe validarse formato y permisos.
+- **Criterios de aceptación:**
+  - Guardado exitoso confirma cambio y audita si es relevante.
+  - Cancelación no persiste modificaciones.
+- **Casos borde:** Sesión expirada durante edición, conflicto de sincronización, permiso de cámara denegado al enrolar rostro.
+
+### ERF 4.5 Gestión de alertas de fallos de dispositivos IoT
+
+- **Propósito:** Supervisar estado operativo de dispositivos conectados.
+- **Eventos mínimos:** Offline, batería baja, sensor fallando, manipulación, lectura inválida, reconexión.
+- **Reglas de negocio:**
+  - Umbrales configurables por tipo de dispositivo.
+  - Escalamiento por responsable si no se atiende en tiempo definido.
+  - Acknowledgment obligatorio para eventos críticos.
+- **Criterios de aceptación:**
+  - El sistema detecta pérdida de heartbeat.
+  - Genera alerta con dispositivo, ubicación, hora y severidad.
+  - Permite asignar ticket o acción correctiva.
+- **Seguridad:** Autenticación mutua dispositivo-servidor, rotación de credenciales, aislamiento de red.
+- **Casos borde:** Dispositivo comprometido, ráfaga de eventos repetidos, falsa alarma por mantenimiento.
+
+### ERF 4.6 Cambio de rol en un usuario
+
+- **Propósito:** Modificar rol asignado a un usuario existente.
+- **Plataforma:** Web.
+- **Reglas de negocio:**
+  - Requiere operador autorizado.
+  - Debe registrarse motivo y vigencia.
+  - Puede revocar sesiones o forzar refresco de permisos.
+- **Criterios de aceptación:**
+  - El nuevo rol se aplica según política inmediata o programada.
+  - El usuario pierde o gana acceso conforme a permisos.
+  - Queda auditoría completa del cambio.
+- **Casos borde:** Cambio de rol propio, rol inexistente, usuario con sesiones múltiples, cambio durante proceso crítico.
+
+### ERF 4.7 Retardos y justificaciones (Parametrización)
+
+- **Propósito:** Configurar reglas para clasificar retardos, inasistencias y aceptación de justificaciones.
+- **Parámetros sugeridos:** Minutos de tolerancia, hora límite de marcación, tipo de inasistencia, plazos de justificación, tipos de soporte aceptados, aprobadores, notificaciones.
+- **Reglas de negocio:**
+  - Los parámetros deben versionarse y tener fecha de vigencia.
+  - Cambios no deben alterar históricos ya cerrados, salvo corrección autorizada.
+  - Debe definirse si el retardo se calcula por jornada, ficha o ambiente.
+- **Criterios de aceptación:**
+  - El sistema clasifica correctamente asistencia, retardo e inasistencia según parámetros vigentes.
+  - Permite consultar parámetros activos y su historial.
+  - Impacta reportes RF 5 y RF 7 sin inconsistencias.
+- **Casos borde:** Cambio de parámetro a mitad de día, jornada cruzada de medianoche, justificación presentada fuera de plazo, zona horaria inconsistente.
+
+## RF 5 Generar históricos
+
+**Finalidad:** Consultar y conservar antecedentes de asistencia, inasistencia y cambios de usuario.
+
+**Plataformas:** Móvil y web.
+
+**Dependencias principales:** RF 1, RF 2, RF 3, RF 4.7.
+
+### ERF 5.1 Asistencias e inasistencias (Móvil) por parámetros
+
+- **Propósito:** Consultar movimientos de asistencia filtrados por fecha, ficha, ambiente, instructor o persona.
+- **Plataforma:** Móvil.
+- **Filtros mínimos:** Rango de fechas, ficha, ambiente, instructor, persona, estado, método de registro.
+- **Reglas de negocio:**
+  - El responsable solo ve datos de su alcance.
+  - El cálculo de inasistencia usa parámetros RF 4.7.
+  - Debe soportar paginación y ordenamiento.
+- **Criterios de aceptación:**
+  - La consulta devuelve resultados consistentes con base de datos.
+  - Los filtros combinados funcionan sin exponer datos no autorizados.
+  - Se muestra detalle del evento: hora, método, dispositivo, estado y justificación asociada si existe.
+- **Casos borde:** Rango de fechas invertido, muchos resultados, usuario sin asignaciones, datos biométricos sin match confirmado.
+
+### ERF 5.2 Historial de cambios del usuario
+
+- **Propósito:** Registrar bitácora de modificaciones al perfil, roles, permisos, estado y credenciales.
+- **Plataforma:** Web y API.
+- **Campos mínimos de auditoría:** Entidad afectada, identificador, operador, fecha/hora, acción, valores anterior y nuevo, IP, dispositivo, motivo.
+- **Reglas de negocio:**
+  - El historial debe ser inmutable o append-only.
+  - Datos sensibles se enmascaran en vista no privilegiada.
+  - Retención según política legal y operativa.
+- **Criterios de aceptación:**
+  - Cada cambio relevante genera registro.
+  - El registro permite reconstruir línea de tiempo del usuario.
+  - Solo roles autorizados consultan historial completo.
+- **Casos borde:** Cambio simultáneo por dos administradores, importación CSV masiva, borrado lógico, acceso desde sesión comprometida.
+
+## RF 6 Gestión de justificaciones
+
+**Finalidad:** Permitir presentar, revisar, aprobar o rechazar soportes que expliquen irregularidades de asistencia.
+
+**Plataformas:** Móvil y web.
+
+**Dependencias principales:** RF 1, RF 3, RF 4.7, RF 5.
+
+### ERF 6.1 Carga de soportes de justificación
+
+- **Propósito:** Subir documento o imagen que respalde una inasistencia o retardo.
+- **Plataforma:** Móvil y web.
+- **Entradas:** Evento de asistencia asociado, tipo de justificación, descripción, archivo.
+- **Formatos mínimos sugeridos:** PDF, JPG, PNG.
+- **Reglas de negocio:**
+  - Tamaño máximo configurable.
+  - Solo eventos permitidos por plazo pueden justificarse.
+  - El archivo debe analizarse contra malware.
+- **Criterios de aceptación:**
+  - Carga exitosa asocia soporte al evento.
+  - Formato no permitido es rechazado con mensaje claro.
+  - Queda huella digital o hash del archivo.
+- **Seguridad:** Almacenamiento cifrado, control de acceso, eliminación segura si corresponde.
+- **Casos borde:** Archivo corrupto, nombre con caracteres especiales, subida interrumpida, documento sensible expuesto en miniatura.
+
+### ERF 6.2 Aprobación y rechazo
+
+- **Propósito:** Permitir al evaluador decidir sobre la justificación.
+- **Plataforma:** Web y móvil según rol.
+- **Estados sugeridos:** Pendiente, en revisión, aprobada, rechazada, cerrada.
+- **Reglas de negocio:**
+  - Solo aprobadores designados pueden resolver.
+  - El rechazo requiere comentario obligatorio.
+  - No se permite doble resolución sin anulación auditada.
+- **Criterios de aceptación:**
+  - Aprobación actualiza estado del evento si la política lo exige.
+  - Rechazo notifica al solicitante.
+  - Toda decisión queda auditada con aprobador, fecha y motivo.
+- **Casos borde:** Aprobador sin permisos, justificación ya resuelta, cambio de parámetros durante revisión, apelación si existe.
+
+### ERF 6.3 Notificación automática del resultado (A/R)
+
+- **Propósito:** Informar automáticamente al usuario sobre aprobación o rechazo.
+- **Canales:** Push móvil, correo, SMS opcional.
+- **Reglas de negocio:**
+  - Plantilla clara y sin datos sensibles innecesarios.
+  - Reintentos si el canal falla.
+  - Registro de entrega.
+- **Criterios de aceptación:**
+  - El usuario recibe notificación tras decisión.
+  - La notificación incluye enlace seguro al detalle.
+  - Falla de envío genera alerta operativa y reintento.
+- **Casos borde:** Notificación desactivada, correo lleno, número inválido, duplicidad de envío por reintento.
+
+## RF 7 Visualización y reportes avanzados
+
+**Finalidad:** Proveer consulta analítica, exportación y reportes operativos sobre asistencia, retardos, inasistencias y actividad del sistema.
+
+**Plataformas:** Web principalmente; móvil para consulta reducida.
+
+**Dependencias principales:** RF 2, RF 3, RF 4.7, RF 5, RF 6.
+
+### ERF 7.1 Exportar reporte
+
+- **Propósito:** Generar archivo descargable con datos filtrados.
+- **Formatos mínimos:** CSV, XLSX, PDF.
+- **Reglas de negocio:**
+  - Exportaciones grandes deben ser asíncronas.
+  - El enlace de descarga expira.
+  - Se aplica enmascarado según rol.
+  - CSV debe mitigar inyección de fórmulas.
+- **Criterios de aceptación:**
+  - El archivo exportado coincide con filtros vistos en pantalla.
+  - Se registra auditoría de exportación: usuario, filtros, formato, fecha.
+  - No exporta datos fuera del alcance autorizado.
+- **Casos borde:** Dataset vacío, timeouts, sensibilidad de datos, descarga repetida, archivo corrupto.
+
+### ERF 7.2 Dashboard analítico
+
+- **Propósito:** Visualizar indicadores clave de asistencia, justificaciones, retardos, fallos IoT y actividad de usuarios.
+- **Plataforma:** Web.
+- **KPIs sugeridos:** Tasa de asistencia, tasa de retardo, inasistencias por ficha, justificaciones pendientes, aprobación/rechazo, dispositivos IoT con fallo, usuarios activos.
+- **Reglas de negocio:**
+  - Filtros globales por periodo, ambiente, ficha e instructor.
+  - Drill-down a detalle.
+  - Actualización periódica o bajo demanda.
+- **Criterios de aceptación:**
+  - Los indicadores calculan correctamente según parámetros vigentes.
+  - Tiempos de carga aceptables para volumen esperado.
+  - Acceso restringido por rol.
+- **Casos borde:** Datos nulos, rangos largos, concurrencia de consultas pesadas, caché desactualizada.
+
+### ERF 7.3 Reportes por rango de fechas
+
+- **Propósito:** Consultar información acotada temporalmente.
+- **Reglas de negocio:**
+  - Fecha inicio no mayor a fecha fin.
+  - Límite máximo de rango configurable.
+  - Zona horaria explícita.
+  - Los días son inclusivos o exclusivos según definición documentada.
+- **Criterios de aceptación:**
+  - El reporte devuelve solo eventos dentro del rango.
+  - Errores de rango se muestran claramente.
+  - Cruces de medianoche se calculan correctamente.
+- **Casos borde:** Horario de verano, rango de un solo día, fecha futura, zona horaria del dispositivo distinta al servidor.
+
+### ERF 7.4 Consulta de retardos e inasistencias por parámetros
+
+- **Propósito:** Listar eventos clasificados como retardo o inasistencia según filtros.
+- **Filtros:** Fecha, ficha, ambiente, instructor, persona, tipo de evento, estado de justificación.
+- **Reglas de negocio:**
+  - Usa parámetros RF 4.7.
+  - Debe mostrar causa de clasificación: hora de marcación, tolerancia, ausencia de salida, etc.
+- **Criterios de aceptación:**
+  - La consulta es consistente con históricos RF 5.
+  - Permite exportar resultado.
+  - Respeta alcance del responsable.
+- **Casos borde:** Evento sin jornada asignada, justificación aprobada que revierte inasistencia, cambio retroactivo de parámetros.
+
+## RF 8 Gestión del colegio
+
+**Finalidad:** Administrar catálogo de cursos y planes de estudio asociados a materias y fichas académicas.
+
+**Plataformas:** Web.
+
+**Dependencias principales:** RF 2, RF 5, RF 7.
+
+### ERF 8.1 Agregar y eliminar cursos
+
+- **Propósito:** Mantener el catálogo maestro de cursos ofrecidos por el colegio.
+- **Entradas mínimas:** Código, nombre, descripción, duración, modalidad, estado.
+- **Reglas de negocio:**
+  - Código único.
+  - Eliminación lógica si existen fichas, planes o históricos asociados.
+  - Inactivar curso impide nuevas fichas, pero conserva reportes previos.
+- **Criterios de aceptación:**
+  - Crear curso exitoso lo habilita para asignación en fichas.
+  - Editar curso conserva trazabilidad si cambia datos críticos.
+  - Eliminar o inactivar exige confirmación y auditoría.
+- **Casos borde:** Curso con fichas activas, duplicidad de código, cambio de modalidad con alumnos asignados.
