@@ -798,3 +798,269 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
   - Editar curso conserva trazabilidad si cambia datos críticos.
   - Eliminar o inactivar exige confirmación y auditoría.
 - **Casos borde:** Curso con fichas activas, duplicidad de código, cambio de modalidad con alumnos asignados.
+
+### ERF 8.2 Plan de estudios de las materias
+
+- **Propósito:** Definir estructura académica de materias, horas, secuencia y prerrequisitos.
+- **Entradas mínimas:** Curso, materia, código, intensidad horaria, orden, prerrequisitos opcionales, competencias, vigencia.
+- **Reglas de negocio:**
+  - El plan debe versionarse.
+  - Una ficha se asocia a una versión vigente del plan.
+  - No se permite borrar plan con fichas activas; se inactiva o cierra versión.
+- **Criterios de aceptación:**
+  - Publicar plan lo hace disponible para fichas.
+  - Consultar plan muestra materias y horas correctamente.
+  - Cambios de versión no alteran históricos cerrados.
+- **Casos borde:** Prerrequisito circular, materia sin horas, plan publicado sin revisión, cambio de plan a mitad de periodo.
+
+# Matriz de trazabilidad de requisitos
+
+| ID | Nombre | Plataforma | Depende de | Prioridad |
+|---|---|---|---|---|
+| ERF 1.1 | Registrar usuarios | Web | RF 4.6 | Alta |
+| ERF 1.1.1 | Asignación de roles | Web | ERF 1.1 | Alta |
+| ERF 1.1.2 | Asignación de permisos | Web/API | ERF 1.1.1 | Alta |
+| ERF 1.2 | Registro masivo CSV | Web | ERF 1.1 | Media |
+| ERF 1.3 | Inicio de sesión móvil | Móvil | ERF 1.1 | Alta |
+| ERF 1.4 | Recuperación de contraseña | Web/Móvil | ERF 1.3 | Alta |
+| ERF 1.5 | Cambio de contraseña | Web/Móvil | ERF 1.3 | Alta |
+| ERF 1.6 | Activar o desactivar usuarios | Web | ERF 1.1 | Alta |
+| ERF 1.7 | Eliminar usuarios | Web | ERF 1.6 | Media |
+| ERF 1.8 | Consulta de información del usuario | Web/Móvil | ERF 1.1 | Media |
+| ERF 2.1 | Registrar ambientes | Web | RF 1 | Media |
+| ERF 2.2 | Registrar fichas o cursos | Web | ERF 8.1 | Alta |
+| ERF 2.3 | Asignar responsables | Web | ERF 1.1 | Alta |
+| ERF 2.3.1 | Asignar fichas | Web | ERF 2.2 | Alta |
+| ERF 2.3.2 | Asignar jornadas | Web | ERF 2.1 | Alta |
+| ERF 3.1 | Registrar ingresos y salidas | Móvil/API | ERF 2.3 | Crítica |
+| ERF 3.1.1 | Registro facial móvil | Móvil | ERF 3.1 | Crítica |
+| ERF 3.1.2 | Registro alterno huella | Móvil | ERF 3.1 | Alta |
+| ERF 3.2 | Control de personal no registrado | Móvil/Web | ERF 3.1 | Alta |
+| ERF 3.2.1 | Registro alternativo temporal | Móvil/Web | ERF 3.2 | Alta |
+| ERF 4.1 | Configurar alertas móvil | Móvil | ERF 1.3 | Media |
+| ERF 4.1.1 | Activar o desactivar alertas | Móvil | ERF 4.1 | Media |
+| ERF 4.1.2 | Cambio de tono | Móvil | ERF 4.1 | Baja |
+| ERF 4.2 | Configurar idiomas | Móvil | ERF 1.3 | Media |
+| ERF 4.3 | Actualización paletas | Móvil | ERF 1.3 | Baja |
+| ERF 4.4 | Parámetros del usuario | Móvil | ERF 1.1 | Media |
+| ERF 4.5 | Alertas de fallos IoT | Web/Móvil | Infraestructura IoT | Alta |
+| ERF 4.6 | Cambio de rol | Web | ERF 1.1.1 | Alta |
+| ERF 4.7 | Parametrización retardos | Web | ERF 2.3.2 | Crítica |
+| ERF 5.1 | Históricos de asistencia móvil | Móvil | ERF 3.1 | Alta |
+| ERF 5.2 | Historial de cambios de usuario | Web/API | ERF 1.1 | Alta |
+| ERF 6.1 | Carga de soportes | Móvil/Web | ERF 3.1 | Alta |
+| ERF 6.2 | Aprobación y rechazo | Web/Móvil | ERF 6.1 | Alta |
+| ERF 6.3 | Notificación de resultado | Móvil/Web | ERF 6.2 | Media |
+| ERF 7.1 | Exportar reporte | Web | ERF 5.1 | Media |
+| ERF 7.2 | Dashboard analítico | Web | ERF 5.1 | Media |
+| ERF 7.3 | Reportes por rango de fechas | Web | ERF 5.1 | Alta |
+| ERF 7.4 | Consulta retardos e inasistencias | Web/Móvil | ERF 4.7 | Alta |
+| ERF 8.1 | Agregar o eliminar cursos | Web | RF 2 | Media |
+| ERF 8.2 | Plan de estudios | Web | ERF 8.1 | Media |
+
+# Requisitos no funcionales derivados
+
+Aunque el enunciado original se centra en requisitos funcionales, los siguientes requisitos no funcionales son necesarios para llevar el sistema a nivel de producción.
+
+| Código | Categoría | Requisimiento | Criterio verificable |
+|---|---|---|---|
+| NFR-SEG-01 | Seguridad | Autenticación y autorización robustas | Tokens firmados, expiración corta, RBAC server-side |
+| NFR-SEG-02 | Seguridad | Protección contra inyección y XSS | Validación de entradas, escaping, CSP cuando aplique |
+| NFR-PRIV-01 | Privacidad | Tratamiento seguro de datos biométricos | Plantillas cifradas, consentimiento, retención definida |
+| NFR-PRIV-02 | Privacidad | Minimización de datos personales en logs | Enmascarado de correos, documentos y tokens |
+| NFR-PERF-01 | Rendimiento | Inicio de sesión móvil | P95 menor o igual a tres segundos en red estable |
+| NFR-PERF-02 | Rendimiento | Registro de asistencia | Confirmación local o servidor en menos de cinco segundos |
+| NFR-PERF-03 | Rendimiento | Consultas de históricos | Paginación y tiempo de respuesta aceptable hasta volumen definido |
+| NFR-AVL-01 | Disponibilidad | Servicio crítico de asistencia | Objetivo de disponibilidad acordado, por ejemplo 99.5 por ciento mensual |
+| NFR-USU-01 | Usabilidad | Flujos móviles claros | Menos de cinco pasos para marcar asistencia con biometría registrada |
+| NFR-ACC-01 | Accesibilidad | Contraste y navegación | Cumplimiento básico WCAG 2.2 para interfaz web (World Wide Web Consortium, 2023) |
+| NFR-MNT-01 | Mantenibilidad | Modularidad | Cada RF implementable como módulo con pruebas independientes |
+| NFR-PORT-01 | Portabilidad | Soporte móvil | Android e iOS según versiones mínimas acordadas |
+| NFR-AUD-01 | Auditoría | Trazabilidad | Todos los cambios críticos generan log inmutable |
+| NFR-IOT-01 | Confiabilidad IoT | Detección de fallos | Heartbeat y alerta en intervalo máximo definido |
+
+# Riesgos técnicos y de negocio identificados
+
+| Riesgo | Impacto | Probabilidad | Mitigación |
+|---|---|---|---|
+| Falso positivo en registro facial | Acceso indebido o asistencia incorrecta | Media | Liveness, umbral configurable, auditoría, método alterno |
+| Falso negativo biométrico | Negación de servicio al usuario legítimo | Media-Alta | Huella, credencial, registro asistido, soporte operativo |
+| Exposición de datos en CSV | Violación de privacidad | Media | Sanitización, control de acceso, cifrado, retención temporal |
+| Escalada de privilegios por roles | Compromiso administrativo | Baja-Media | RBAC server-side, segregación de funciones, auditoría |
+| Alertas IoT falsas | Fatiga de operación | Alta | Umbrales, supresión de duplicados, mantenimiento programado |
+| Reportes con datos fuera de alcance | Filtración informativa | Media | Filtros por responsable, pruebas de autorización |
+| Cambios retroactivos de parámetros | Inconsistencia histórica | Media | Versionado de parámetros, cierre de periodos, auditoría |
+| Falta de conexión en móvil | Pérdida de registro de asistencia | Media | Cola local segura, sincronización idempotente, marca temporal fiable |
+
+# Plan de verificación y validación
+
+## Verificación estática
+
+- Revisión de este informe por producto, desarrollo, QA, seguridad y privacidad.
+- Comprobación de consistencia entre RF, ERF, roles, plataformas y dependencias.
+- Validación de que cada requerimiento tenga criterio de aceptación medible.
+
+## Pruebas unitarias
+
+- Validadores de campos personales.
+- Servicios de autenticación y recuperación.
+- Cálculo de retardos según parámetros.
+- Parseo y sanitización de CSV.
+- Reglas de RBAC y permisos.
+
+## Pruebas de integración
+
+- Registro de usuario con asignación de rol y permiso.
+- Importación CSV con creación masiva y reporte de errores.
+- Inicio de sesión móvil con emisión y revocación de tokens.
+- Registro facial o huella vinculado a evento de asistencia.
+- Carga de justificación y cambio de estado.
+- Generación de alerta IoT y notificación.
+
+## Pruebas end-to-end
+
+- Flujo completo: crear usuario, asignar rol, importar ficha, asignar responsable, marcar asistencia, justificar retardo, aprobar justificación, exportar reporte.
+- Flujo de visitante no registrado: ingreso temporal, permanencia, salida y cierre.
+- Flujo de cambio de rol con revocación de sesión y actualización de permisos.
+
+## Pruebas de seguridad
+
+- Intentos de enumeración de usuarios en recuperación de contraseña.
+- Reutilización de tokens de recuperación.
+- Inyección de fórmulas en CSV exportado.
+- Acceso horizontal y vertical no autorizado en históricos y reportes.
+- Suplantación básica en registro facial, si la tecnología lo permite evaluar.
+- Revisión de almacenamiento y transmisión de datos biométricos conforme a OWASP ASVS (OWASP Foundation, 2021).
+
+## Pruebas de rendimiento
+
+- Carga concurrente en inicio de sesión móvil.
+- Volumen alto de eventos de asistencia por jornada.
+- Consultas de dashboard con rango amplio.
+- Exportación asíncrona de reportes grandes.
+
+## Validación con usuarios
+
+- UAT con administradores, responsables académicos y personal operativo.
+- Verificación de usabilidad móvil en condiciones reales de iluminación, red y dispositivo.
+- Confirmación de que los reportes coinciden con expectativas de negocio.
+
+# Consideraciones de seguridad y privacidad
+
+## Datos biométricos
+
+Los datos biométricos son categorías sensibles. El sistema debe:
+
+- Obtener consentimiento informado cuando aplique.
+- Almacenar plantillas cifradas, no imágenes crudas salvo necesidad técnica justificada y aprobada.
+- Limitar acceso a plantillas mediante segregación de servicios.
+- Definir retención y eliminación segura al salir el usuario o revocar consentimiento.
+- Registrar intentos de autenticación biométrica fallidos sin exponer datos sensibles en logs.
+- Evaluar riesgo de sesgo algorítmico y falsos negativos por condiciones físicas o ambientales.
+
+## Autenticación y sesiones
+
+- Contraseñas con hash fuerte, por ejemplo Argon2, bcrypt o scrypt según estándar adoptado.
+- MFA para roles críticos si el riesgo lo justifica.
+- Revocación de sesiones al cambiar contraseña, rol o estado.
+- Protección contra fuerza bruta y credential stuffing.
+
+## Importación y exportación
+
+- Validar MIME real, no solo extensión.
+- Escanear archivos contra malware.
+- Prevenir CSV injection anteponiendo carácter seguro a campos de riesgo.
+- Limitar descarga de reportes a usuarios autorizados.
+- Registrar auditoría de exportación con filtros usados.
+
+## IoT
+
+- Credenciales únicas por dispositivo.
+- Rotación periódica.
+- Comunicación cifrada.
+- Segmentación de red.
+- Monitoreo de anomalías y firmware vulnerable.
+
+# Anexos
+
+## Anexo A. Diccionario operativo mínimo
+
+| Término | Definición operativa |
+|---|---|
+| Usuario | Persona natural con identidad digital en el sistema |
+| Rol | Conjunto de responsabilidades que agrupa permisos |
+| Permiso | Capacidad técnica para ejecutar una acción |
+| Ambiente | Espacio físico o lógico donde ocurre actividad |
+| Ficha | Grupo académico u operativo asociado a curso, periodo y responsables |
+| Jornada | Franja horaria o turno de operación académica |
+| Asistencia | Registro válido de presencia dentro de parámetros definidos |
+| Retardo | Presencia fuera de tolerancia configurada |
+| Inasistencia | Ausencia no justificada o no registrada según regla vigente |
+| Justificación | Soporte documental que explica irregularidad |
+| Dispositivo IoT | Elemento conectado que genera telemetría o eventos |
+| Auditoría | Registro trazable de acciones sobre el sistema |
+
+## Anexo B. Estructura mínima recomendada para importación CSV
+
+Encabezado sugerido:
+
+`documento,tipo_documento,nombres,apellidos,correo,telefono,rol_inicial,estado`
+
+Reglas:
+
+- Codificación UTF-8.
+- Delimitador coma o punto y coma según configuración.
+- Primera fila obligatoria de cabecera.
+- Campos textuales entre comillas si contienen delimitadores.
+- Fechas en formato ISO 8601 cuando aplique.
+- Valores vacíos permitidos solo en campos opcionales.
+- Cualquier campo que inicie con signo igual, más, menos, arroba, tabulador o retorno de carro debe sanitizarse antes de exportar nuevamente.
+
+## Anexo C. Ejemplo de matriz RBAC mínima
+
+| Acción | Administrador | Responsable académico | Personal registrado | Visitante temporal |
+|---|---|---|---|---|
+| Crear usuario | Sí | No | No | No |
+| Asignar rol | Sí | No | No | No |
+| Ver su asistencia | Sí | Sí si asignado | Sí | No |
+| Marcar asistencia | No aplica | Sí | Sí | Sí temporal |
+| Aprobar justificación | Sí | Sí si asignado | No | No |
+| Exportar reporte global | Sí | No | No | No |
+| Configurar IoT | Sí | No | No | No |
+| Cambiar propio password | Sí | Sí | Sí | No |
+
+Nota: Esta matriz es ilustrativa. La matriz definitiva debe aprobarse por seguridad, producto y cumplimiento normativo.
+
+## Anexo D. Estados sugeridos para justificaciones
+
+| Estado | Descripción | Transiciones permitidas |
+|---|---|---|
+| Pendiente | Recibida y awaiting review | En revisión, rechazada por plazo |
+| En revisión | Under evaluation by approver | Aprobada, rechazada |
+| Aprobada | Aceptada y surte efecto operativo | Cerrada, reapertura autorizada |
+| Rechazada | No aceptada con motivo | Resubmission si plazo permite |
+| Cerrada | Proceso finalizado | Reapertura solo con autorización especial |
+
+# Conclusiones
+
+El presente informe transforma la lista inicial de requerimientos funcionales en una especificación técnica verificable. Cada RF y ERF fue desglosado con propósito, plataforma, reglas, criterios de aceptación, seguridad, casos borde y pruebas asociadas. Esta estructura permite reducir ambigüedad, alinear desarrollo y QA, proteger datos sensibles y sostener trazabilidad ante auditorías.
+
+Los puntos más críticos del sistema son: gestión segura de roles y permisos, registro biométrico confiable, control de personal no registrado, parametrización consistente de retardos y justificaciones, y reportes que respeten alcance por responsable. Ignorar estos aspectos puede generar falsas asistencias, exposición de datos, inconsistencias históricas o disfunción operativa.
+
+Para implementación en producción, se recomienda validar este informe con áreas de producto, seguridad, privacidad, calidad y usuarios clave antes de congelar alcance. Posteriormente, cada ERF debe trazarse a épicas, historias de usuario, casos de prueba, commits, pipelines y evidencias de despliegue.
+
+**Nota del autor.** Jonas es el autor y responsable técnico del documento. La correspondencia relacionada con este informe puede dirigirse a jonas@consultoria.example. El autor declara la ausencia de conflictos de interés y de financiación externa para la elaboración de este documento.
+
+# Referencias
+
+American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7th ed.). https://doi.org/10.1037/0000165-000
+
+International Organization for Standardization. (2015). *Quality management systems — Requirements* (ISO 9001:2015). https://www.iso.org/standard/62085.html
+
+International Organization for Standardization & International Electrotechnical Commission. (2011). *Systems and software engineering — Systems and software quality requirements and evaluation (SQuaRE) — System and software quality models* (ISO/IEC 25010:2011). https://www.iso.org/standard/35733.html
+
+International Organization for Standardization, International Electrotechnical Commission, & Institute of Electrical and Electronics Engineers. (2018). *Systems and software engineering — Life cycle processes — Requirements engineering* (ISO/IEC/IEEE 29148:2018). https://www.iso.org/standard/72089.html
+
+OWASP Foundation. (2021). *OWASP Application Security Verification Standard 4.0*. https://owasp.org/www-project-application-security-verification-standard/
+
+World Wide Web Consortium. (2023). *Web Content Accessibility Guidelines (WCAG) 2.2*. https://www.w3.org/TR/WCAG22/
