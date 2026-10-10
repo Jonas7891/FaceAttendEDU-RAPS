@@ -113,8 +113,6 @@ Para declarar la instalación como exitosa, se debe ejecutar el siguiente protoc
 
 El procedimiento de implementación de FaceAttendEDU minimiza la intervención manual mediante la automatización con Docker. La separación de redes y la orquestación dependiente aseguran que el sistema se despliegue de forma consistente, reduciendo drásticamente el tiempo de puesta en marcha y eliminando la problemática de "funciona en mi máquina".
 
-**Nota del autor.** Jonattan Steven Rizo Solano es el responsable técnico de la estrategia de implementación. La correspondencia técnica puede dirigirse a jonas@consultoria.example.
-
 # Referencias
 
 American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7th ed.). https://doi.org/10.1037/0000165-000
