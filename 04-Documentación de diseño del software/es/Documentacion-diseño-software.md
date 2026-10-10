@@ -16,7 +16,7 @@ keywords:
 
 El diseño arquitectónico de FaceAttendEDU representa la traducción de los requerimientos funcionales y no funcionales en una estructura técnica robusta. A diferencia del análisis de software, que define el "qué" y el "por qué", este documento se centra en el "cómo": la organización del código, la gestión de datos, la comunicación entre componentes y la selección tecnológica.
 
-El sistema ha sido concebido bajo un enfoque de **Polyglot Modular Monolith** (organizado en un monorepo), donde cada módulo opera como un microservicio independiente con su propio contexto delimitado (*bounded context*), permitiendo la coexistencia de múltiples lenguajes de programación según la necesidad técnica (Java, TypeScript, Python y Go).
+El sistema ha sido concebido bajo un enfoque de **Polyglot Modular Monolith** (organizado en un monorepo), donde cada módulo opera como un microservicio independiente con su propio contexto delimitado (*bounded context*), permitiendo la coexistencia de múltiples lenguajes de programación según la necesidad técnica (Java, TypeScript, JavaScript, Python y Go).
 
 ## Objetivo del documento
 Proporcionar una descripción detallada y formal de la arquitectura del sistema, los patrones de diseño aplicados y el modelo de datos, estableciendo la base técnica para la implementación, el despliegue y la evolución del software.
