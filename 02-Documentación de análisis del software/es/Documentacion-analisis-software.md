@@ -14,41 +14,23 @@ keywords:
   - sistema académico
 ---
 
-# Resumen
-
-La documentación de análisis del software es el artefacto que permite comprender el problema, el contexto, las necesidades de las partes interesadas y las condiciones necesarias para que una solución tecnológica genere valor real. En proyectos de software educativo o administrativo, este análisis resulta crítico porque integra procesos humanos, restricciones normativas, seguridad de la información, usabilidad móvil, trazabilidad de asistencia y reportes para la toma de decisiones.
-
-El presente documento analiza un sistema orientado a la gestión de usuarios, ambientes, fichas o cursos, responsables, jornadas, registros de entrada y salida, personal no registrado, configuración móvil, alertas de dispositivos IoT, históricos, justificaciones, reportes avanzados y gestión del colegio. Se parte de una situación caracterizada por procesos fragmentados, riesgos de seguridad, inconsistencias entre diseño y desarrollo, dificultades de navegación móvil, ausencia de roles completos y necesidad de fortalecer protocolos contra falsificación.
-
-El análisis establece los objetivos del proyecto, delimita el alcance, explica por qué se realizó la iniciativa, para qué servirá el sistema, cuál es su finalidad estratégica, qué aporta durante la creación del software y quiénes resultan beneficiados. También identifica riesgos, supuestos, limitaciones, criterios de éxito y recomendaciones para la siguiente fase del ciclo de vida. Su propósito es reducir ambigüedad, alinear expectativas y proporcionar una base verificable para la especificación de requisitos, el diseño arquitectónico, la implementación, las pruebas y la mejora continua.
-
-**Palabras clave:** análisis de software, ingeniería de requisitos, objetivos del proyecto, alcance funcional, justificación, beneficiarios, calidad de software, sistema académico.
-
 # Introducción
 
-El desarrollo de software no debe iniciarse únicamente a partir de una lista de funcionalidades. Antes de construir, integrar o desplegar una solución, es necesario analizar el problema, el contexto organizacional, los actores involucrados, las restricciones técnicas, los riesgos de seguridad, los objetivos de negocio y los criterios que permitirán determinar si el sistema es exitoso. Este proceso corresponde al análisis de software y es una fase fundamental dentro de los procesos de ciclo de vida y de ingeniería de requisitos (International Organization for Standardization, International Electrotechnical Commission, & Institute of Electrical and Electronics Engineers [ISO, IEC, & IEEE], 2018).
+La documentación de análisis del software para el sistema FaceAttendEDU permite comprender el problema, el contexto y las condiciones necesarias para que la solución tecnológica genere valor real. En este proyecto, el análisis es crítico ya que integra procesos humanos, restricciones normativas, seguridad de la información y trazabilidad de asistencia.
 
-En el caso del sistema objeto de este documento, el análisis se orienta a una plataforma de gestión académica y administrativa con componentes web y móviles. La solución pretende soportar la administración de usuarios, roles y permisos; la gestión de ambientes, fichas, responsables y jornadas; el registro de entradas y salidas mediante métodos biométricos o alternos; el control de personal no registrado; la configuración de alertas, idiomas, paletas y parámetros; la generación de históricos; la gestión de justificaciones; la producción de reportes avanzados y la administración del catálogo de cursos y planes de estudio.
-
-El análisis también responde a hallazgos detectados durante el avance del proyecto, entre ellos: errores en campos de fecha en la aplicación móvil, problemas de navegación, ausencia de sección de preguntas de seguridad, necesidad de revisar protocolos para evitar falsificación, visualización limitada al rol administrador y discrepancias entre el mockup móvil y el desarrollo real. Estos hallazgos confirman la necesidad de un documento analítico que ordene prioridades, delimite responsabilidades y establezca criterios verificables antes de continuar con implementación.
-
-La estructura y citación de este documento siguen principios coherentes con la séptima edición de las Normas APA (American Psychological Association [APA], 2020). En formato Markdown se preserva la semántica documental; la apariencia visual propia de APA, como interlineado doble, márgenes de una pulgada, sangría francesa y tipografía normativa, debe garantizarse en la exportación final a `.docx` o `.pdf`.
+El sistema se orienta a la gestión de usuarios, ambientes, fichas, registros de asistencia y reportes avanzados, partiendo de una situación de procesos fragmentados y riesgos de seguridad. Este documento establece los objetivos, delimita el alcance y proporciona una base verificable para la especificación de requisitos y el diseño arquitectónico, reduciendo la ambigüedad y alineando las expectativas de los stakeholders.
 
 ## Objetivo del documento
-
-Analizar formalmente el contexto, los objetivos, el alcance, la justificación, la utilidad, la finalidad, los aportes y los beneficiarios del proyecto de software, con el fin de establecer una base documentada que oriente la especificación de requisitos, el diseño, la implementación, las pruebas, el despliegue y la mejora continua.
+Analizar formalmente el contexto, los objetivos, el alcance y la viabilidad del proyecto para orientar la especificación de requisitos, el diseño, la implementación y la mejora continua.
 
 ## Alcance del documento
-
-Este documento aplica al análisis preliminar y estratégico del sistema de gestión académica, administrativa y de asistencia. Incluye la identificación del problema, los objetivos del proyecto, el alcance funcional y no funcional, las partes interesadas, los riesgos, los criterios de éxito y las recomendaciones para fases posteriores.
-
-No sustituye el informe de especificación de requisitos, el diseño arquitectónico, el modelo de datos físico, el plan de pruebas detallado ni el análisis jurídico definitivo sobre protección de datos personales o biométricos.
+Este documento cubre el análisis estratégico del sistema (problema, objetivos, riesgos y criterios de éxito). No sustituye el informe de especificación de requisitos ni el diseño arquitectónico detallado.
 
 # Contexto del proyecto
 
 ## Descripción general del sistema
 
-El sistema es una plataforma compuesta por una aplicación web administrativa y una aplicación móvil operativa. Su propósito es digitalizar y controlar procesos relacionados con la identidad digital de los usuarios, la asignación de roles y permisos, la gestión de ambientes académicos, el registro de asistencia, el control de访问 de personal no registrado, la parametrización de reglas de retardos y justificaciones, la generación de históricos, la producción de reportes y la administración del catálogo académico del colegio.
+El sistema es una plataforma compuesta por una aplicación web administrativa y una aplicación móvil operativa. Su propósito es digitalizar y controlar procesos relacionados con la identidad digital de los usuarios, la asignación de roles y permisos, la gestión de ambientes académicos, el registro de asistencia, el control de de personal no registrado, la parametrización de reglas de retardos y justificaciones, la generación de históricos, la producción de reportes y la administración del catálogo académico del colegio.
 
 La solución se apoya en componentes de autenticación, biometría, notificaciones, gestión documental, auditoría, reportes analíticos y monitoreo de dispositivos IoT. Por su naturaleza, requiere controles robustos de seguridad, privacidad, usabilidad, trazabilidad y disponibilidad.
 
@@ -196,161 +178,55 @@ En esta versión del análisis, no se incluyen explícitamente:
 
 Este documento se basa en la información funcional proporcionada, en hallazgos operativos detectados y en buenas prácticas de ingeniería de software. No sustituye la validación legal, la auditoría forense, el diseño arquitectónico detallado ni la aprobación formal de presupuesto. Algunos criterios cuantitativos, como tiempos de respuesta, volúmenes máximos de usuarios o disponibilidad exacta, deberán concretarse con datos reales de operación.
 
-# Por qué se hizo el proyecto
+# Justificación y Utilidad del Proyecto
 
 ## Necesidad detectada
+El proyecto surge de la necesidad crítica de control, seguridad y eficiencia administrativa. La gestión dispersa de asistencia y reportes generaba riesgos operativos y dificultaba la auditoría. Además, se detectaron fallos técnicos durante el desarrollo inicial:
+- Errores en campos de fecha y navegación en la aplicación móvil.
+- Ausencia de preguntas de seguridad y protocolos antifalsificación.
+- Desalineación entre los mockups y la implementación real.
+- Visualización limitada de roles.
 
-El proyecto se hizo porque la organización enfrenta necesidades críticas de control, seguridad, trazabilidad y eficiencia administrativa. La gestión dispersa de usuarios, asistencia, justificaciones y reportes genera riesgo operativo, expone información sensible, dificulta la auditoría y retrasa la toma de decisiones.
+## Utilidad y Finalidad
+El sistema proporciona una herramienta operativa para registrar, consultar y auditar procesos críticos del colegio. Su finalidad es modernizar los procesos académicos, reducir la dependencia de controles manuales y proteger los datos biométricos.
 
-Adicionalmente, durante el avance del desarrollo se detectaron problemas que exigen una base analítica formal:
-
-- Los campos de fecha presentan error en móvil.
-- Existen problemas de navegación en la aplicación móvil.
-- Falta agregar la sección de preguntas de seguridad.
-- Se requieren protocolos de seguridad para evitar falsificación.
-- Solo se visualiza el administrador y faltan los demás roles.
-- El mockup móvil no concuerda con el avance real del desarrollo.
-- Hay diferencias entre base de datos, frontend, colores, degradados y pantallas no representadas.
-- El avance del aplicativo web y móvil es insuficiente frente a lo planificado.
-
-Estos hallazgos indican que el proyecto no puede gestionarse únicamente como una acumulación de tareas técnicas. Requiere análisis, priorización, criterios de aceptación, gestión de riesgos y documentación trazable.
-
-## Motivación estratégica
-
-La motivación estratégica del proyecto se relaciona con:
-
-- Modernizar procesos académicos y administrativos.
-- Reducir dependencia de controles manuales.
-- Mejorar la confiabilidad de la información.
-- Proteger datos personales y biométricos.
-- Fortalecer la seguridad frente a suplantación o falsificación.
-- Habilitar reportes oportunos para dirección.
-- Estandarizar la experiencia entre web y móvil.
-- Crear una base documental para auditoría y mejora continua.
-
-## Riesgos de no hacerlo
-
-| Riesgo | Consecuencia probable | Probabilidad | Impacto |
-|---|---|---|---|
-| Mantener procesos manuales o fragmentados | Errores, duplicidad y pérdida de trazabilidad | Alta | Alto |
-| No definir roles y permisos | Accesos indebidos y escalada de privilegios | Media-Alta | Crítico |
-| No asegurar biometría | Suplantación, falsos positivos o falsos negativos | Media | Crítico |
-| No corregir navegación móvil | Abandono operativo y quejas de usuarios | Alta | Medio-Alto |
-| No implementar preguntas de seguridad | Recuperación indebida de cuentas | Media | Alto |
-| No revisar protocolos antifalsificación | Manipulación de registros o identidades | Media | Crítico |
-| No alinear mockup y desarrollo | Retrabajo, inconsistencia visual y demoras | Alta | Medio |
-| No generar reportes confiables | Decisiones basadas en información incompleta | Media-Alta | Alto |
-
-# Para qué se hizo el proyecto
-
-## Utilidad inmediata
-
-El proyecto se hizo para proporcionar una herramienta operativa que permita registrar, consultar, controlar y auditar procesos críticos del colegio. Su utilidad inmediata se materializa en:
-
-- Reducir tiempo administrativo.
-- Evitar errores de digitación.
-- Centralizar información de asistencia.
-- Facilitar aprobación de justificaciones.
-- Permitir consulta móvil de históricos.
-- Generar reportes exportables.
-- Monitorizar dispositivos IoT.
-- Aplicar controles de seguridad y permisos.
-
-## Utilidad técnica
-
-Técnicamente, sirve para establecer una base de desarrollo ordenada, con requisitos verificables, trazabilidad entre artefactos, controles de calidad, gestión de riesgos y criterios de aceptación. Esto permite pasar de un desarrollo reactivo a un proceso ingenieril sostenido.
-
-## Utilidad de gestión
-
-Desde la gestión, permite a los responsables tomar decisiones con evidencia, medir desempeño, identificar cuellos de botella, priorizar mejoras y demostrar cumplimiento ante auditorías internas o externas.
-
-## Tabla de utilidad por ámbito
-
-| Ámbito | Para qué sirve | Resultado esperado |
+| Ámbito | Utilidad | Resultado esperado |
 |---|---|---|
-| Operativo | Digitalizar registro de asistencia y justificaciones | Menos errores y mayor rapidez |
-| Administrativo | Centralizar usuarios, roles, fichas y responsables | Mejor control organizacional |
-| Técnico | Definir requisitos, riesgos y criterios de aceptación | Desarrollo más predecible |
-| Seguridad | Implementar autenticación, RBAC y antifalsificación | Menor exposición a riesgos |
+| Operativo | Digitalizar asistencia y justificaciones | Menor error y mayor rapidez |
+| Administrativo | Centralizar usuarios y roles | Mejor control organizacional |
+| Técnico | Definir requisitos y riesgos | Desarrollo predecible |
+| Seguridad | Implementar RBAC y antifalsificación | Menor exposición al riesgo |
 | Analítico | Proveer dashboards y reportes | Decisiones basadas en datos |
-| Legal-privacidad | Establecer tratamiento seguro de datos | Cumplimiento y confianza |
-| Mejora continua | Alimentar acciones correctivas y preventivas | Aprendizaje institucional |
+| Institucional | Establecer trazabilidad y calidad | Madurez organizacional |
 
-# Finalidad del proyecto
-
-La finalidad del proyecto trasciende la entrega de un software funcional. Su propósito de fondo es fortalecer la capacidad de la organización para gestionar su comunidad, proteger su información, optimizar sus procesos y sostener la mejora continua.
-
-En términos estratégicos, la finalidad es:
-
-- Institucionalizar la calidad de software como parte de la gobernanza organizacional.
-- Generar confianza en los registros de asistencia, usuarios y reportes.
-- Reducir la variabilidad y la incertidumbre operativa.
-- Proteger derechos de privacidad y seguridad de las personas.
-- Habilitar una cultura de trazabilidad, evidencia y aprendizaje.
-- Mejorar la experiencia de usuarios internos y externos.
-- Crear una plataforma escalable para futuros módulos académicos o administrativos.
-
-Mientras que el “para qué” describe la utilidad inmediata del sistema, la finalidad expresa el impacto duradero que se busca en la organización.
-
-# Qué ayudamos al momento de crear nuestro proyecto
-
-El análisis de software ayuda durante la creación del proyecto en múltiples dimensiones. No se limita a documentar ideas; convierte necesidades difusas en artefactos accionables, verificables y trazables.
-
-## Reducción de ambigüedad
-
-Ayuda a transformar enunciados generales en requisitos comprensibles. Por ejemplo, “gestionar usuarios” se desglosa en registro, roles, permisos, autenticación, recuperación, activación, eliminación y consulta. Esto evita interpretaciones divergentes entre negocio, desarrollo, QA y seguridad.
-
-## Priorización fundamentada
-
-Permite distinguir entre funcionalidades críticas, importantes y deseables. En este proyecto, la gestión de roles, la autenticación, el registro de asistencia y la seguridad son críticas, porque impactan directamente confidencialidad, integridad y disponibilidad.
-
-## Definición de criterios de aceptación
-
-Cada requerimiento puede asociarse a condiciones objetivas de cumplimiento. Esto facilita pruebas, reduce discusiones subjetivas y permite cerrar entregables con evidencia.
-
-## Identificación temprana de riesgos
-
-El análisis expone riesgos técnicos, operativos, de privacidad y de adopción. Detectarlos antes de implementar reduce costo de corrección y evita fallos en producción.
-
-## Alineación entre diseño y desarrollo
-
-Al comparar mockups, pantallas reales, base de datos y frontend, el análisis ayuda a corregir desviaciones visuales y funcionales antes de que se acumulen como deuda técnica.
-
-## Seguridad por diseño
-
-Permite incorporar controles desde la concepción del sistema: RBAC server-side, validación de entradas, protección contra inyección, cifrado de datos biométricos, auditoría, límites de intentos y gestión segura de sesiones.
-
-## Trazabilidad documental
-
-Construye enlaces entre hallazgos, requisitos, casos de prueba, commits, tickets, reportes y acciones correctivas. Esto es esencial para auditoría y mejora continua.
-
-## Comunicación con partes interesadas
-
-Proporciona un lenguaje común entre área de negocio, tecnología, calidad, seguridad y usuarios finales. Reduce sorpresas y gestiona expectativas.
-
-## Base para pruebas y validación
-
-El análisis permite derivar casos de prueba funcionales, de seguridad, de usabilidad, de rendimiento y de extremo. Sin análisis, las pruebas se limitan al camino feliz y dejan fuera casos borde críticos.
-
-## Soporte para mejora continua
-
-Los hallazgos analíticos alimentan acciones correctivas, preventivas y de mejoramiento. Así, el proyecto no solo entrega software, sino que fortalece el proceso organizacional.
-
-## Tabla de ayuda durante la creación del proyecto
-
-| Actividad de creación | Ayuda del análisis | Resultado esperado |
+## Riesgos de no implementar la solución
+| Riesgo | Impacto | Consecuencia |
 |---|---|---|
-| Levantamiento de necesidad | Clarifica problema y contexto | Requerimientos mejor entendidos |
-| Definición de alcance | Delimita incluido, excluido y límites | Menos scope creep |
-| Diseño de flujos | Identifica pasos, actores y excepciones | Procesos más robustos |
-| Especificación de requisitos | Convierte ideas en criterios verificables | Desarrollo alineado |
-| Estimación técnica | Revela complejidad y dependencias | Planificación realista |
+| Procesos manuales | Alto | Pérdida de trazabilidad y errores |
+| Roles indefinidos | Crítico | Accesos indebidos y escalada de privilegios |
+| Biometría insegura | Crítico | Suplantación de identidad |
+| Navegación móvil deficiente | Medio-Alto | Abandono operativo |
+| Reportes no confiables | Alto | Decisiones basadas en datos incompletos |
+
+# Aportes del Análisis en la Creación del Proyecto
+
+El análisis de software transforma necesidades difusas en artefactos accionables y verificables, aportando valor en las siguientes dimensiones:
+
+- **Reducción de ambigüedad:** Desglosa enunciados generales (ej. "gestionar usuarios") en requisitos específicos (registro, roles, autenticación), evitando interpretaciones divergentes.
+- **Priorización y Criterios:** Permite distinguir funcionalidades críticas y asociarlas a condiciones objetivas de cumplimiento, facilitando las pruebas y la aceptación.
+- **Identificación de Riesgos:** Expone riesgos técnicos y de privacidad tempranamente, reduciendo el costo de corrección.
+- **Alineación Diseño-Desarrollo:** Corrige desviaciones entre mockups y el frontend antes de que se conviertan en deuda técnica.
+- **Seguridad por Diseño:** Incorpora controles desde la concepción (RBAC server-side, cifrado biométrico, auditoría).
+- **Trazabilidad y Mejora:** Vincula hallazgos con requisitos y acciones correctivas (CAPA), fundamental para la auditoría.
+
+| Actividad | Aporte del Análisis | Resultado Esperado |
+|---|---|---|
+| Levantamiento | Clarifica problema y contexto | Requerimientos precisos |
+| Alcance | Delimita lo incluido y excluido | Evita el "scope creep" |
+| Diseño de Flujos | Identifica actores y excepciones | Procesos robustos |
 | Construcción | Reduce retrabajo por ambigüedad | Mayor productividad |
-| Pruebas | Deriva casos normales y borde | Calidad verificable |
 | Seguridad | Incorpora controles preventivos | Menor exposición al riesgo |
-| Despliegue | Define evidencias y criterios de cierre | Entrega controlada |
 | Operación | Habilita monitoreo y auditoría | Sostenibilidad |
-| Mejora continua | Alimenta CAPA y lecciones aprendidas | Madurez organizacional |
 
 # Quiénes son los más beneficiados
 
@@ -597,23 +473,14 @@ Se utilizó como referencia el modelo de calidad de sistema y software (Internat
 | Política de privacidad | Deriva de tratamiento de datos biométricos y personales | Cumplimiento |
 | Release notes y backlog | Convierten análisis en entregables priorizados | Ejecución ágil |
 
-# Análisis de valor esperado
+# Análisis de Valor Esperado
 
-## Valor operativo
+El sistema genera valor en cuatro dimensiones principales:
 
-El sistema debe reducir tiempo en registro, consulta y consolidación de información. El valor operativo se mide en menor fricción diaria, menos correcciones manuales y mayor disponibilidad de información para responsables académicos.
-
-## Valor de riesgo
-
-El valor en gestión de riesgo se materializa en prevención de accesos indebidos, falsificación, pérdida de trazabilidad y errores críticos de asistencia. Este valor suele ser preventivo y se evidencia cuando los incidentes evitados superan el costo de controls implementados.
-
-## Valor decisorio
-
-Los dashboards y reportes permiten pasar de decisiones intuitivas a decisiones basadas en datos. El valor decisorio se refleja en mejor asignación de recursos, detección temprana de patrones de ausentismo y seguimiento de justificaciones.
-
-## Valor institucional
-
-La documentación analítica y la trazabilidad fortalecen la madurez organizacional. El valor institucional aparece cuando el proceso de calidad se sostiene más allá de un proyecto puntual y se convierte en práctica recurrente.
+1. **Operativo:** Reduce el tiempo de registro y consolidación de información, disminuyendo la fricción diaria y los errores manuales.
+2. **Riesgo:** Previene accesos indebidos, suplantaciones y pérdida de trazabilidad. El valor es preventivo y se evidencia en la reducción de incidentes.
+3. **Decisorio:** Permite pasar de decisiones intuitivas a decisiones basadas en datos mediante dashboards y reportes analíticos.
+4. **Institucional:** Fortalece la madurez organizacional al institucionalizar la calidad de software y la trazabilidad como prácticas recurrentes.
 
 # Enfoque recomendado para la siguiente fase
 
