@@ -472,10 +472,8 @@ Se utilizó como referencia el modelo de calidad de sistema y software (Internat
 | Matriz RBAC | Deriva de necesidad de roles y permisos | Control de acceso |
 | Política de privacidad | Deriva de tratamiento de datos biométricos y personales | Cumplimiento |
 | Release notes y backlog | Convierten análisis en entregables priorizados | Ejecución ágil |
-| Historias de Usuario | Define la funcionalidad detallada desde la perspectiva del usuario | Consultar en `Anexos/HU/` |
-| Mapa de Navegación | Define el flujo de pantallas y rutas del sistema | Consultar en `Anexos/02-Mapa_navegación/` |
-| Historias de Usuario | Define la funcionalidad detallada desde la perspectiva del usuario | Consultar en `Anexos/HU/` |
-| Mapa de Navegación | Define el flujo de pantallas y rutas del sistema | Consultar en `Anexos/02-Mapa_navegación/` |
+| Historias de Usuario | Define la funcionalidad detallada desde la perspectiva del usuario | [Ver índice de HU](Anexos/01-Historias_de_usuarios/Index_HU.md) |
+| Mapa de Navegación | Define el flujo de pantallas y rutas del sistema | [Ver mapa de navegación](Anexos/02-Mapa_navegación/navigation-map.md) |
 
 # Análisis de Valor Esperado
 
