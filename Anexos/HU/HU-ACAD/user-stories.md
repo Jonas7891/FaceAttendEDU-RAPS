@@ -398,3 +398,38 @@ conference
 - `ScheduleAssignmentFailed`  
 - `ScheduleConflictDetected`  
 
+**Required permissions:**  
+- Administrator or Supervisor for assigning conference/time blocks.
+- Teacher/Instructor may consult schedules assigned to them.  
+- Student may consult allowed schedules if applicable.
+
+---
+
+## Definition of Done (DoD)
+
+> This HU can only be closed when it meets the team's full DoD.
+
+**Additional checks specific to this HU:**
+
+- [ ] Successful jornada/time block assignment tested.
+- [ ] Invalid responsible user scenario tested.
+- [ ] Time block overlap scenario tested.
+- [ ] Cohort unavailable scenario tested.
+- [ ] Assigned time block is correctly associated with cohort and responsible user.
+- [ ] Schedule consultation tested for administrator, instructor, and student where applicable.
+- [ ] Attendance module can use the assigned time block for entry/exit validation.
+- [ ] Audit event is generated.
+- [ ] Confirmation and error messages are clear.
+- [ ] Response time is validated under normal conditions and remains under 5 seconds.
+- [ ] Traceability to RF 2.3.2 is documented.
+
+---
+
+## Estimation and priority
+
+| Field | Value |
+|---|---|
+| Story Points | 8 |
+| Priority | High |
+| Target sprint | Sprint 1 / MVP |
+| Dependencies | HU-IAM-001: User login; HU-ACAD-003: Assign responsible instructors; HU-ACAD-004: Assign cohorts to responsible users |
