@@ -530,7 +530,11 @@ This document should be considered a living base. Its value increases when conne
 
 **Author's Note.** Jonas is the author and technical lead of the document. Correspondence related to this analysis can be directed to jonas@consultoria.example. The author declares the absence of conflicts of interest and external funding for the preparation of this document.
 
-# References
+# References and Additional Annexes
+
+This section remains open for the incorporation of new standards, technical manuals, or supporting documents that emerge during the system evolution. and Additional Annexes
+
+This section remains open for the incorporation of new standards, technical manuals, or supporting documents that emerge during the system evolution.
 
 American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7th ed.). https://doi.org/10.1037/0000165-000
 

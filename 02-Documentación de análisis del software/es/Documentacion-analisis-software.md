@@ -472,6 +472,10 @@ Se utilizó como referencia el modelo de calidad de sistema y software (Internat
 | Matriz RBAC | Deriva de necesidad de roles y permisos | Control de acceso |
 | Política de privacidad | Deriva de tratamiento de datos biométricos y personales | Cumplimiento |
 | Release notes y backlog | Convierten análisis en entregables priorizados | Ejecución ágil |
+| Historias de Usuario | Define la funcionalidad detallada desde la perspectiva del usuario | Consultar en `Anexos/HU/` |
+| Mapa de Navegación | Define el flujo de pantallas y rutas del sistema | Consultar en `Anexos/02-Mapa_navegación/` |
+| Historias de Usuario | Define la funcionalidad detallada desde la perspectiva del usuario | Consultar en `Anexos/HU/` |
+| Mapa de Navegación | Define el flujo de pantallas y rutas del sistema | Consultar en `Anexos/02-Mapa_navegación/` |
 
 # Análisis de Valor Esperado
 
@@ -534,7 +538,11 @@ Este documento debe considerarse una base viva. Su valor aumenta cuando se conec
 
 **Nota del autor.** Jonas es el autor y responsable técnico del documento. La correspondencia relacionada con este análisis puede dirigirse a jonas@consultoria.example. El autor declara la ausencia de conflictos de interés y de financiación externa para la elaboración de este documento.
 
-# Referencias
+# Referencias y Anexos Adicionales
+
+Este apartado se mantiene abierto para la incorporación de nuevas normativas, manuales técnicos o documentos de soporte que surjan durante la evolución del sistema. y Anexos Adicionales
+
+Este apartado se mantiene abierto para la incorporación de nuevas normativas, manuales técnicos o documentos de soporte que surjan durante la evolución del sistema.
 
 American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7th ed.). https://doi.org/10.1037/0000165-000
 
