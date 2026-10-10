@@ -1,6 +1,6 @@
 ---
 title: "Informe de Especificación de Requisitos"
-authors: 
+authors: Jonattan Steven Rizo Solano, Diego Andres Gutierrez Nuñez, Juan Davida Arboleda Perdomo
 abstract: |
   El presente informe especifica los requisitos funcionales del sistema de gestión de usuarios, ambientes académicos, control de asistencia, configuraciones móviles, históricos, justificaciones, reportes avanzados y gestión del colegio. Documenta cada requerimiento con propósito, plataforma, entradas, reglas de negocio, criterios de aceptación, consideraciones de seguridad, casos borde y mecanismos de verificación. Su objetivo servir como base contractual, técnica y de auditoría para desarrollo, pruebas, despliegue y mantenimiento del software.
 keywords:
@@ -13,21 +13,6 @@ keywords:
   - RBAC
   - movilidad
 ---
-
-# Identificación del documento
-
-| Campo | Descripción |
-|---|---|
-| Código | IER-SW-001 |
-| Título | Informe de Especificación de Requisitos |
-| Versión | 1.0 |
-| Estado | Borrador para revisión técnica |
-| Clasificación | Confidencial-interno |
-| Propietario | Dirección de Ingeniería de Software |
-| Aprobador | Comité de Producto y Calidad |
-| Fecha de emisión | 10 de octubre de 2026 |
-| Próxima revisión programada | 10 de abril de 2027 |
-| Naturaleza del documento | Especificación funcional y de validación de requisitos |
 
 # Introducción
 
@@ -62,14 +47,6 @@ Incluye:
 - Exportación de reportes, dashboard analítico y consultas por rango de fechas.
 - Gestión de cursos y planes de estudio.
 
-No incluye, en esta versión:
-
-- Diseño arquitectónico detallado.
-- Modelo físico de base de datos.
-- Contratos de API completos.
-- Plan de infraestructura productiva.
-- Análisis jurídico profundo de protección de datos, salvo lineamientos de seguridad y privacidad aplicables.
-
 ## Definiciones
 
 - **RF**: Requerimiento funcional de alto nivel.
@@ -93,7 +70,7 @@ No incluye, en esta versión:
 | Actor | Descripción | Interacción principal |
 |---|---|---|
 | Administrador general | Usuario con privilegios amplios de configuración y gestión | Administra usuarios, roles, permisos, cursos, parámetros y reportes globales |
-| Responsable académico | Instructor, coordinador o supervisor asignado a fichas o ambientes | Gestiona asistencia, justificaciones y consultas de su alcance |
+| Responsable académico | Instructor asignado a fichas o ambientes | Gestiona asistencia, justificaciones y consultas de su alcance |
 | Personal registrado | Usuario autorizado del colegio | Consulta su perfil, marca asistencia y presenta justificaciones |
 | Personal no registrado | Visitante, contratista o persona temporal | Ingresa mediante registro alternativo supervisado |
 | Aplicación móvil | Cliente usado en dispositivos móviles | Autenticación, registro facial, huella, alertas, configuración y consultas |
@@ -239,10 +216,10 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
   - Prueba de importación parcial y rollback.
   - Prueba de rendimiento con diez mil filas.
 
-### ERF 1.3 Inicio de sesión (Móvil)
+### ERF 1.3 Inicio de sesión
 
 - **Propósito:** Autenticar al usuario en la aplicación móvil.
-- **Plataforma:** Móvil.
+- **Plataforma:** Web y Móvil.
 - **Métodos:** Correo o usuario con contraseña; opcionalmente desbloqueo biométrico local del dispositivo.
 - **Reglas de negocio:**
   - Bloquear temporalmente tras N intentos fallidos.
@@ -389,6 +366,7 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 #### ERF 2.3.1 Asignar fichas
 
 - **Propósito:** Relacionar responsables con fichas específicas.
+- **Plataforma:** Web.
 - **Reglas de negocio:**
   - Un responsable solo ve y opera fichas asignadas, salvo rol global.
   - La asignación puede ser múltiple.
@@ -401,6 +379,7 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 #### ERF 2.3.2 Asignar jornadas
 
 - **Propósito:** Vincular responsables a franjas horarias o turnos.
+- **Plataforma:** Web.
 - **Entradas:** Responsable, jornada, ambiente opcional, ficha opcional, vigencia.
 - **Reglas de negocio:**
   - Una jornada define inicio, fin, día o patrón recurrente.
@@ -422,7 +401,7 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 ### ERF 3.1 Registrar ingresos y salidas
 
 - **Propósito:** Crear evento de asistencia con dirección entrada o salida.
-- **Plataforma:** Móvil y API.
+- **Plataforma:** Móvil, Web y API.
 - **Entradas mínimas:** Usuario o credencial temporal, tipo de evento, marca temporal, dispositivo, método, ubicación o ambiente si aplica.
 - **Reglas de negocio:**
   - Un mismo usuario no puede registrar dos entradas consecutivas sin salida, salvo corrección autorizada.
@@ -435,10 +414,10 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 - **Seguridad:** Firmar payload móvil, validar dispositivo, prevenir replay attacks.
 - **Casos borde:** Sin conexión, reloj del dispositivo alterado, cambio brusco de ubicación, usuario desactivado durante intento.
 
-#### ERF 3.1.1 Registro facial (Móvil)
+#### ERF 3.1.1 Registro facial
 
 - **Propósito:** Identificar o verificar al usuario mediante reconocimiento facial en móvil.
-- **Plataforma:** Móvil.
+- **Plataforma:** Web y Móvil.
 - **Flujo:** Captura facial, detección de vitalidad, extracción de plantilla, comparación con plantilla registrada, decisión.
 - **Reglas de negocio:**
   - Requiere consentimiento y registro de enrolamiento previo.
@@ -457,8 +436,8 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 
 #### ERF 3.1.2 Registro alterno (Huella)
 
-- **Propósito:** Usar huella dactilar como método alternativo o complementario.
-- **Plataforma:** Móvil con sensor compatible.
+- **Propósito:** Usar huella dactilar como método alternativo o complementario  (digitalPerson 4500).
+- **Plataforma:** Web y Móvil
 - **Reglas de negocio:**
   - Solo disponible si el dispositivo y sistema operativo lo soportan.
   - Debe respetar enclave seguro del dispositivo cuando exista.
@@ -469,46 +448,18 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
   - No se almacena imagen dactilar cruda fuera del sistema operativo si la plataforma ofrece plantilla segura.
 - **Casos borde:** Dedo húmedo o lesionado, sensor sucio, cambio de dispositivo, usuario con múltiples dedos registrados.
 
-### ERF 3.2 Control de ingresos de personal no registrado
-
-- **Propósito:** Gestionar ingreso de visitantes, contratistas o personas sin cuenta permanente.
-- **Plataforma:** Móvil o web operativa.
-- **Reglas de negocio:**
-  - Requiere anfitrión o responsable que valide el ingreso.
-  - Debe generarse credencial temporal, QR o registro equivalente.
-  - El acceso se limita a zonas, tiempos y finalidades aprobadas.
-- **Criterios de aceptación:**
-  - El sistema registra identidad mínima, motivo, empresa si aplica, hora de ingreso y salida.
-  - No permite acceso a funciones internas sensibles.
-  - La permanencia vencida genera alerta.
-- **Seguridad:** No solicitar datos biométricos salvo base legal y técnica aprobada.
-
-#### ERF 3.2.1 Registro alternativo enfocado a usuarios no registrados
-
-- **Propósito:** Capturar manualmente o con apoyo documental a personas externas.
-- **Entradas mínimas:** Documento, nombres, apellidos, motivo, empresa opcional, anfitrión, vigencia, foto opcional.
-- **Reglas de negocio:**
-  - El registro temporal expira automáticamente.
-  - Debe permitir checkout manual o automático por geocercas si está disponible.
-  - No crea usuario permanente salvo conversión autorizada.
-- **Criterios de aceptación:**
-  - Se genera identificador temporal único.
-  - El anfitrión recibe notificación si la política lo exige.
-  - Queda trazabilidad completa del ingreso y egreso.
-- **Casos borde:** Visitante sin documento, anfitrión no disponible, salida no registrada, extensión de permanencia.
-
 ## RF 4 Configuración del sistema
 
-**Finalidad:** Administrar preferencias móviles, alertas, idioma, temas, parámetros de usuario, fallos IoT, cambios de rol y reglas de retardos o justificaciones.
+**Finalidad:** Administrar preferencias móviles, alertas, idioma, temas, parámetros de usuario, cambios de rol y reglas de retardos o justificaciones.
 
 **Plataformas:** Móvil y web administrativa.
 
 **Dependencias principales:** RF 1, RF 3, RF 5, RF 6, RF 7.
 
-### ERF 4.1 Configurar alertas (Móvil)
+### ERF 4.1 Configurar alertas
 
 - **Propósito:** Permitir al usuario gestionar notificaciones del sistema.
-- **Plataforma:** Móvil.
+- **Plataforma:** Web y Móvil.
 - **Tipos de alerta:** Asistencia, justificación aprobada o rechazada, fallo IoT, cambio de rol, recordatorios académicos, alertas críticas de seguridad.
 - **Reglas de negocio:**
   - Las alertas críticas de seguridad o cumplimiento pueden ser no desactivables.
@@ -529,32 +480,23 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
   - Alertas obligatorias no pueden desactivarse desde interfaz de usuario final.
 - **Casos borde:** Permiso de notificación denegado por SO, usuario con múltiples dispositivos, sincronización conflictiva.
 
-#### ERF 4.1.2 Cambio en el tono de la notificación
-
-- **Propósito:** Personalizar sonido o vibración.
-- **Reglas de negocio:**
-  - Solo sonidos locales o assets certificados.
-  - Debe respetar accesibilidad y volumen del sistema.
-- **Criterios de aceptación:**
-  - El usuario previsualiza el tono.
-  - La selección persiste por usuario o dispositivo según política.
-  - Si el tono no está disponible, aplica default.
-
-### ERF 4.2 Configurar idiomas (Móvil)
+### ERF 4.2 Configurar idiomas
 
 - **Propósito:** Permitir selección de idioma de interfaz.
-- **Idiomas mínimos sugeridos:** Español e inglés; portugués opcional según contexto.
+- **Plataforma:** Web y Móvil.
+- **Idiomas mínimos sugeridos:** Español, Ingles, Frances y Portugues.
 - **Reglas de negocio:**
   - Fallback automático a español si traducción falta.
-  - Fechas, números y moneda se formatean según locale.
+  - Fechas, números y moneda se formatean según la localidad de persona.
 - **Criterios de aceptación:**
   - Cambio de idioma actualiza interfaz sin reinicio obligatorio, o informa si requiere reinicio.
   - Mensajes de error también se traducen.
 - **Casos borde:** Locale no soportado, texto truncado, mezcla de idiomas por recursos faltantes.
 
-### ERF 4.3 Actualización paletas de colores (Móvil)
+### ERF 4.3 Actualización paletas de colores
 
 - **Propósito:** Aplicar temas visuales y paletas institucionales.
+- **Plataforma:** Web y Móvil.
 - **Reglas de negocio:**
   - Debe mantener contraste accesible.
   - Modo claro y oscuro recomendados.
@@ -565,9 +507,10 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
   - La preferencia persiste.
 - **Casos borde:** Tema personalizado con bajo contraste, actualización de app con paleta incompatible.
 
-### ERF 4.4 Actualización de parámetros del usuario (Móvil)
+### ERF 4.4 Actualización de parámetros del usuario
 
-- **Propósito:** Centralizar ajustes personales del usuario en móvil.
+- **Propósito:** Centralizar ajustes personales del usuario.
+- **Plataforma:** Web y Móvil.
 - **Parámetros:** Idioma, tema, notificaciones, datos de contacto opcionales, enrolamiento biométrico, cambio de contraseña, privacidad.
 - **Reglas de negocio:**
   - Cambios sensibles requieren reautenticación.
@@ -576,21 +519,6 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
   - Guardado exitoso confirma cambio y audita si es relevante.
   - Cancelación no persiste modificaciones.
 - **Casos borde:** Sesión expirada durante edición, conflicto de sincronización, permiso de cámara denegado al enrolar rostro.
-
-### ERF 4.5 Gestión de alertas de fallos de dispositivos IoT
-
-- **Propósito:** Supervisar estado operativo de dispositivos conectados.
-- **Eventos mínimos:** Offline, batería baja, sensor fallando, manipulación, lectura inválida, reconexión.
-- **Reglas de negocio:**
-  - Umbrales configurables por tipo de dispositivo.
-  - Escalamiento por responsable si no se atiende en tiempo definido.
-  - Acknowledgment obligatorio para eventos críticos.
-- **Criterios de aceptación:**
-  - El sistema detecta pérdida de heartbeat.
-  - Genera alerta con dispositivo, ubicación, hora y severidad.
-  - Permite asignar ticket o acción correctiva.
-- **Seguridad:** Autenticación mutua dispositivo-servidor, rotación de credenciales, aislamiento de red.
-- **Casos borde:** Dispositivo comprometido, ráfaga de eventos repetidos, falsa alarma por mantenimiento.
 
 ### ERF 4.6 Cambio de rol en un usuario
 
@@ -624,14 +552,14 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 
 **Finalidad:** Consultar y conservar antecedentes de asistencia, inasistencia y cambios de usuario.
 
-**Plataformas:** Móvil y web.
+**Plataformas:** web.
 
 **Dependencias principales:** RF 1, RF 2, RF 3, RF 4.7.
 
 ### ERF 5.1 Asistencias e inasistencias (Móvil) por parámetros
 
 - **Propósito:** Consultar movimientos de asistencia filtrados por fecha, ficha, ambiente, instructor o persona.
-- **Plataforma:** Móvil.
+- **Plataforma:** Web y Móvil.
 - **Filtros mínimos:** Rango de fechas, ficha, ambiente, instructor, persona, estado, método de registro.
 - **Reglas de negocio:**
   - El responsable solo ve datos de su alcance.
@@ -723,6 +651,7 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 ### ERF 7.1 Exportar reporte
 
 - **Propósito:** Generar archivo descargable con datos filtrados.
+- **Plataforma:** Web.
 - **Formatos mínimos:** CSV, XLSX, PDF.
 - **Reglas de negocio:**
   - Exportaciones grandes deben ser asíncronas.
@@ -753,6 +682,7 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 ### ERF 7.3 Reportes por rango de fechas
 
 - **Propósito:** Consultar información acotada temporalmente.
+- **Plataforma:** Web.
 - **Reglas de negocio:**
   - Fecha inicio no mayor a fecha fin.
   - Límite máximo de rango configurable.
@@ -767,6 +697,7 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 ### ERF 7.4 Consulta de retardos e inasistencias por parámetros
 
 - **Propósito:** Listar eventos clasificados como retardo o inasistencia según filtros.
+- **Plataforma:** Web y Móvil.
 - **Filtros:** Fecha, ficha, ambiente, instructor, persona, tipo de evento, estado de justificación.
 - **Reglas de negocio:**
   - Usa parámetros RF 4.7.
@@ -781,13 +712,14 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 
 **Finalidad:** Administrar catálogo de cursos y planes de estudio asociados a materias y fichas académicas.
 
-**Plataformas:** Web.
+**Plataformas:** Web y Móvil.
 
 **Dependencias principales:** RF 2, RF 5, RF 7.
 
 ### ERF 8.1 Agregar y eliminar cursos
 
 - **Propósito:** Mantener el catálogo maestro de cursos ofrecidos por el colegio.
+- **Plataforma:** Web.
 - **Entradas mínimas:** Código, nombre, descripción, duración, modalidad, estado.
 - **Reglas de negocio:**
   - Código único.
@@ -802,6 +734,7 @@ Todo requerimiento funcional descrito en este informe debe cumplir, como mínimo
 ### ERF 8.2 Plan de estudios de las materias
 
 - **Propósito:** Definir estructura académica de materias, horas, secuencia y prerrequisitos.
+- **Plataforma:** Web.
 - **Entradas mínimas:** Curso, materia, código, intensidad horaria, orden, prerrequisitos opcionales, competencias, vigencia.
 - **Reglas de negocio:**
   - El plan debe versionarse.
