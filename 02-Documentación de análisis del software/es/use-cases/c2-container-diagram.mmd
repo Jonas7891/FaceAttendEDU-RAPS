@@ -1,0 +1,75 @@
+C4Container
+    title Diagrama de contenedores — FaceAttend EDU
+
+    Person(student, "Estudiante / Aprendiz", "Registra la asistencia con un escaneo facial desde la app móvil o web")
+    Person(instructor, "Instructor", "Abre y cierra las sesiones de clase y revisa la asistencia")
+    Person(admin, "Administrador de sede", "Gestiona sedes, programas, horarios y configuración")
+
+    System_Boundary(faceattend, "FaceAttend EDU") {
+
+        Container(web, "App web", "Expo Web export served by nginx :8090", "Cliente de navegador para administradores e instructores")
+        Container(mobile, "App móvil", "Expo / React Native (Android)", "Cliente usado por los estudiantes para la asistencia con escaneo facial")
+
+        Container(gateway, "API Gateway", "Kong OSS 3.6 (DB-less) :8080 / :8001", "Punto único de entrada: enrutamiento, CORS, limitación de tasa (política redis) y una prefunción global que valida el sessionId opaco contra identity antes de enrutar (401/503 en el borde). Sin plugin jwt, sin consumidores — cada servicio detrás de él (los 9, no solo Java) revalida la sesión y evalúa RBAC de nuevo por su cuenta en su propio hook onRequest/filter. El único contenedor en las redes Docker faceattend-edge y faceattend-app — el puente entre los niveles de clientes y de servicios")
+
+        Container(identity, "ms-identity", "Java 21 + Spring Boot", "Personas, usuarios, sesiones, autenticación (sessionId opaco), política de contraseñas. Puerto 8081")
+        Container(authorization, "ms-authorization", "Java 21 + Spring Boot", "Roles, permisos y asignaciones de roles (RBAC). Puerto 8082")
+        Container(academic, "ms-academic", "TypeScript + Fastify", "Sedes, programas, periodos, cohortes, cursos, actores y matrículas. Puerto 8083")
+        Container(scheduling, "ms-scheduling", "Java 21 + Spring Boot", "Ambientes, bloques de horario y sesiones de clase con reglas anti-doble-reserva. Puerto 8084")
+        Container(attendance, "ms-attendance", "Java 21 + Spring Boot", "Registros de asistencia, justificaciones y documentos de soporte. Puerto 8085")
+        Container(biometric, "ms-biometric", "Python 3.12 + FastAPI", "Embeddings faciales y de huella, búsqueda vectorial. Puerto 8086")
+        Container(configuration, "ms-configuration", "TypeScript + Fastify", "Valores de configuración académica/de seguridad y casos de actualización biométrica. Puerto 8087")
+        Container(notification, "ms-notification", "Go 1.22 + Gin", "Tipos de alerta, ciclo de vida de alertas y el canal interno de correo. Puerto 8088")
+        Container(quality, "ms-quality", "TypeScript + Fastify", "Herramientas de calidad ISO 25010 / 29110 / ISTQB (no es un contexto acotado). Puerto 8089")
+
+        ContainerDb(postgres, "PostgreSQL 17", "faceattend_db", "Un esquema por contexto acotado: identity, authorization, academic, scheduling, attendance, biometric, configuration, notification (+ quality). Sin FK entre esquemas. En la red faceattend-data vía database/docker-compose.yml, fusionado al compose raíz con el include: de Docker Compose — también publicado en 127.0.0.1:5432 para desarrollo local")
+        ContainerDb(mongodb, "MongoDB 7", "Document store with vector search", "Embeddings faciales y de huella y registros de coincidencias (ADR-003 — única excepción políglota). En la red faceattend-data")
+        ContainerDb(redis, "Redis 7", "Rate-limit store", "Contadores de limitación de tasa de Kong. En la red faceattend-app")
+        ContainerDb(kafka, "Kafka 3.x (KRaft) :9092", "Message broker", "Eventos de dominio entre servicios (ADR-006). Solo productores — aún no existe ningún consumidor (AT-006). En la red faceattend-data")
+    }
+
+    System_Ext(countriesnow, "countriesnow.space", "Catálogo externo de ciudades y países, invocado directamente desde el cliente móvil")
+    System_Ext(smtp, "SMTP relay", "Entrega el correo de recuperación de contraseña propiedad de ms-notification")
+
+    Rel(student, web, "Usa", "HTTPS")
+    Rel(student, mobile, "Usa", "HTTPS")
+    Rel(instructor, web, "Usa", "HTTPS")
+    Rel(admin, web, "Usa", "HTTPS")
+
+    Rel(web, gateway, "Llamadas API", "HTTPS / REST")
+    Rel(mobile, gateway, "Llamadas API", "HTTPS / REST")
+
+    Rel(gateway, identity, "Prefunción en el borde: GET /api/v1/sessions/{id} en cada ruta no pública (401/503 antes de enrutar)", "HTTP / REST")
+    Rel(gateway, identity, "Enruta /api/v1/persons, /users, /auth, /sessions, /cities, /password-policies", "HTTP / REST")
+    Rel(gateway, authorization, "Enruta /api/v1/roles, /permissions, /user-roles, /auth/evaluate, /users/{id}/roles", "HTTP / REST")
+    Rel(gateway, academic, "Enruta /api/v1/schools, /programs, /academic-periods, /cohorts, /courses, /actor-types, /academic-actors, /enrollments, más /health/quality (el servicio Kong quality-health apunta aquí)", "HTTP / REST")
+    Rel(gateway, scheduling, "Enruta /api/v1/environments, /schedule-blocks, /class-sessions (+ /blocks, /sessions anidados)", "HTTP / REST")
+    Rel(gateway, attendance, "Enruta /api/v1/attendance-records, /justifications, /justification-types, /supporting-documents (+ anidados)", "HTTP / REST")
+    Rel(gateway, biometric, "Enruta /api/v1/biometric", "HTTP / REST")
+    Rel(gateway, configuration, "Enruta /api/v1/academic-configurations, /security-configurations, /biometric-update-cases, /configurations", "HTTP / REST")
+    Rel(gateway, notification, "Enruta /api/v1/alert-types, /api/v1/alerts", "HTTP / REST")
+    Rel(gateway, quality, "Enruta /api/v1/quality (el servicio Kong /health/quality en realidad apunta a ms-academic)", "HTTP / REST")
+    Rel(gateway, redis, "Contadores de limitación de tasa", "RESP")
+
+    Rel(identity, postgres, "Lee / escribe el esquema identity", "JDBC / SQL")
+    Rel(authorization, postgres, "Lee / escribe el esquema authorization", "JDBC / SQL")
+    Rel(academic, postgres, "Lee / escribe el esquema academic (pool pg, esquema Drizzle por paridad)", "SQL")
+    Rel(scheduling, postgres, "Lee / escribe el esquema scheduling", "JDBC / SQL")
+    Rel(attendance, postgres, "Lee / escribe el esquema attendance", "JDBC / SQL")
+    Rel(notification, postgres, "Lee / escribe el esquema notification", "SQL (pgx)")
+    Rel(quality, postgres, "Lee / escribe el esquema quality", "SQL (pg)")
+    Rel(configuration, postgres, "Lee / escribe el esquema configuration — academic_configuration, security_configuration, biometric_update_case. Postgres es el único almacén; el arranque falla de forma fatal si no puede conectarse, no hay respaldo en memoria", "SQL (pg)")
+
+    Rel(biometric, mongodb, "Almacena y busca embeddings, anexa registros de coincidencias, y mantiene su propia colección biometric_update_cases — un segundo flujo independiente de casos de actualización biométrica sin sincronización con el de configuration (ver SEQ-04)", "Motor / MongoDB")
+
+    Rel(identity, kafka, "Publica identity-events, city-events, password-policy-events", "Async producer")
+    Rel(authorization, kafka, "Publica role-events, permission-events", "Async producer")
+    Rel(academic, kafka, "Publica academic-events (registro de acceso HTTP: método, url, estado)", "Async producer")
+    Rel(scheduling, kafka, "Publica class-session-events, environment-events, schedule-block-events", "Async producer")
+    Rel(attendance, kafka, "Publica attendance-events, justification-events, justification-type-events, document-events — solo produce, no consume", "Async producer")
+    Rel(configuration, kafka, "Publica configuration-events (registro de acceso HTTP: método, url, estado)", "Async producer")
+
+    Rel(mobile, countriesnow, "Lee códigos de país y listas de ciudades directamente desde el navegador", "HTTPS / REST")
+
+    Rel(identity, notification, "POST /api/v1/emails con el código de recuperación (solo red interna, no enrutado por Kong)", "HTTP / REST")
+    Rel(notification, smtp, "Envía el correo de recuperación (única plantilla: verification_code)", "SMTP")

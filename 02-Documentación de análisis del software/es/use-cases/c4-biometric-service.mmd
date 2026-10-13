@@ -1,0 +1,67 @@
+C4Component
+    title Diagrama de componentes — ms-biometric :8086 (FastAPI, más plano que el hexágono Java)
+
+    Person(client, "Cliente web / móvil", "Llega al servicio a través de Kong portando el sessionId opaco")
+
+    Container_Boundary(driving, "Adaptadores de entrada (inbound, infrastructure/web)") {
+        Component(facialCtrl, "FacialRouter", "FastAPI APIRouter /api/v1/biometric/facial", "enroll, enroll-image, verify, identify, identify-image, liveness-challenge/step, get, history, delete. Dependencia a nivel de router exige el permiso attendance.record:write en cada ruta")
+        Component(fingerprintCtrl, "FingerprintRouter", "FastAPI APIRouter /api/v1/biometric/fingerprint", "enroll, verify, identify, get, delete, por dedo. Misma guarda de permiso a nivel de router que facial")
+        Component(summaryCtrl, "SummaryRouter", "FastAPI APIRouter", "GET /api/v1/biometric/{person_id}/summary -> {has_face, has_fingerprint}, lee ambos repositorios")
+        Component(updateCtrl, "UpdateRouter", "FastAPI APIRouter /api/v1/biometric/update-request", "Flujo independiente de casos de actualización biométrica — NO es un proxy del de configuration, ver SEQ-04")
+        Component(wsCtrl, "WsRouter", "FastAPI WebSocket /api/v1/biometric/ws", "Canal en tiempo real: despacha tramas identify/enroll y difunde attendance.event a los demás clientes conectados. Totalmente construido, idempotente, pero ningún cliente frontend lo abre jamás — ver SEQ-06")
+        Component(guard, "require_permission / authenticate_websocket", "FastAPI dependency", "Revalida el sessionId portador contra identity, evalúa un permiso contra authorization — mismo contrato que el AuthTokenFilter de Java, implementado de forma independiente (ver 07-api/authentication.md §1)")
+    }
+
+    Container_Boundary(domain, "Capa de dominio (dataclasses + puertos)") {
+        Component(facialEntity, "FacialEmbedding / FingerprintEmbedding", "dataclass", "Vector de encoding, versión de modelo/plantilla, isActive — construido directamente dentro de los manejadores del router")
+        Component(matchLogEntity, "BiometricMatchLog", "dataclass", "Cada intento de verify/identify, coincida o no, con puntaje y umbral")
+        Component(caseEntity, "BiometricUpdateCase", "dataclass", "La entidad independiente de casos de actualización — sin campo requestedBy, sin validación de fingerNumber (ver cls-biometric.puml)")
+        Component(outPorts, "Puertos de repositorio", "ABC interfaces", "BiometricRepositoryPort, MatchLogRepositoryPort, UpdateCaseRepositoryPort")
+        Component(deadPort, "EnrollFacialUseCase", "ABC interface, unused", "Declarado bajo domain/ports/in_ pero sin implementación y sin invocador — los routers invocan los puertos de repositorio directamente, omitiendo este puerto por completo")
+    }
+
+    Container_Boundary(driven, "Adaptadores de salida (outbound, infrastructure/persistence)") {
+        Component(mongoEmbedding, "MongoEmbeddingRepository", "Motor (async MongoDB)", "Respalda los repositorios facial y de huella, parametrizado por BiometricType")
+        Component(mongoMatchLog, "MongoMatchLogRepository", "Motor", "Anexa a biometric_match_logs, retención de 90 días")
+        Component(mongoUpdateCase, "MongoUpdateCaseRepository", "Motor", "Respalda el flujo independiente de update-request — colección propia biometric_update_cases")
+        Component(deadStore, "EmbeddingStore (memory_store.py)", "in-memory dict, unused", "Escrito como respaldo en memoria con paridad Mongo pero nunca importado por main.py ni dependencies.py — código muerto. El propio docstring de main.py dice solo MongoDB, sin respaldo en memoria")
+    }
+
+    ContainerDb(mongo, "MongoDB 7", "faceattend_biometric", "facial_embedding, fingerprint_embedding, biometric_match_logs, biometric_update_cases")
+
+    Container_Ext(kong, "Kong :8080", "Gateway", "Enruta /api/v1/biometric/* aquí. Su prefunción en el borde ya validó el sessionId portador antes de reenviar")
+    Container_Ext(identity, "ms-identity :8081", "Session store", "GET /api/v1/sessions/{id} — invocado de nuevo por la propia guarda de este servicio")
+    Container_Ext(authorization, "ms-authorization :8082", "RBAC", "GET /api/v1/auth/evaluate con attendance.record:write, biometric.case:request, biometric.case:review")
+
+    Rel(client, kong, "Llamadas API", "HTTPS / REST")
+    Rel(kong, facialCtrl, "Enruta /facial/*", "HTTP / REST")
+    Rel(kong, fingerprintCtrl, "Enruta /fingerprint/*", "HTTP / REST")
+    Rel(kong, summaryCtrl, "Enruta /{person_id}/summary", "HTTP / REST")
+    Rel(kong, updateCtrl, "Enruta /update-request*", "HTTP / REST")
+    Rel(client, wsCtrl, "WS /ws (token como query param — los navegadores no pueden fijar cabeceras WS)", "WebSocket")
+
+    Rel(guard, identity, "GET /api/v1/sessions/{id}", "HTTP")
+    Rel(guard, authorization, "GET /api/v1/auth/evaluate", "HTTP")
+    Rel(facialCtrl, guard, "Encadena solo cuando la sesión está Activa y el permiso es permitido")
+    Rel(fingerprintCtrl, guard, "Encadena solo cuando la sesión está Activa y el permiso es permitido")
+    Rel(summaryCtrl, guard, "Encadena solo cuando la sesión está Activa y el permiso es permitido")
+    Rel(updateCtrl, guard, "Encadena solo cuando la sesión está Activa y el permiso es permitido")
+    Rel(wsCtrl, guard, "authenticate_websocket al conectar — cierra con código WS 4401/4403/4503 en vez de un estado HTTP")
+
+    Rel(facialCtrl, facialEntity, "Construye directamente desde el cuerpo de la petición")
+    Rel(fingerprintCtrl, facialEntity, "Construye directamente desde el cuerpo de la petición")
+    Rel(facialCtrl, outPorts, "Invoca")
+    Rel(fingerprintCtrl, outPorts, "Invoca")
+    Rel(summaryCtrl, outPorts, "Invoca")
+    Rel(updateCtrl, caseEntity, "Construye directamente desde el cuerpo de la petición")
+    Rel(updateCtrl, outPorts, "Invoca")
+    Rel(facialCtrl, matchLogEntity, "Registra cada intento de verify/identify")
+
+    Rel(outPorts, mongoEmbedding, "Implementado por")
+    Rel(outPorts, mongoMatchLog, "Implementado por")
+    Rel(outPorts, mongoUpdateCase, "Implementado por")
+    Rel(mongoEmbedding, mongo, "Lee / escribe", "Motor / MongoDB")
+    Rel(mongoMatchLog, mongo, "Anexa", "Motor / MongoDB")
+    Rel(mongoUpdateCase, mongo, "Lee / escribe", "Motor / MongoDB")
+
+    Rel(wsCtrl, mongo, "Mismos repositorios que los routers REST, vía variantes de dependencia get_*_repository_ws", "Motor / MongoDB")

@@ -1,0 +1,71 @@
+C4Component
+    title Diagrama de componentes — ms-attendance :8085 (puertos y adaptadores hexagonales)
+
+    Person(client, "Cliente web / móvil", "Llega al servicio a través de Kong portando el sessionId opaco")
+
+    Container_Boundary(driving, "Adaptadores de entrada (inbound, infrastructure.web)") {
+        Component(attendanceCtrl, "AttendanceRecordController", "Spring MVC", "POST /api/v1/attendance-records y /bulk, GET / PUT / DELETE /{id}")
+        Component(justificationCtrl, "JustificationController", "Spring MVC", "GET /{id}, PATCH /{id}/review, DELETE /{id}")
+        Component(typeCtrl, "JustificationTypeController", "Spring MVC", "GET /{id}, PUT /{id}, DELETE /{id} sobre el catálogo por sede")
+        Component(docCtrl, "SupportingDocumentController", "Spring MVC", "GET /{id}, DELETE /{id} para los anexos de justificaciones")
+        Component(relationsCtrl, "AttendanceRelationsController", "Spring MVC", "4 joins de solo lectura — class-sessions/{id}/attendance, academic-actors/{id}/attendance, attendance/{id}/justification, justifications/{id}/documents")
+        Component(healthCtrl, "HealthController + QualityHealthController", "Spring MVC", "/health y /health/quality (instantánea de métricas ISO 9001)")
+        Component(filter, "AuthTokenFilter", "Jakarta filter", "Revalida el sessionId portador contra identity (defensa en profundidad — Kong ya lo verificó en el borde), carga los roles y evalúa el permiso desde authorization, luego fija X-User-Id / X-User-Roles. El permiso requerido se deriva del método + la ruta, no de anotaciones")
+        Component(advice, "GlobalExceptionHandler", "@RestControllerAdvice", "Mapea excepciones de dominio a 400 / 404 / 409")
+        Component(webMap, "DTOs y mapeadores web", "records + mappers", "Traducción de peticiones y respuestas en el borde, 11 DTOs / 4 mapeadores")
+    }
+
+    Container_Boundary(application, "Capa de aplicación (21 casos de uso)") {
+        Component(useCases, "Implementaciones de casos de uso", "Spring @Service", "Crear / Registrar / Masivo / Actualizar / Eliminar / Listar / Obtener registros de asistencia, Crear / Revisar / Listar / Eliminar justificaciones, CRUD de tipos de justificación, CRUD de documentos de soporte")
+        Component(tx, "Frontera @Transactional", "Spring", "Una transacción ACID local por escritura: validar, verificar duplicados contra (class_session_id, academic_actor_id), guardar, luego publicar (ADR-004)")
+    }
+
+    Container_Boundary(domain, "Capa de dominio (Java puro, sin imports web de Spring)") {
+        Component(models, "4 agregados", "POJOs", "AttendanceRecord, Justification, JustificationType, SupportingDocument con enums de estado cerrados y sus reglas")
+        Component(inPorts, "21 puertos de entrada", "interfaces", "domain/port/in/*UseCase — el contrato de caso de uso que invocan los adaptadores de entrada")
+        Component(outPorts, "4 puertos de salida", "interfaces", "AttendanceRecordRepository, JustificationRepository, JustificationTypeRepository, SupportingDocumentRepository")
+        Component(domainEx, "Excepciones de dominio", "POJOs", "ValidationException, EntityNotFoundException, DuplicateEntityException, DomainException")
+    }
+
+    Container_Boundary(driven, "Adaptadores de salida (outbound, infrastructure)") {
+        Component(persistence, "4 adaptadores de persistencia", "JPA / Hibernate", "Adaptador -> mapeador -> entidad JPA -> repositorio Spring Data, esquema attendance")
+        Component(publisher, "DomainEventPublisher", "Kafka producer", "kafkaTemplate.send, los fallos solo se registran — sin outbox ni DLQ (AT-006)")
+        Component(qualityAudit, "QualityAuditInterceptor", "HandlerInterceptor", "Declarado como @Component pero nunca registrado (sin WebMvcConfigurer.addInterceptors), así que preHandle nunca se ejecuta y /health/quality reporta una instantánea vacía")
+    }
+
+    ContainerDb(postgres, "PostgreSQL 17", "esquema attendance", "attendance_record, justification, justification_type, supporting_document más el bloque de auditoría. Liquibase deshabilitado dentro del servicio — las migraciones viven en database/05-ms-attendance-db")
+    ContainerDb(kafka, "Kafka 3.x (KRaft)", "topics", "attendance-events, justification-events, justification-type-events, document-events — solo se producen, no existe ningún consumidor")
+
+    Container_Ext(kong, "Kong :8080", "Gateway", "Enruta /api/v1/attendance-records, /justifications, /justification-types, /supporting-documents más las 4 rutas anidadas de lectura. Su prefunción en el borde ya validó el sessionId portador antes de reenviar")
+    Container_Ext(identity, "ms-identity :8081", "Session store", "GET /api/v1/sessions/{id} — cada llamada autenticada")
+    Container_Ext(authorization, "ms-authorization :8082", "RBAC", "GET /users/{id}/roles y GET /auth/evaluate con attendance.record:read | write y attendance.justification:approve")
+
+    Rel(client, kong, "Llamadas API", "HTTPS / REST")
+    Rel(kong, attendanceCtrl, "Enruta attendance-records y lecturas anidadas", "HTTP / REST")
+    Rel(kong, justificationCtrl, "Enruta justifications", "HTTP / REST")
+    Rel(kong, typeCtrl, "Enruta justification-types", "HTTP / REST")
+    Rel(kong, docCtrl, "Enruta supporting-documents", "HTTP / REST")
+
+    Rel(filter, identity, "GET /api/v1/sessions/{id}", "HTTP")
+    Rel(filter, authorization, "GET /users/{id}/roles + GET /auth/evaluate", "HTTP")
+    Rel(filter, attendanceCtrl, "Encadena solo cuando la sesión está Activa y el permiso es permitido")
+
+    Rel(attendanceCtrl, webMap, "Deserializa y mapea")
+    Rel(justificationCtrl, webMap, "Deserializa y mapea")
+    Rel(attendanceCtrl, inPorts, "Invoca")
+    Rel(justificationCtrl, inPorts, "Invoca")
+    Rel(typeCtrl, inPorts, "Invoca")
+    Rel(docCtrl, inPorts, "Invoca")
+    Rel(relationsCtrl, inPorts, "Joins de solo lectura")
+    Rel(healthCtrl, qualityAudit, "Lee la instantánea de métricas")
+
+    Rel(inPorts, useCases, "Implementado por")
+    Rel(useCases, tx, "Se ejecuta dentro de")
+    Rel(useCases, models, "Opera sobre")
+    Rel(useCases, domainEx, "Lanza")
+    Rel(useCases, outPorts, "Requiere (puerto)")
+
+    Rel(outPorts, persistence, "Implementado por")
+    Rel(persistence, postgres, "Lee / escribe", "JDBC / SQL")
+    Rel(tx, publisher, "Publica tras guardar", "KafkaTemplate")
+    Rel(publisher, kafka, "attendance-events, justification-events, justification-type-events, document-events", "Async producer")
