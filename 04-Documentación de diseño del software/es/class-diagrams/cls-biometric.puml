@@ -1,0 +1,117 @@
+@startuml cls-biometric
+title Diagrama de clases — Biometría
+
+skinparam classAttributeIconSize 0
+hide circle
+
+class Person <<externo — identity>> {
+}
+class AppUser <<externo — identity>> {
+}
+
+enum BiometricType <<enumeración>> {
+  FACIAL
+  FINGERPRINT
+}
+
+enum UpdateStatus <<enumeración>> {
+  Pending
+  In_Review
+  Approved
+  Rejected
+}
+
+class BiometricUpdateCase {
+  +caseId: UUID
+  +personId: UUID
+  +biometricType: BiometricType
+  +fingerNumber: Int
+  +currentEmbeddingRef: String
+  +reason: String
+  +updateStatus: UpdateStatus
+  +requestedBy: UUID
+  +requestedAt: DateTime
+  +reviewedBy: UUID
+  +reviewedAt: DateTime
+  +resolutionNotes: String
+  +request()
+  +review(decision)
+}
+
+class FacialEmbedding <<documento MongoDB>> {
+  +_id: ObjectId
+  +personId: UUID
+  +templateVersion: Int
+  +encoding: Float[]
+  +modelVersion: String
+  +enrolledAt: DateTime
+  +isActive: Boolean
+  +enroll()
+  +deactivate()
+}
+
+class FingerprintEmbedding <<documento MongoDB>> {
+  +_id: ObjectId
+  +personId: UUID
+  +fingerNumber: Int
+  +templateVersion: Int
+  +encoding: Float[]
+  +modelVersion: String
+  +enrolledAt: DateTime
+  +isActive: Boolean
+  +enroll()
+  +deactivate()
+}
+
+BiometricUpdateCase --> BiometricType
+BiometricUpdateCase --> UpdateStatus
+
+BiometricUpdateCase ..> Person : person_id\n(trans-contexto, sin FK)
+BiometricUpdateCase ..> AppUser : requested_by / reviewed_by\n(trans-contexto, sin FK)
+BiometricUpdateCase ..> FacialEmbedding : current_embedding_ref\n(trans-paradigma Mongo _id, sin FK)
+BiometricUpdateCase ..> FingerprintEmbedding : current_embedding_ref\n(trans-paradigma Mongo _id, sin FK)
+FacialEmbedding ..> Person : person_id\n(trans-contexto, sin FK)
+FingerprintEmbedding ..> Person : person_id\n(trans-contexto, sin FK)
+
+note left of BiometricUpdateCase
+  Propiedad lógica de Biometric, alojado
+  físicamente en el schema configuration (transitorio,
+  ver AGENTS.md §4.6). chk_finger_number: 1..10
+  solo si biometricType=FINGERPRINT, en otro caso NULL.
+  requestedBy/requestedAt son obligatorios. Esta es
+  la forma canónica expuesta en
+  ms-configuration /api/v1/biometric-update-cases
+  (Postgres) — ms-biometric también ejecuta su propia
+  implementación independiente en MongoDB de la misma
+  funcionalidad en /api/v1/biometric/update-request*
+  sin requestedBy, sin verificación de fingerNumber y
+  sin sincronización con esta. Ver SEQ-04 y
+  c4-biometric-service.mmd.
+end note
+
+note right of FacialEmbedding
+  RN-28: solo un embedding activo por persona
+  a la vez (bandera isActive) — enroll()
+  desactiva la plantilla anterior.
+end note
+
+note right of FingerprintEmbedding
+  RN-27: admite hasta 10 dedos por persona,
+  una plantilla activa por dedo.
+end note
+
+note as N1
+  FacialEmbedding/FingerprintEmbedding no tienen
+  bloque de auditoría (documentos MongoDB, no filas SQL —
+  ver AGENTS.md §4.6). BiometricUpdateCase sí
+  lleva el bloque estándar de auditoría SQL
+  (created_at/updated_at/deleted_at/created_by/
+  updated_by/deleted_by/row_version), omitido
+  aquí por legibilidad. Ver
+  06-data/domains/06-biometric.md y
+  08-configuration.md para la vista a nivel de columnas
+  (06-biometric.md no tiene erDiagram propio —
+  ver la nota en diagram-index.md).
+end note
+
+@enduml

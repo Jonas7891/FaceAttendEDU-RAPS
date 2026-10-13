@@ -1,0 +1,55 @@
+@startuml cls-configuration
+title Diagrama de clases — Configuración
+
+skinparam classAttributeIconSize 0
+hide circle
+
+class School <<externo — academic>> {
+}
+
+class AcademicConfiguration {
+  +configurationId: Int
+  +schoolId: Int
+  +configurationName: String
+  +configurationValue: String
+  +description: String
+}
+
+class SecurityConfiguration {
+  +configurationId: Int
+  +configurationName: String
+  +configurationValue: String
+  +description: String
+}
+
+AcademicConfiguration ..> School : school_id\n(trans-contexto, sin FK)
+
+note bottom of AcademicConfiguration
+  Alcance por sede (uq_academic_configuration
+  sobre school_id + configuration_name), p. ej.
+  tardy_tolerance_minutes.
+end note
+
+note bottom of SecurityConfiguration
+  Global (sin school_id), uq sobre
+  configuration_name, p. ej. max_login_attempts,
+  session_timeout_minutes,
+  lockout_duration_minutes. La política de contraseñas
+  vive en identity.password_policy, no aquí.
+end note
+
+note as N1
+  BiometricUpdateCase también está alojado físicamente
+  en este schema (alojamiento transitorio solamente, el
+  dueño lógico es Biometric — ver cls-biometric.puml y
+  AGENTS.md §4.6), por eso deliberadamente no se dibuja
+  aquí. Todas las clases de arriba también llevan el
+  bloque estándar de auditoría
+  (created_at/updated_at/deleted_at/created_by/
+  updated_by/deleted_by/row_version) —
+  omitido aquí por legibilidad. Ver AGENTS.md
+  §2.2 y 06-data/domains/08-configuration.md
+  para la vista ER a nivel de columnas.
+end note
+
+@enduml

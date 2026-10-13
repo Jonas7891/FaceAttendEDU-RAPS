@@ -1,0 +1,101 @@
+@startuml cls-scheduling
+title Diagrama de clases — Programación de clases
+
+skinparam classAttributeIconSize 0
+hide circle
+
+class School <<externo — academic>> {
+}
+class Cohort <<externo — academic>> {
+}
+class Course <<externo — academic>> {
+}
+class AcademicActor <<externo — academic>> {
+}
+
+enum SessionStatus <<enumeración>> {
+  Open
+  Closed
+  Cancelled
+}
+
+class Environment {
+  +environmentId: Int
+  +schoolId: Int
+  +code: String
+  +name: String
+  +capacity: Int
+  +status: Boolean
+}
+
+class ScheduleBlock {
+  +scheduleBlockId: Long
+  +cohortId: Long
+  +courseId: Int
+  +environmentId: Int
+  +instructorActorId: Long
+  +dayOfWeek: Int
+  +startsAt: Time
+  +endsAt: Time
+  +create()
+}
+
+class ClassSession {
+  +classSessionId: Long
+  +scheduleBlockId: Long
+  +sessionDate: Date
+  +openedBy: Long
+  +openedAt: DateTime
+  +closedBy: Long
+  +closedAt: DateTime
+  +sessionStatus: SessionStatus
+  +open()
+  +close(closedBy)
+  +cancel()
+}
+
+Environment "1" -- "0..*" ScheduleBlock : schedule_block.environment_id FK
+ScheduleBlock "1" -- "0..*" ClassSession : class_session.schedule_block_id FK
+ClassSession --> SessionStatus
+
+Environment ..> School : environment.school_id\n(trans-contexto, sin FK)
+ScheduleBlock ..> Cohort : schedule_block.cohort_id\n(trans-contexto, sin FK)
+ScheduleBlock ..> Course : schedule_block.course_id\n(trans-contexto, sin FK)
+ScheduleBlock ..> AcademicActor : schedule_block.instructor_actor_id\n(trans-contexto, sin FK)
+ClassSession ..> AcademicActor : opened_by / closed_by\n(trans-contexto, sin FK)
+
+note left of ScheduleBlock
+  RN-18/RN-20: starts_at < ends_at (chk_block_time).
+  Las restricciones unique de la BD solo detectan un
+  starts_at idéntico; el solapamiento real de intervalos
+  (los rangos que se tocan están bien, p. ej. fin 10:00 /
+  inicio 10:00) se verifica en el código de aplicación
+  mediante ScheduleBlockOverlapGuard antes de cada
+  create/update — una consulta para el environment,
+  una para el instructor. Ni cohort_id, ni course_id
+  ni instructor_actor_id se verifican jamás contra
+  Academic antes de guardar — ver
+  09-microservices/communication-patterns.md §3.
+end note
+
+note right of ClassSession
+  RN-22: una asistencia por actor por sesión,
+  garantizado en attendance (uq_attendance_session_actor).
+  RN-23 (previsto): la sesión debería estar Open
+  cuando se registra la asistencia -- ms-attendance
+  nunca verifica el estado de esta sesión, así que
+  no se aplica (corregido el 2026-10-12 contra
+  FULL/). open() nunca puede tener éxito en la práctica —
+  ver ST-01 en diagram-index.md.
+end note
+
+note as N1
+  Todas las clases también llevan el bloque estándar
+  de auditoría (created_at/updated_at/deleted_at/
+  created_by/updated_by/deleted_by/row_version) —
+  omitido aquí por legibilidad. Ver AGENTS.md §2.2 y
+  06-data/domains/04-scheduling.md para la
+  vista ER a nivel de columnas.
+end note
+
+@enduml

@@ -1,0 +1,114 @@
+@startuml cls-identity
+title Diagrama de clases — Identidad
+
+skinparam classAttributeIconSize 0
+hide circle
+
+enum AuthenticationType <<enumeración>> {
+  Local
+  Windows
+  External
+}
+
+enum SessionStatus <<enumeración>> {
+  Active
+  Closed
+}
+
+class Credentials <<objeto de valor>> {
+  +identifier: String
+  +password: String
+}
+
+class Person {
+  +personId: UUID
+  +documentType: String
+  +documentNumber: String
+  +name: String
+  +lastName: String
+  +email: String
+  +phone: String
+  +bloodType: String
+  +birthDate: Date
+  +status: Boolean
+  +activate()
+  +deactivate()
+}
+
+class AppUser {
+  +userId: UUID
+  +personId: UUID
+  +username: String
+  +passwordHash: String
+  +authenticationType: AuthenticationType
+  +status: Boolean
+  +lastAccess: DateTime
+  +authenticate(credentials: Credentials): UserSession
+  +activate()
+  +deactivate()
+}
+
+class UserSession {
+  +sessionId: UUID
+  +userId: UUID
+  +startDate: DateTime
+  +endDate: DateTime
+  +sourceIp: String
+  +sessionStatus: SessionStatus
+  +close()
+  +refresh(): UserSession
+}
+
+class PasswordPolicy {
+  +policyId: Int
+  +minLength: Int
+  +maxLength: Int
+  +requiresUppercase: Boolean
+  +requiresNumbers: Boolean
+  +requiresSymbols: Boolean
+  +expirationDays: Int
+}
+
+Person "1" -- "0..1" AppUser : app_user.person_id FK\nUNIQUE
+AppUser "1" -- "0..*" UserSession : user_session.user_id FK
+AppUser ..> Credentials : authenticate() consume
+AppUser --> AuthenticationType
+UserSession --> SessionStatus
+
+note right of Person
+  RN-01/RN-02: una Person puede existir sin un
+  AppUser activo, pero un AppUser no puede existir
+  sin una Person. RN-03: no se puede eliminar
+  con registros activos. Sin school_id — la identidad
+  es agnóstica de sede.
+end note
+
+note right of AppUser
+  RN-04/RN-06: debe autenticarse antes de usar;
+  los administradores pueden desactivar sin borrar
+  el historial. person_id es UNIQUE — una cuenta
+  por persona. Los roles viven en el contexto
+  Authorization (ver cls-authorization.puml) —
+  AppUser no tiene referencia directa a Role aquí.
+end note
+
+note right of UserSession
+  sessionId es el token portador opaco (nunca
+  un JWT). refresh() lo rota: cierra esta fila
+  y devuelve un nuevo UserSession — de un solo uso.
+end note
+
+note as N1
+  PasswordPolicy no tiene relación dibujada: es un
+  singleton global que el flujo de recuperación/
+  restablecimiento lee, no algo que alguna entidad
+  aquí referencie por FK. Todas las clases también
+  llevan el bloque estándar de auditoría
+  (created_at/updated_at/deleted_at/created_by/
+  updated_by/deleted_by/row_version) — omitido
+  aquí por legibilidad. Ver AGENTS.md §2.2 y
+  06-data/domains/01-identity.md para la
+  vista ER a nivel de columnas.
+end note
+
+@enduml

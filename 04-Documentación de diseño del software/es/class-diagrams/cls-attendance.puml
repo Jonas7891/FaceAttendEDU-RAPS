@@ -1,0 +1,169 @@
+@startuml cls-attendance
+title Diagrama de clases — Asistencia
+
+skinparam classAttributeIconSize 0
+hide circle
+
+class ClassSession <<externo — scheduling>> {
+}
+class AcademicActor <<externo — academic>> {
+}
+class School <<externo — academic>> {
+}
+class Cohort <<externo — academic>> {
+}
+class AppUser <<externo — identity>> {
+}
+
+enum AttendanceStatus <<enumeración>> {
+  Present
+  Absent
+  Late
+  Justified
+}
+
+enum CaptureMethod <<enumeración>> {
+  FACIAL
+  MANUAL
+  IOT
+  IMPORT
+}
+
+enum ReviewStatus <<enumeración>> {
+  Pending
+  Approved
+  Rejected
+}
+
+class AttendanceRecord {
+  +attendanceRecordId: Long
+  +classSessionId: Long
+  +academicActorId: Long
+  +attendanceStatus: AttendanceStatus
+  +capturedAt: DateTime
+  +captureMethod: CaptureMethod
+  +matchScore: Decimal
+  +record()
+}
+
+class JustificationType {
+  +justificationTypeId: Int
+  +schoolId: Int
+  +name: String
+  +description: String
+  +requiresAttachment: Boolean
+  +status: Boolean
+}
+
+class Justification {
+  +justificationId: Long
+  +attendanceRecordId: Long
+  +justificationTypeId: Int
+  +reason: String
+  +submittedAt: DateTime
+  +reviewedBy: UUID
+  +reviewedAt: DateTime
+  +reviewStatus: ReviewStatus
+  +resolutionNotes: String
+  +submit()
+  +review(decision)
+}
+
+class SupportingDocument {
+  +supportingDocumentId: Long
+  +justificationId: Long
+  +fileName: String
+  +storageUri: String
+  +mimeType: String
+  +sizeBytes: Long
+  +upload()
+}
+
+class AttendanceReport <<proyección derivada, sin FKs>> {
+  +reportId: UUID
+  +schoolId: Int
+  +cohortId: Long
+  +generatedBy: UUID
+  +reportType: String
+  +filters: JSON
+  +result: JSON
+  +generatedAt: DateTime
+}
+
+AttendanceRecord "1" -- "0..1" Justification : justification.attendance_record_id FK\nUNIQUE uno a uno
+JustificationType "1" -- "0..*" Justification : justification.justification_type_id FK
+Justification "1" -- "0..*" SupportingDocument : supporting_document.justification_id FK
+AttendanceRecord --> AttendanceStatus
+AttendanceRecord --> CaptureMethod
+Justification --> ReviewStatus
+
+AttendanceRecord ..> ClassSession : class_session_id\n(trans-contexto, sin FK)
+AttendanceRecord ..> AcademicActor : academic_actor_id\n(trans-contexto, sin FK)
+Justification ..> AppUser : reviewed_by\n(trans-contexto, sin FK)
+AttendanceReport ..> School : school_id\n(sin FK, proyección derivada)
+AttendanceReport ..> Cohort : cohort_id\n(sin FK, proyección derivada)
+AttendanceReport ..> AppUser : generated_by\n(sin FK, proyección derivada)
+
+note right of AttendanceRecord
+  RN-22: un solo registro por academic_actor por
+  class_session (uq_attendance_session_actor),
+  la única protección real -- RecordAttendanceUseCaseImpl
+  solo depende de AttendanceRecordRepository, así que
+  RN-23 (la sesión debe estar Open) NO se verifica
+  en el servidor (corregido el 2026-10-12 contra FULL/):
+  un registro puede escribirse contra una class_session
+  Closed o Cancelled sin error. Los registros Absent
+  dejan capturedAt en NULL. Solo
+  captureMethod=MANUAL está cableado para la ruta
+  alternativa (RN-26) — la captura FACIAL está diseñada
+  pero ningún cliente aún invoca la escritura, ver SEQ-01.
+end note
+
+note left of JustificationType
+  school_id NULL = tipo global.
+  uq_justification_type_school_name más un
+  unique parcial sobre name WHERE school_id IS NULL.
+end note
+
+note right of Justification
+  RN-32: exactamente una justificación por
+  attendance_record (1:1, UNIQUE). La revisión es
+  una transición de un solo intento: Pending -> Approved
+  o Rejected solamente, una justificación ya resuelta
+  no puede revisarse de nuevo (corregido el 2026-10-12
+  contra FULL/). RN-33 SÍ se aplica: aprobar un tipo
+  que requiere adjunto devuelve 400 a menos que exista
+  una fila SupportingDocument -- solo verifica que
+  la fila exista, no que su archivo se haya subido
+  realmente (ver la nota de SupportingDocument).
+  RN-36 (previsto): la aprobación debería propagar
+  attendance_status a Justified
+  -- no lo hace (ver ST-02 / SEQ-03). Ver
+  act-justification-process.mmd para el proceso completo
+  previsto frente al real.
+end note
+
+note bottom of SupportingDocument
+  Tanto Web como Mobile llaman a este endpoint con
+  metadatos reales justo después de crear una
+  justificación, pero storageUri se fabrica en el
+  cliente -- sin subida multipart, sin llamada al SDK
+  de MinIO o S3 en ningún lado, ADR-009 nunca se
+  implementó. La fila es real, el archivo que nombra
+  nunca se transmitió. Ver SEQ-03.
+end note
+
+note as N1
+  Todas las clases también llevan el bloque estándar
+  de auditoría (created_at/updated_at/deleted_at/
+  created_by/updated_by/deleted_by/row_version) —
+  omitido aquí por legibilidad. Ver AGENTS.md §2.2 y
+  06-data/domains/05-attendance.md para la
+  vista ER a nivel de columnas. Las entidades
+  biométricas (FacialEmbedding, FingerprintEmbedding,
+  BiometricUpdateCase) viven en
+  cls-biometric.puml — ms-attendance nunca llama
+  a ms-biometric directamente, ver SEQ-01.
+end note
+
+@enduml
