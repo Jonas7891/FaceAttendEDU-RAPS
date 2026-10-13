@@ -1,0 +1,76 @@
+sequenceDiagram
+    autonumber
+    actor U as Usuario (Web / Móvil)
+    participant GW as Kong :8080
+    participant ID as ms-identity :8081
+    participant AZ as ms-authorization :8082
+    participant SVC as Cualquier servicio 01-09
+
+    Note over GW: La pre-función global de Kong valida el sessionId opaco contra identity en cada ruta no pública (401/503 en el borde), más cors + limitación de tasa — sin plugin jwt, sin consumidores. Cada servicio detrás (Java 01/02/04/05, TS 03/07/09, Python 06, Go 08) también revalida la sesión y evalúa RBAC de nuevo por su cuenta, con una guardia por servicio — "duplicado por servicio a propósito: sin módulo compartido" (ver nota al final)
+
+    rect rgb(238, 245, 238)
+    Note over U,ID: 1. Inicio de sesión — ruta pública de arranque, la pre-función no corre
+    U->>GW: POST /api/v1/auth/login {identifier, password}
+    GW->>ID: reenviar (aún no se exige bearer)
+    ID->>ID: compara BCrypt contra app_user.password_hash
+    alt credenciales válidas
+        ID->>ID: INSERT user_session (session_status = Active, start_date, source_ip)
+        ID-->>U: 200 {sessionId, userId, sessionStatus: Active, startDate, sourceIp}
+        U->>U: guarda sessionId (SecureStore en Móvil, storage en Web)
+    else usuario desconocido o contraseña errónea
+        ID-->>U: 401 "Invalid email or password" (mismo mensaje para ambos casos)
+    end
+    end
+
+    rect rgb(240, 245, 255)
+    Note over U,AZ: 2. Contexto en cliente (fail-closed en Móvil) — cada llamada de abajo lleva Authorization Bearer sessionId
+    U->>GW: GET /api/v1/users/{id}/roles
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>AZ: reenviar
+    AZ-->>U: [roleName...]
+    U->>GW: GET /api/v1/auth/evaluate?userId&permission=attendance.record:read
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>AZ: reenviar
+    AZ-->>U: {allowed: true|false}
+    U->>GW: GET /api/v1/users/{id} + GET /api/v1/persons/{id}
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>ID: reenviar
+    ID-->>U: perfil
+    end
+
+    rect rgb(255, 246, 236)
+    Note over U,SVC: 3. Cada llamada autenticada, en cada uno de los 9 servicios — la verificación de borde de Kong corre primero, luego la guardia propia del servicio revalida (AuthTokenFilter en Java, registerAuthGuard en TS, require_permission en Python, AuthMiddleware en Go — mismo contrato, duplicado por servicio, sin módulo compartido)
+    U->>GW: GET/PATCH/POST ... cabecera: Authorization Bearer sessionId
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    alt falta cabecera, token no-UUID, o sesión no Active
+        ID-->>GW: 401 / sesión no Active
+        GW-->>U: 401 (la solicitud nunca llega al servicio)
+    else sesión Active
+        ID-->>GW: 200 Active
+        GW->>SVC: reenviar
+        SVC->>ID: GET /api/v1/sessions/{sessionId} (revalida — sin caché, sin estado compartido con Kong)
+        ID-->>SVC: sesión (debe estar Active)
+        SVC->>AZ: GET /api/v1/users/{id}/roles (solo Java) o GET /api/v1/auth/evaluate directo (TS/Python/Go — más grueso, permiso derivado de la ruta)
+        AZ-->>SVC: roles / allowed?
+        SVC->>SVC: Java fija X-User-Id / X-User-Roles — TS/Python/Go solo fijan req.userId
+        alt permiso concedido
+            SVC-->>U: respuesta 2xx
+        else permiso denegado
+            SVC-->>U: 403 forbidden
+        end
+    end
+    end
+
+    rect rgb(245, 240, 255)
+    Note over U,ID: 4. Cierre de sesión y refresco (rotación) — rutas públicas de arranque, la pre-función no corre
+    U->>GW: POST /api/v1/auth/logout?sessionId=...
+    GW->>ID: reenviar
+    ID->>ID: session_status = Closed (end_date fijado)
+    ID-->>U: 204 No Content
+    Note over U,ID: el refresco es de un solo uso: POST /api/v1/auth/refresh {sessionId} cierra la sesión vieja y devuelve una nueva — un sessionId repetido o vencido recibe 401
+    end
+
+    Note over SVC: Verificado 2026-10 contra FULL — cada servicio, no solo Java, registra su propia guardia de sesión+RBAC al arrancar (03/07/09 TS registerAuthGuard, 06 Python require_permission, 08 Go AuthMiddleware), aplicada a cada ruta /api/** salvo /health. Una llamada directa al puerto propio de un servicio igual choca con una verificación real, no es una omisión abierta. La brecha de cobertura AT-004 de 07-api/authentication.md (solo 01/02/04/05 tienen filtro) y R-003 de 15-project-control/risks.md describen un estado anterior del código, hoy obsoleto y nunca actualizado cuando se añadieron estas guardias

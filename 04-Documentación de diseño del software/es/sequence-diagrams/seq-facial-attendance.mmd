@@ -1,0 +1,79 @@
+sequenceDiagram
+    autonumber
+    actor S as Estudiante (Móvil / Web)
+    participant CL as App cliente (face-api.js)
+    participant GW as Kong :8080
+    participant ID as ms-identity :8081
+    participant AZ as ms-authorization :8082
+    participant BIO as ms-biometric :8086
+    participant M as MongoDB faceattend_biometric
+    participant ATT as ms-attendance :8085
+    participant PG as PostgreSQL schema attendance
+    participant K as Kafka tópico attendance-events
+
+    Note over GW: La pre-función global de Kong valida el sessionId opaco contra identity en cada ruta no pública (401/503 en el borde), más cors + limitación de tasa — sin plugin jwt. ms-biometric (06) también revalida por su cuenta: cada ruta /api/v1/biometric/facial/* exige sesión + permiso attendance.record:write (ver SEQ-02)
+
+    rect rgb(238, 245, 238)
+    Note over CL,M: 1. Inscripción (una vez por estudiante)
+    S->>CL: abre pantalla "registrar rostro"
+    CL->>CL: face-api.js detecta el rostro y calcula el descriptor localmente
+    CL->>GW: POST /api/v1/biometric/facial/enroll {person_id, encoding}
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>BIO: reenviar
+    BIO->>ID: GET /api/v1/sessions/{sessionId} (su propia guardia revalida)
+    ID-->>BIO: Active
+    BIO->>AZ: GET /api/v1/auth/evaluate?permission=attendance.record:write
+    AZ-->>BIO: permitido
+    BIO->>M: inserta/actualiza plantilla activa y desactiva la anterior
+    M-->>BIO: ok
+    BIO-->>CL: 201 Created
+    end
+
+    rect rgb(240, 245, 255)
+    Note over CL,M: 2. Identificación 1:N — precondición solo lectura, fuera de la transacción de escritura (ADR-004)
+    S->>CL: pulsa "tomar asistencia"
+    CL->>CL: calcula el descriptor localmente (la foto nunca se sube)
+    CL->>GW: POST /api/v1/biometric/facial/identify {encoding}
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>BIO: reenviar
+    BIO->>ID: GET /api/v1/sessions/{sessionId} + GET /auth/evaluate (misma guardia que enroll)
+    ID-->>BIO: Active, permitido
+    BIO->>M: lista plantillas activas (tope identify_scan_limit = 10000)
+    M-->>BIO: plantillas
+    BIO->>BIO: similitud coseno de cada plantilla contra la captura
+    BIO->>M: inserta biometric_match_logs (umbral 0.85, retención 90 días)
+    alt mejor puntaje >= umbral
+        BIO-->>CL: 200 {person_id, score}
+    else bajo el umbral
+        BIO-->>CL: 404 NO_MATCH
+        CL-->>S: rostro no reconocido — reintenta (nada se escribe)
+    end
+    end
+
+    rect rgb(255, 246, 236)
+    Note over GW,PG: 3. Escritura de asistencia — una transacción ACID local (ADR-004)
+    CL->>GW: POST /api/v1/attendance-records {class_session_id, academic_actor_id, attendance_status, capture_method, match_score}
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>ATT: reenviar con Authorization Bearer sessionId
+    ATT->>ID: AuthTokenFilter revalida: GET /sessions/{id} + GET /users/{id}/roles + evaluate
+    ID-->>ATT: Sesión activa, roles, permitido (ver SEQ-02)
+    ATT->>ATT: inicia @Transactional
+    ATT->>ATT: pre-verificación findByClassSessionIdAndAcademicActorId
+    ATT->>PG: INSERT attendance_record
+    Note over ATT,K: publish() corre dentro de @Transactional justo tras guardar: kafkaTemplate.send es asíncrono y los fallos solo se registran — sin outbox, sin DLQ (AT-006)
+    ATT->>K: envía attendance-events {attendanceRecordId, status}
+    PG-->>ATT: commit — uq_attendance_session_actor lo hace atómico
+    alt ya existe fila para esa sesión y actor
+        PG-->>ATT: violación de unicidad
+        ATT-->>CL: 409 DuplicateEntityException
+    else fila nueva
+        ATT-->>CL: 201 Created
+    end
+    end
+
+    Note over CL: Verificado 2026-10: endpoints.js declara facialIdentify y AttendanceService.create no tiene sitio de llamada — el backend está listo pero ningún cliente conecta la captura con la escritura de asistencia aún
+    Note over K: No existe ningún consumidor Kafka en el back-end (solo productores) — attendance-events se publica pero no se consume — ningún servicio genera notification.alert automáticamente (las alertas solo se crean vía POST /api/v1/alerts de ms-notification)
+    Note over ATT: ADR-004 describe un bus de eventos en proceso — el mecanismo implementado es el tópico Kafka attendance-events

@@ -1,0 +1,60 @@
+sequenceDiagram
+    autonumber
+    actor C1 as Cliente A (quiosco / tablero)
+    actor C2 as Cliente B (otro quiosco / tablero conectado)
+    participant WS as ms-biometric :8086 /api/v1/biometric/ws
+    participant ID as ms-identity :8081
+    participant AZ as ms-authorization :8082
+    participant IDEMP as IdempotencyCache (en proceso, 2000 entradas, TTL 5 min)
+    participant MGR as ConnectionManager (en proceso, solo esta instancia)
+    participant M as MongoDB faceattend_biometric
+
+    Note over WS: No pasa por la pre-función de borde de Kong igual que REST — un handshake WebSocket lleva el token como parámetro de consulta, ya que los navegadores no pueden fijar cabeceras personalizadas en una solicitud de actualización a WS
+
+    rect rgb(238, 245, 238)
+    Note over C1,AZ: 1. Conexión — ambos clientes abren el socket de forma independiente
+    C1->>WS: Conexión WS con token como parámetro de consulta
+    WS->>WS: accept() acepta primero el handshake, para que un rechazo aún pueda llevar un código y motivo de cierre
+    WS->>ID: GET sessions por id
+    ID-->>WS: Active
+    WS->>AZ: evalúa permiso attendance.record:write
+    AZ-->>WS: permitido
+    WS->>MGR: registra esta conexión
+    C2->>WS: Conexión WS, mismos pasos de autenticación
+    WS->>MGR: registra también esta conexión
+    end
+
+    rect rgb(240, 245, 255)
+    Note over C1,M: 2. El Cliente A envía una trama facial identify, dirección CHECK_IN, con un client_message_id
+    C1->>WS: trama facial.identify, client_message_id abc-1
+    WS->>IDEMP: busca abc-1
+    IDEMP-->>WS: fallo (miss)
+    WS->>WS: valida el contenido
+    WS->>M: misma llamada al repositorio que hace el REST POST facial identify
+    M-->>WS: mejor coincidencia y puntaje
+    WS->>IDEMP: guarda el ack bajo abc-1 — se repite literal si abc-1 se reenvía alguna vez
+    WS-->>C1: facial.identify.ack, client_message_id abc-1, resultado person_id y puntaje
+    WS->>MGR: difunde un attendance.event (CHECK_IN, person_id, score), excluyendo a C1
+    MGR-->>C2: attendance.event — C1 nunca recibe su propia difusión
+    end
+
+    rect rgb(255, 246, 236)
+    Note over C1,WS: 3. Reconexión tras un ack perdido — repetición idempotente
+    C1--xWS: la conexión se cae tras procesar abc-2 en el servidor pero antes de que llegue el ack
+    C1->>WS: Reconexión WS, mismos pasos de autenticación
+    C1->>WS: reenvía trama facial.enroll, mismo client_message_id abc-2
+    WS->>IDEMP: busca abc-2
+    IDEMP-->>WS: acierto (hit) — el ack guardado del primer intento
+    WS-->>C1: repite el ack en caché — enroll() NO se reejecuta, así la versión de plantilla no se incrementa dos veces
+    end
+
+    rect rgb(245, 240, 255)
+    Note over C1,WS: 4. Error y ping
+    C1->>WS: trama fingerprint.verify con contenido inválido
+    WS-->>C1: trama de error, código BadRequest, mismo client_message_id
+    C1->>WS: trama ping
+    WS-->>C1: trama pong
+    end
+
+    Note over C1,M: Verificado 2026-10: este endpoint refleja toda la superficie REST facial/fingerprint de enroll-verify-identify sobre un WebSocket con estado, con repetición idempotente y difusión a múltiples clientes (una dirección CHECK_IN/CHECK_OUT en cada trama) — una funcionalidad real y completa de entrada/salida para RF 3.1. Ningún cliente en front-end/Mobile ni front-end/Web abre jamás este socket — es alcanzable y correcto, pero está totalmente sin usar.
+    Note over MGR: La difusión se limita al conjunto de conexiones en memoria de este único proceso — con más de una réplica de ms-biometric, los clientes conectados a distintas instancias nunca ven los eventos entre sí (una limitación documentada en connection_manager.py, no un error introducido aquí)

@@ -1,0 +1,58 @@
+sequenceDiagram
+    autonumber
+    actor S as Estudiante
+    actor R as Revisor (instructor/admin)
+    participant GW as Kong :8080
+    participant ID as ms-identity :8081
+    participant AZ as ms-authorization :8082
+    participant CFG as ms-configuration :8087
+    participant PG as PostgreSQL schema configuration
+    participant BIO as ms-biometric :8086
+    participant M as MongoDB biometric_update_cases
+
+    Note over CFG,M: Verificado 2026-10 contra FULL — estas son dos implementaciones totalmente independientes de la funcionalidad de solicitud de actualización, no un almacén canónico más un espejo. Nada en el código comunica ms-configuration con ms-biometric aquí — endpoint-matrix.md se equivoca al llamar al lado biométrico un proxy delgado del caso canónico
+
+    rect rgb(238, 245, 238)
+    Note over S,PG: 1. Ruta A — la ruta "canónica" documentada
+    S->>GW: POST /api/v1/biometric-update-cases {personId, biometricType, fingerNumber?, reason}
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>CFG: reenviar
+    CFG->>ID: guardia propia: GET /api/v1/sessions/{sessionId}
+    ID-->>CFG: Active, userId
+    CFG->>AZ: GET /api/v1/auth/evaluate?permission=biometric.case:request
+    AZ-->>CFG: permitido
+    CFG->>CFG: resolveCaseScope — personId debe ser el propio del llamante salvo que tenga biometric.case:review
+    alt biometricType = FINGERPRINT y fingerNumber ausente
+        CFG-->>S: 400 fingerNumber requerido para FINGERPRINT
+    else válido
+        CFG->>PG: INSERT biometric_update_case (updateStatus=Pending, requestedBy obligatorio)
+        CFG-->>S: 201 {caseId, updateStatus: Pending}
+    end
+    R->>GW: PATCH /api/v1/biometric-update-cases/{caseId}/review {updateStatus}
+    GW->>CFG: reenviar (misma cadena de guardias, permiso biometric.case:review)
+    CFG->>PG: UPDATE (sin guardia de orden — ver ST-03)
+    CFG-->>R: 200 {updateStatus}
+    end
+
+    rect rgb(255, 246, 236)
+    Note over S,M: 2. Ruta B — una segunda implementación independiente, mismo prefijo de ruta base
+    S->>GW: POST /api/v1/biometric/update-request {person_id, biometric_type, reason}
+    Note right of S: Aquí no existe ningún campo fingerNumber — un caso FINGERPRINT puede crearse sin nada contra lo cual validarlo
+    GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
+    ID-->>GW: 200 Active
+    GW->>BIO: reenviar
+    BIO->>ID: guardia propia: GET /api/v1/sessions/{sessionId}
+    ID-->>BIO: Active
+    BIO->>AZ: GET /api/v1/auth/evaluate?permission=biometric.case:request
+    AZ-->>BIO: permitido
+    Note right of BIO: Sin verificación de alcance de persona como el resolveCaseScope de CFG — cualquier llamante con biometric.case:request puede listar o crear para cualquier person_id
+    BIO->>M: inserta documento {request_id, person_id, status: Pending} — sin campo requestedBy en esta entidad
+    BIO-->>S: 201 {request_id, status: Pending}
+    R->>GW: PATCH /api/v1/biometric/update-request/{request_id}/review {status}
+    GW->>BIO: reenviar (guardia propia, permiso biometric.case:review)
+    BIO->>M: update (tampoco con guardia de orden — mismas transiciones que ST-03)
+    BIO-->>R: 200 {status}
+    end
+
+    Note over CFG,M: La brecha: un caso radicado por la Ruta A es invisible para GET /api/v1/biometric/update-requests/{personId} (Ruta B), y un caso radicado por la Ruta B es invisible para GET /api/v1/biometric-update-cases (Ruta A). Un revisor que trabaje desde cualquiera de los dos endpoints solo ve la mitad de la cola real, y nada detecta ni reconcilia la división — ver state-biometric-update.mmd para el detalle de transiciones por almacén

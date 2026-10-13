@@ -1,0 +1,62 @@
+sequenceDiagram
+    autonumber
+    actor S as Estudiante (Móvil)
+    actor R as Revisor (instructor/admin)
+    participant GW as Kong :8080
+    participant ATT as ms-attendance :8085
+    participant K as Kafka tópico justification-events
+
+    Note over GW: La pre-función global de Kong valida el sessionId opaco contra identity en cada ruta no pública (401/503 en el borde) — ver SEQ-02. ms-attendance también revalida vía AuthTokenFilter (servicio Java)
+
+    rect rgb(238, 245, 238)
+    Note over S,ATT: 1. Envío — pantalla Añadir justificante (Móvil) / SubmitJustificationModal (Web)
+    S->>GW: GET /api/v1/attendance-records?academicActorId=...
+    GW->>ATT: reenviar
+    ATT-->>S: registros (elige el de Absent/Late)
+    S->>GW: GET /api/v1/justification-types
+    GW->>ATT: reenviar
+    ATT-->>S: tipos con bandera requires_attachment
+    S->>S: motivo + fecha + archivo — Web exige archivo solo cuando requires_attachment = true, Móvil exige archivo incondicionalmente en cada envío, sin importar la bandera
+    S->>GW: POST /api/v1/justifications {attendanceRecordId, justificationTypeId, reason}
+    GW->>ATT: reenviar
+    Note right of S: Ambos clientes arman esta llamada desde un objeto local más rico (attachment, submittedAt, reviewStatus incluidos) — el create(attendanceRecordId, justificationTypeId, reason) de ms-attendance solo desestructura estos tres, así los campos extra se descartan silenciosamente aquí, no se pierden en el cliente
+    ATT->>ATT: valida campos requeridos — verificación de duplicado (1 justificante por attendance_record)
+    ATT->>ATT: touchCreated -> reviewStatus = Pending, submittedAt = now
+    ATT->>K: publica justification-events (mejor esfuerzo, fallos solo registrados)
+    ATT-->>S: 201 {justificationId, reviewStatus: Pending}
+    end
+
+    rect rgb(255, 246, 236)
+    Note over S,ATT: 2. Adjunto — la fila de metadatos es real, el archivo detrás no (verificado 2026-10-12 contra FULL/)
+    S->>GW: POST /api/v1/supporting-documents {justificationId, fileName, storageUri, mimeType, sizeBytes} — se envía solo cuando se eligió un archivo, justo tras el éxito del paso 1
+    GW->>ATT: reenviar
+    ATT->>ATT: validate() + touchCreated -> save, sin contenido de bytes en la solicitud
+    ATT->>K: publica document-events (mejor esfuerzo)
+    ATT-->>S: 201 {supportingDocumentId}
+    Note right of S: storageUri se fabrica en el cliente, una ruta armada con año, mes actuales y un uuid aleatorio — sin subida multipart, sin llamada SDK a MinIO o S3 en ningún lado, ADR-009 nunca se implementó. La fila existe, pero el archivo que nombra nunca se transmitió
+    end
+
+    rect rgb(240, 245, 255)
+    Note over R,ATT: 3. Revisión — PATCH /justifications/{id}/review (corregido 2026-10-12 contra FULL/)
+    R->>GW: GET /api/v1/justifications?reviewStatus=Pending
+    GW->>ATT: reenviar
+    ATT-->>R: cola de pendientes
+    R->>GW: PATCH /api/v1/justifications/{id}/review {reviewStatus: Approved|Rejected, reviewedBy, resolutionNotes}
+    GW->>ATT: reenviar
+    ATT->>ATT: reviewStatus=Pending como destino se rechaza -- Cannot review to Pending
+    ATT->>ATT: el reviewStatus actual ya debe ser Pending, o 400 -- un justificante resuelto no puede revisarse de nuevo
+    alt destino Approved y el tipo exige adjunto
+        ATT->>ATT: busca cualquier fila SupportingDocument de este justificante
+        alt no existe fila
+            ATT-->>R: 400 exige al menos un documento de soporte
+        else existe fila -- su storageUri puede no apuntar a nada real, ver paso 2
+            ATT->>ATT: reviewedBy, reviewedAt, resolutionNotes, touchUpdated -> save
+            ATT-->>R: 200 {reviewStatus: Approved}
+        end
+    else destino Rejected, o Approved sin adjunto requerido
+        ATT->>ATT: reviewedBy, reviewedAt, resolutionNotes, touchUpdated -> save
+        ATT-->>R: 200 {reviewStatus}
+    end
+    end
+
+    Note over ATT: No se publica ningún evento en la revisión (solo create publica), y attendance_record.attendance_status nunca pasa a Justified — la aprobación no se propaga a la asistencia
