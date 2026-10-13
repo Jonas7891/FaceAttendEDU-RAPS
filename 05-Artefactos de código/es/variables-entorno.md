@@ -1,3 +1,16 @@
+---
+title: "Variables de entorno — FaceAttend EDU"
+authors: Jonattan Steven Rizo Solano, Diego Andres Gutierrez Nuñez, Juan Davida Arboleda Perdomo
+date: "13 de octubre de 2026"
+abstract: |
+  Este documento inventaría las variables de entorno de FaceAttend EDU a partir de FULL (.env.example, .env, archivos docker-compose): variables globales y por servicio, con alcance, origen y valores de ejemplo. Los secretos se enmascaran.
+keywords:
+  - variables de entorno
+  - configuración
+  - docker compose
+  - Normas APA 7ma edición
+---
+
 # Variables de entorno — FaceAttend EDU
 
 Fuente: `.env.example` (120 líneas) + `.env` (103 líneas) + `docker-compose.yml` + `docker-compose.tls.yml` + `back-end/docker-compose.yml` en `FULL` (relevado 2026-10-13). Los secretos se enmascaran como `****`. Ningún secreto real está en el repo: los archivos declaran "single source for dev credentials: nothing below is a real secret".
@@ -76,3 +89,9 @@ Nota: `.env` NO incluye `WEBHOOK_URL`, `WEBHOOK_SECRET`, `WEBHOOK_TIMEOUT_SECOND
 | SMTP_*, EMAIL_INTERNAL_TOKEN, WEBHOOK_* | ms-notification | Passthrough directo de las globales homónimas | ver §1 |
 | KONG_DATABASE=off, KONG_DECLARATIVE_CONFIG, KONG_PROXY/ADMIN_ACCESS/ERROR_LOG, KONG_ADMIN_LISTEN, KONG_DNS_ORDER | kong-gateway | Kong DB-less 3.6 | off, /kong/kong.yml, 0.0.0.0:8001, LAST,A,AAAA,CNAME |
 | DOMAIN | caddy (overlay TLS) | `${DOMAIN:-localhost}` | localhost |
+
+# Referencias
+
+American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7ma ed.). https://doi.org/10.1037/0000165-000
+
+Docker Inc. (2024). *Referencia del archivo Compose*. https://docs.docker.com/compose/compose-file/

@@ -1,3 +1,17 @@
+---
+title: "Dependencies and Libraries — FaceAttend EDU"
+authors: Jonattan Steven Rizo Solano, Diego Andres Gutierrez Nuñez, Juan Davida Arboleda Perdomo
+date: "October 13, 2026"
+abstract: |
+  This document inventories the dependencies and libraries of FaceAttend EDU from the build files in FULL/back-end and FULL/front-end: Java/Spring Boot, Node/TypeScript, Python/FastAPI and Go microservices, the Kong DB-less gateway, and the Expo web and mobile applications, with declared versions and usage notes.
+keywords:
+  - dependencies
+  - libraries
+  - microservices
+  - build files
+  - APA 7th Edition
+---
+
 # Dependencies and Libraries — FaceAttend EDU
 
 Source of truth: build files in `FULL/back-end` and `FULL/front-end` ( surveyed 2026-10-13 ). Versions below are the declared ones; Spring Boot starters inherit their version from the parent BOM unless stated.
@@ -113,3 +127,11 @@ Declarative config in `kong/kong.yml` (`_format_version: "3.0"`). "Libraries" ar
 - Python (06): only one with facial ML and MongoDB.
 - Go (08): only one with Gin + pgx + golang-migrate + zap.
 - Gateway: no own code; policy in Kong plugins (CORS, Redis-backed rate-limit).
+
+# References
+
+American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7th ed.). https://doi.org/10.1037/0000165-000
+
+Newman, S. (2021). *Building microservices* (2nd ed.). O'Reilly Media.
+
+Spring. (2024). *Spring Boot reference documentation*. https://docs.spring.io/spring-boot/

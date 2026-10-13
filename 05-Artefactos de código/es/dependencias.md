@@ -1,3 +1,17 @@
+---
+title: "Dependencias y librerías — FaceAttend EDU"
+authors: Jonattan Steven Rizo Solano, Diego Andres Gutierrez Nuñez, Juan Davida Arboleda Perdomo
+date: "13 de octubre de 2026"
+abstract: |
+  Este documento inventaría las dependencias y librerías de FaceAttend EDU a partir de los archivos de build en FULL/back-end y FULL/front-end: microservicios Java/Spring Boot, Node/TypeScript, Python/FastAPI y Go, el gateway Kong DB-less y las aplicaciones web y móvil Expo, con versiones declaradas y notas de uso.
+keywords:
+  - dependencias
+  - librerías
+  - microservicios
+  - archivos de build
+  - Normas APA 7ma edición
+---
+
 # Dependencias y librerías — FaceAttend EDU
 
 Fuente de verdad: archivos de build en `FULL/back-end` y `FULL/front-end` (relevado 2026-10-13). Las versiones son las declaradas; los starters de Spring Boot heredan su versión del BOM padre salvo indicación.
@@ -113,3 +127,11 @@ Configuración declarativa en `kong/kong.yml` (`_format_version: "3.0"`). Las "l
 - Python (06): único con ML facial y MongoDB.
 - Go (08): único con Gin + pgx + golang-migrate + zap.
 - Gateway: sin código propio; política en plugins Kong (CORS, rate-limit con Redis).
+
+# Referencias
+
+American Psychological Association. (2020). *Publication manual of the American Psychological Association* (7ma ed.). https://doi.org/10.1037/0000165-000
+
+Newman, S. (2021). *Building microservices* (2da ed.). O'Reilly Media.
+
+Spring. (2024). *Documentaci�n de referencia de Spring Boot*. https://docs.spring.io/spring-boot/
