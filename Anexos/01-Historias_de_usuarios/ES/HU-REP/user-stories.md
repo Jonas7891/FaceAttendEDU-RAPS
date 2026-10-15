@@ -460,4 +460,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros; HU-CONF-008: Parametrización de justificaciones |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros; HU-CONF-008: Parametrización de retardos y justificaciones |

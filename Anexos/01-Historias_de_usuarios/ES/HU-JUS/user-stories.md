@@ -103,7 +103,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-ATT-001: Registro de asistencia facial; HU-HIST-001: Consulta de historial de asistencias y ausencias; HU-CONF-008: Parametrización de justificaciones |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-ATT-001: Registro de asistencia facial; HU-HIST-001: Consulta de asistencias y ausencias por parámetros; HU-CONF-008: Parametrización de retardos y justificaciones |
 
 ---
 
@@ -212,7 +212,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-JUS-001: Carga del soporte de justificación; HU-CONF-008: Parametrización de justificaciones; HU-IAM-003: Asignación de permisos basada en roles |
+| Dependencias | HU-JUS-001: Carga del soporte de justificación; HU-CONF-008: Parametrización de retardos y justificaciones; HU-IAM-003: Asignación de permisos basada en roles |
 
 ---
 
@@ -316,4 +316,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-JUS-002: Aprobación y rechazo de justificaciones; HU-CONF-001: Configuración de alertas, si aplica; HU-CONF-002: Habilitar/deshabilitar alertas, si aplica |
+| Dependencias | HU-JUS-002: Aprobación y rechazo de justificaciones; HU-CONF-001: Configurar alertas del sistema, si aplica; HU-CONF-002: Habilitar o deshabilitar alertas, si aplica |

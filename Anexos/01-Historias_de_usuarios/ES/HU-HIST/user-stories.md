@@ -1,4 +1,4 @@
-# HU-HIST-001: Consulta de asistencia y ausencias por parámetros
+# HU-HIST-001: Consulta de asistencias y ausencias por parámetros
 
 ## Historia
 
@@ -134,7 +134,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basados en roles; HU-ATT-001: Registro de asistencia facial; HU-ACAD-005: Asignación de jornadas/bloques de tiempo |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-ATT-001: Registro de asistencia facial; HU-ACAD-005: Asignar bloques de tiempo/jornadas |
 
 ---
 
@@ -254,4 +254,4 @@
 | Story Points | 5 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basados en roles; HU-IAM-002: Registro de usuario con asignación de rol; HU-IAM-007: Activar/desactivar usuarios; HU-IAM-010: Cambio de rol |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-IAM-002: Registro de usuario con asignación de rol; HU-IAM-007: Activar/desactivar usuarios; HU-IAM-010: Cambio de rol |

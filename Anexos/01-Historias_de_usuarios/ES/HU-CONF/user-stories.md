@@ -475,7 +475,7 @@
 | Story Points | 3 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basados en roles |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles |
 
 ---
 
@@ -676,7 +676,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basados en roles; HU-CONF-001: Configurar alertas del sistema |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-CONF-001: Configurar alertas del sistema |
 
 ---
 
@@ -784,4 +784,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basados en roles |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles |

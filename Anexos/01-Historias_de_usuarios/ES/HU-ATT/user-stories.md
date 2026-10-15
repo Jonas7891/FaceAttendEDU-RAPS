@@ -70,7 +70,7 @@
 ## Definición de Terminado (DoD)
 
 > Esta HU solo puede cerrarse cuando cumpla con el DoD completo del equipo.  
-> Ver: [`00-governance/definition-of-done.md`](../../../00-governance/definition-of-done.md)
+> Ver: [`00-governance/definition-of-done.md`](https://github.com/code-sena/fae-docs/blob/main/00-governance/definition-of-done.md) (repositorio `fae-docs`).
 
 **Verificaciones adicionales específicas para esta HU:**
 
@@ -97,7 +97,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión; HU-USR-001: Registro de usuario; HU-ATT-000: Inscripción de parámetro facial; HU-ACAD-001: Bloque de formación/horario asignado |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-002: Registro de usuario con asignación de rol; HU-ATT-002: Inscripción inicial de parámetros faciales; HU-ACAD-005: Asignar bloques de tiempo/jornadas |
 
 ---
 

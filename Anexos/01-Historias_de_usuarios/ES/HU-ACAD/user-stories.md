@@ -75,7 +75,7 @@
 | Story Points | 3 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión; HU-IAM-003: Asignación de permisos basada en roles |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles |
 
 ---
 
@@ -159,7 +159,7 @@
 | Story Points | 3 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión; HU-IAM-003: Asignación de permisos basada en roles; HU-ACAD-001 recomendado para contexto de ambiente |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-ACAD-001 recomendado para contexto de ambiente |
 
 ---
 
@@ -248,7 +248,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión; HU-IAM-002: Registro de usuario con asignación de rol; HU-ACAD-002: Registrar cohortes/cursos |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-002: Registro de usuario con asignación de rol; HU-ACAD-002: Registrar cohortes/cursos |
 
 ---
 
@@ -334,7 +334,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión; HU-ACAD-002: Registrar cohortes/cursos; HU-ACAD-003: Asignar instructores responsables |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-ACAD-002: Registrar cohortes/cursos; HU-ACAD-003: Asignar instructores responsables |
 
 ---
 
@@ -432,4 +432,4 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión; HU-ACAD-003: Asignar instructores responsables; HU-ACAD-004: Asignar cohortes a usuarios responsables |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-ACAD-003: Asignar instructores responsables; HU-ACAD-004: Asignar cohortes a usuarios responsables |
