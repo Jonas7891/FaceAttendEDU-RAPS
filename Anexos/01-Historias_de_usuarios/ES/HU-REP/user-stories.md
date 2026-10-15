@@ -234,3 +234,230 @@
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
 | Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros; HU-ATT-001: Registro de asistencia facial |
+
+---
+
+# HU-REP-003: Reportes por rango de fechas
+
+## Historia
+
+**Como** administrador, supervisor, instructor o usuario autorizado  
+**Quiero** exportar reportes filtrados por un rango de fechas  
+**Para que** pueda analizar la información de asistencia de períodos específicos, como semanas, meses o períodos académicos, según mi rol.
+
+---
+
+## Criterios de Aceptación
+
+> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+
+- [ ] **AC1:** Dado que un usuario autenticado accede al módulo de reportes por rango de fechas, cuando el usuario selecciona la fecha de inicio, la fecha de fin y el tipo de reporte, entonces el sistema valida los parámetros de entrada antes de procesar la solicitud.
+
+- [ ] **AC2:** Dado que el rango de fechas seleccionado es válido y el rol del usuario está autorizado, cuando se envía la solicitud de exportación, entonces el sistema genera el reporte filtrado por el rango de fechas especificado y lo pone a disposición para su descarga.
+
+- [ ] **AC3:** Dado que la fecha de inicio es posterior a la fecha de fin, cuando se envía la solicitud, entonces el sistema rechaza la operación y muestra un mensaje de validación claro.
+
+- [ ] **AC4:** Dado que el rango de fechas seleccionado excede el período máximo permitido, cuando se envía la solicitud, entonces el sistema rechaza la operación y muestra un mensaje claro indicando el período máximo permitido.
+
+- [ ] **AC5:** Dado que el rol del usuario no está autorizado para el tipo de reporte seleccionado, cuando se solicita la exportación, entonces el sistema deniega la solicitud, muestra un error de permisos y registra un intento de acceso no autorizado.
+
+- [ ] **AC6:** Dado que no existen datos dentro del rango de fechas seleccionado, cuando se solicita la exportación, entonces el sistema muestra un mensaje claro indicando que no hay datos disponibles para el período especificado.
+
+- [ ] **AC7:** Dado que el reporte por rango de fechas es generado, cuando se descarga el archivo, entonces los datos exportados respetan el alcance del rol del usuario e incluyen el rango de fechas aplicado, el tipo de reporte, la fecha de generación y el usuario solicitante.
+
+- [ ] **AC8:** Dadas condiciones normales de red, cuando el usuario envía una solicitud estándar de exportación por rango de fechas, entonces el sistema responde en menos de 10 segundos para volúmenes de datos típicos.
+
+- [ ] **AC9:** Dado que la exportación por rango de fechas es procesada, cuando se completa la operación, entonces el sistema registra un evento de auditoría que contiene el usuario, el tipo de reporte, el rango de fechas, la fecha, la hora y el resultado.
+
+---
+
+## Notas Técnicas
+
+- El RF 7.3 indica que el sistema debe validar el rol del usuario y asociarlo con los tipos de exportación que está autorizado a solicitar, de forma similar al RF 7.1 pero con filtrado por rango de fechas.
+- Los tipos de reporte disponibles para la exportación por rango de fechas deben alinearse con la HU-REP-001:
+  - Asistencias.
+  - Faltas.
+  - Retardos.
+  - Fichas/Grupos.
+  - Instructores/Profesores.
+  - Ambientes/Salón.
+- El equipo debe definir:
+  - El rango de fechas máximo permitido (por ejemplo, 1 año).
+  - Si la exportación por rango de fechas soporta filtros combinados (cohorte, ambiente, instructor).
+  - Si se requiere exportación asíncrona para rangos de fechas amplios.
+- El sistema debe validar:
+  - Que la fecha de inicio no sea posterior a la fecha de fin.
+  - Que el rango de fechas no exceda el período máximo permitido.
+  - Que las fechas sean válidas y aplicables al contexto de control de asistencia.
+- El archivo exportado debe incluir:
+  - El rango de fechas aplicado.
+  - El tipo de reporte.
+  - La fecha y hora de generación.
+  - El usuario que solicitó la exportación.
+- Esta historia se basa en la HU-REP-001. El equipo debe considerar reutilizar la lógica de generación de exportaciones.
+- Esta historia no cubre el tablero analítico. Eso se maneja en la HU-REP-002.
+- Esta historia no cubre las consultas específicas de retardos/ausencias por parámetros. Eso se maneja en la HU-REP-004.
+- El rendimiento para rangos de fechas amplios puede requerir una exportación asíncrona con notificación cuando esté lista.
+- Los datos sensibles incluidos en las exportaciones deben protegerse según el RNF 4.
+
+**Servicio(s) responsable(s):** Servicio de Reportes / Servicio de Exportación, propuesto.  
+**Endpoint(s) implementados:**  
+- `POST /api/v1/reports/export/by-date-range` — propuesto.  
+- `GET /api/v1/reports/export/{exportId}` — propuesto, recupera el resultado de una exportación asíncrona.  
+
+**Eventos generados:**  
+- `DateRangeReportRequested`  
+- `DateRangeReportCompleted`  
+- `DateRangeReportFailed`  
+- `UnauthorizedDateRangeReportAccessAttempt`  
+
+**Permisos requeridos:**  
+- Usuario autenticado.  
+- Aplicación del alcance según el rol:
+  - Estudiante: solo registros personales.
+  - Instructor: cohortes/ambientes asignados.
+  - Administrador/Supervisor: alcance institucional completo.
+
+---
+
+## Definición de Terminado (DoD)
+
+> Esta HU solo puede cerrarse cuando cumpla con el DoD completo del equipo.
+
+**Verificaciones adicionales específicas para esta HU:**
+
+- [ ] Exportación exitosa por rango de fechas probada.
+- [ ] Escenario de fecha de inicio posterior a la fecha de fin probado.
+- [ ] Escenario de rango de fechas máximo excedido probado.
+- [ ] Escenario de tipo de reporte no autorizado probado.
+- [ ] Escenario de resultado vacío en el rango de fechas probado.
+- [ ] Aplicación del alcance basado en roles probada.
+- [ ] El archivo exportado incluye el rango de fechas aplicado, el tipo de reporte y el usuario solicitante.
+- [ ] Se genera un evento de auditoría para las solicitudes de exportación por rango de fechas.
+- [ ] Los mensajes de confirmación y error son claros.
+- [ ] El tiempo de respuesta se valida para volúmenes de datos típicos.
+- [ ] El comportamiento con rangos de fechas amplios está definido y probado.
+- [ ] Trazabilidad al RF 7.3 documentada.
+
+---
+
+## Estimación y Prioridad
+
+| Campo | Valor |
+|---|---|
+| Story Points | 5 |
+| Prioridad | Media |
+| Sprint objetivo | Sprint 3 |
+| Dependencias | HU-REP-001: Exportación de reportes; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros |
+
+---
+
+# HU-REP-004: Consulta de retardos y ausencias por parámetros
+
+## Historia
+
+**Como** administrador, supervisor, instructor o usuario autorizado  
+**Quiero** consultar retardos y ausencias utilizando parámetros como usuario, fecha, cohorte/grupo, ambiente/salón e instructor  
+**Para que** pueda identificar problemas de asistencia y tomar acciones correctivas oportunas según mi rol.
+
+---
+
+## Criterios de Aceptación
+
+> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+
+- [ ] **AC1:** Dado que un usuario autenticado accede al módulo de consulta de retardos/ausencias, cuando el usuario selecciona uno o más parámetros (usuario, fecha, cohorte/grupo, ambiente/salón, instructor), entonces el sistema valida los parámetros antes de procesar la consulta.
+
+- [ ] **AC2:** Dado que los parámetros seleccionados son válidos y el rol del usuario está autorizado, cuando se ejecuta la consulta, entonces el sistema devuelve los retardos y ausencias que coinciden con los filtros solicitados.
+
+- [ ] **AC3:** Dado que el rol del usuario no está autorizado para el alcance de consulta solicitado, cuando se ejecuta la consulta, entonces el sistema deniega el acceso, muestra un error de permisos y registra un intento de acceso no autorizado.
+
+- [ ] **AC4:** Dado que los parámetros seleccionados no producen registros coincidentes, cuando se ejecuta la consulta, entonces el sistema muestra un mensaje claro indicando que no se encontraron retardos ni ausencias para los filtros especificados.
+
+- [ ] **AC5:** Dado que un estudiante consulta retardos y ausencias, cuando se procesa la solicitud, entonces el sistema solo devuelve los registros pertenecientes a ese estudiante.
+
+- [ ] **AC6:** Dado que un instructor consulta retardos y ausencias, cuando se procesa la solicitud, entonces el sistema solo devuelve los registros asociados con las cohortes, ambientes o bloques de formación asignados a ese instructor.
+
+- [ ] **AC7:** Dado que la consulta devuelve resultados, cuando el sistema los muestra, entonces cada registro incluye como mínimo la siguiente información: usuario, fecha, tipo (retardo o ausencia), cohorte, ambiente, instructor y estado de la justificación cuando aplique.
+
+- [ ] **AC8:** Dadas condiciones normales de red, cuando el usuario ejecuta una consulta de retardos/ausencias, entonces el sistema responde en menos de 5 segundos, según el RNF 1.
+
+- [ ] **AC9:** Dado que la consulta es ejecutada, cuando se completa la operación, entonces el sistema registra un evento de auditoría que contiene el usuario, los parámetros aplicados, la fecha y la hora.
+
+---
+
+## Notas Técnicas
+
+- El RF 7.4 indica que el sistema debe validar el rol del usuario y asociarlo con las consultas de retardos/ausencias que está autorizado a solicitar.
+- Los parámetros de consulta definidos por el SRS son:
+  - Referencias de usuario.
+  - Fechas.
+  - Fichas/grupos.
+  - Ambientes/salones.
+  - Instructores/profesores.
+- La consulta debe soportar filtros combinados para obtener resultados más precisos.
+- El filtrado basado en roles debe aplicarse en el lado del servidor:
+  - Estudiantes: solo sus propios registros.
+  - Instructores: registros de las cohortes/ambientes/bloques de formación asignados.
+  - Administradores/Supervisores: alcance administrativo más amplio.
+- Los resultados de la consulta deben incluir el estado de la justificación para ayudar a los usuarios a identificar qué retardos/ausencias han sido justificados.
+- Se debe considerar la paginación para conjuntos de resultados grandes.
+- El equipo debe considerar:
+  - Opciones de ordenamiento (por fecha, usuario, tipo).
+  - Opción de exportar los resultados de la consulta, si aplica.
+  - Integración con la HU-REP-001 para exportar los resultados de la consulta.
+- Esta historia no cubre el tablero analítico. Eso se maneja en la HU-REP-002.
+- Esta historia no cubre las consultas generales del historial de asistencias/ausencias. Eso se maneja en la HU-HIST-001.
+- Esta historia se enfoca específicamente en retardos y ausencias, no en todos los registros de asistencia.
+- Los datos de asistencia deben protegerse según el RNF 4, y el acceso debe restringirse según el rol del usuario.
+
+**Servicio(s) responsable(s):** Servicio de Reportes / Servicio de Consulta de Retardos y Ausencias, propuesto.  
+**Endpoint(s) implementados:**  
+- `GET /api/v1/reports/delays-absences` — propuesto, con parámetros de consulta para usuario, fecha, cohorte, ambiente e instructor.  
+- `GET /api/v1/reports/delays-absences/me` — propuesto, para estudiantes que consultan sus propios registros.  
+
+**Eventos generados:**  
+- `DelayAbsenceQueryExecuted` — recomendado para fines de auditoría.  
+- `UnauthorizedDelayAbsenceQueryAttempt`  
+
+**Permisos requeridos:**  
+- Usuario autenticado.  
+- Aplicación del alcance según el rol:
+  - Estudiante: solo sus propios registros.
+  - Instructor: cohortes, ambientes o bloques de formación asignados.
+  - Administrador/Supervisor: alcance administrativo.
+
+---
+
+## Definición de Terminado (DoD)
+
+> Esta HU solo puede cerrarse cuando cumpla con el DoD completo del equipo.
+
+**Verificaciones adicionales específicas para esta HU:**
+
+- [ ] Consulta por usuario probada.
+- [ ] Consulta por fecha probada.
+- [ ] Consulta por cohorte/grupo probada.
+- [ ] Consulta por ambiente/salón probada.
+- [ ] Consulta por instructor probada.
+- [ ] Filtros combinados probados.
+- [ ] Escenario de resultado vacío probado.
+- [ ] Filtrado basado en roles probado para estudiante, instructor, administrador y supervisor.
+- [ ] Intento de acceso no autorizado probado.
+- [ ] Los registros devueltos incluyen los campos requeridos: usuario, fecha, tipo, cohorte, ambiente, instructor, estado de la justificación.
+- [ ] Paginación probada para conjuntos de resultados grandes.
+- [ ] Se genera un evento de auditoría.
+- [ ] Los mensajes de confirmación y error son claros.
+- [ ] El tiempo de respuesta se valida bajo condiciones normales y se mantiene bajo 5 segundos.
+- [ ] Trazabilidad al RF 7.4 documentada.
+
+---
+
+## Estimación y Prioridad
+
+| Campo | Valor |
+|---|---|
+| Story Points | 5 |
+| Prioridad | Alta |
+| Sprint objetivo | Sprint 3 |
+| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros; HU-CONF-008: Parametrización de justificaciones |
