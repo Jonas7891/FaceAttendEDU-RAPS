@@ -10,7 +10,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 ### Validación de parámetros
 
@@ -150,7 +150,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 ### Validación de la consulta
 

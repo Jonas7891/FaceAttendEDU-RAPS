@@ -10,7 +10,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que un usuario autenticado accede al módulo de exportación de reportes, cuando el sistema muestra los tipos de reporte disponibles, entonces el usuario puede ver las siguientes opciones: asistencias, ausencias, retardos, cohortes/grupos, instructores/profesores y ambientes/salones.
 
@@ -130,7 +130,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que un usuario autenticado accede al módulo del tablero, cuando el sistema procesa la solicitud, entonces el sistema valida el rol del usuario y muestra el tablero correspondiente a ese rol.
 
@@ -249,7 +249,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que un usuario autenticado accede al módulo de reportes por rango de fechas, cuando el usuario selecciona la fecha de inicio, la fecha de fin y el tipo de reporte, entonces el sistema valida los parámetros de entrada antes de procesar la solicitud.
 
@@ -364,7 +364,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que un usuario autenticado accede al módulo de consulta de retardos/ausencias, cuando el usuario selecciona uno o más parámetros (usuario, fecha, cohorte/grupo, ambiente/salón, instructor), entonces el sistema valida los parámetros antes de procesar la consulta.
 

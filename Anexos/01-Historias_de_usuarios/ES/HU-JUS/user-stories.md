@@ -10,11 +10,11 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que el estudiante está autenticado y tiene al menos una ausencia o un retardo registrado pendiente de justificación, cuando el estudiante accede al módulo de justificaciones, entonces el sistema muestra la lista de ausencias o retardos elegibles para justificación.
 
-- [ ] **AC2:** Dado que el estudiante selecciona una ausencia o un retardo elegible, cuando el estudiante completa el motivo de la justificación y carga un documento de soporte válido, entonces el sistema valida los datos, almacena la justificación con estado "Pendiente", la asocia con el registro de asistencia correspondiente y muestra un mensaje de confirmación.
+- [ ] **AC2:** Dado que el estudiante selecciona una ausencia o un retardo elegible, cuando el estudiante completa el motivo de la justificación y carga un documento de soporte válido, entonces el sistema valida los datos, almacena la justificación con estado “Pendiente”, la asocia con el registro de asistencia correspondiente y muestra un mensaje de confirmación.
 
 - [ ] **AC3:** Dado que el estudiante intenta enviar una justificación sin cargar un documento de soporte, cuando se procesa el envío, entonces el sistema rechaza la operación y muestra un mensaje de validación claro indicando que se requiere un documento de soporte.
 
@@ -24,7 +24,7 @@
 
 - [ ] **AC6:** Dado que el estudiante no tiene ausencias ni retardos registrados elegibles para justificación, cuando el estudiante accede al módulo de justificaciones, entonces el sistema muestra un mensaje claro indicando que no hay registros pendientes de justificación.
 
-- [ ] **AC7:** Dado que la justificación se envía correctamente, cuando se completa la operación, entonces el sistema registra un evento de auditoría que contiene el identificador del estudiante, el registro de asistencia asociado, el identificador de la justificación, la referencia del documento de soporte, la fecha y hora de envío y el estado inicial como "Pendiente".
+- [ ] **AC7:** Dado que la justificación se envía correctamente, cuando se completa la operación, entonces el sistema registra un evento de auditoría que contiene el identificador del estudiante, el registro de asistencia asociado, el identificador de la justificación, la referencia del documento de soporte, la fecha y hora de envío y el estado inicial como “Pendiente”.
 
 - [ ] **AC8:** Dadas condiciones normales de red, cuando el estudiante envía una justificación con su documento de soporte, entonces el sistema responde en menos de 10 segundos, incluido el tiempo de carga del archivo.
 
@@ -86,7 +86,7 @@
 - [ ] Prevención de justificación duplicada probada.
 - [ ] Escenario sin registros elegibles probado.
 - [ ] La justificación se vincula correctamente con el registro de asistencia.
-- [ ] La justificación se almacena con el estado inicial "Pendiente".
+- [ ] La justificación se almacena con el estado inicial “Pendiente”.
 - [ ] El documento de soporte se almacena de forma segura.
 - [ ] El contenido sensible del documento no se expone en logs ni en la UI.
 - [ ] Se genera un evento de auditoría.
@@ -119,15 +119,15 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
-- [ ] **AC1:** Dado que un usuario autorizado con un rol superior está autenticado, cuando el usuario accede al módulo de revisión de justificaciones, entonces el sistema muestra la lista de justificaciones con estado "Pendiente" que corresponden a sus cohortes, ambientes o alcance institucional asignados según su rol.
+- [ ] **AC1:** Dado que un usuario autorizado con un rol superior está autenticado, cuando el usuario accede al módulo de revisión de justificaciones, entonces el sistema muestra la lista de justificaciones con estado “Pendiente” que corresponden a sus cohortes, ambientes o alcance institucional asignados según su rol.
 
 - [ ] **AC2:** Dado que el revisor selecciona una justificación pendiente, cuando el sistema muestra el detalle de la justificación, entonces el revisor puede ver el nombre del estudiante, la fecha del registro de asistencia, el tipo de ausencia o retardo, el motivo de la justificación y el documento de soporte cargado.
 
-- [ ] **AC3:** Dado que el revisor revisa el documento de soporte y determina que es válido según los parámetros de justificación configurados, cuando el revisor aprueba la justificación, entonces el sistema actualiza el estado de la justificación a "Aprobada", actualiza el estado del registro de asistencia correspondiente a "Justificado", almacena el identificador del revisor y la fecha de evaluación, y muestra un mensaje de confirmación.
+- [ ] **AC3:** Dado que el revisor revisa el documento de soporte y determina que es válido según los parámetros de justificación configurados, cuando el revisor aprueba la justificación, entonces el sistema actualiza el estado de la justificación a “Aprobada”, actualiza el estado del registro de asistencia correspondiente a “Justificado”, almacena el identificador del revisor y la fecha de evaluación, y muestra un mensaje de confirmación.
 
-- [ ] **AC4:** Dado que el revisor revisa el documento de soporte y determina que no es válido, cuando el revisor rechaza la justificación, entonces el sistema actualiza el estado de la justificación a "Rechazada", mantiene el registro de asistencia en su estado original, almacena el identificador del revisor y la fecha de evaluación, y muestra un mensaje de confirmación.
+- [ ] **AC4:** Dado que el revisor revisa el documento de soporte y determina que no es válido, cuando el revisor rechaza la justificación, entonces el sistema actualiza el estado de la justificación a “Rechazada”, mantiene el registro de asistencia en su estado original, almacena el identificador del revisor y la fecha de evaluación, y muestra un mensaje de confirmación.
 
 - [ ] **AC5:** Dado que el documento de soporte no existe o no puede recuperarse al momento de la revisión, cuando el revisor intenta evaluar la justificación, entonces el sistema impide la evaluación y muestra un mensaje de error claro indicando que el documento de soporte no está disponible.
 
@@ -151,11 +151,11 @@
 - El sistema debe validar:
   - Que el revisor esté autenticado y tenga un rol superior.
   - Que el revisor tenga visibilidad de la justificación según sus cohortes o alcance asignados.
-  - Que la justificación exista y esté en estado "Pendiente".
+  - Que la justificación exista y esté en estado “Pendiente”.
   - Que el documento de soporte exista y sea accesible.
   - Que la justificación no haya sido resuelta previamente.
-- Cuando una justificación se aprueba, el registro de asistencia correspondiente debe actualizarse a "Justificado".
-- Cuando una justificación se rechaza, el registro de asistencia debe permanecer en su estado original ("Ausente" o "Retardo").
+- Cuando una justificación se aprueba, el registro de asistencia correspondiente debe actualizarse a “Justificado”.
+- Cuando una justificación se rechaza, el registro de asistencia debe permanecer en su estado original (“Ausente” o “Retardo”).
 - La identidad del revisor y su decisión deben almacenarse para fines de trazabilidad.
 - El proceso de revisión no debe permitir que la misma justificación sea evaluada más de una vez.
 - Esta historia no cubre la notificación automática del resultado. Eso se maneja en la [HU-JUS-003](#hu-jus-003-notificación-automática-del-resultado-de-la-justificación).
@@ -191,7 +191,7 @@
 - [ ] El detalle de la justificación con el documento de soporte se muestra correctamente.
 - [ ] Aprobación exitosa probada.
 - [ ] Rechazo exitoso probado.
-- [ ] El registro de asistencia se actualiza a "Justificado" tras la aprobación.
+- [ ] El registro de asistencia se actualiza a “Justificado” tras la aprobación.
 - [ ] El registro de asistencia permanece sin cambios tras el rechazo.
 - [ ] Escenario de documento de soporte faltante o inaccesible probado.
 - [ ] Escenario de justificación ya resuelta probado.
@@ -228,11 +228,11 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
-- [ ] **AC1:** Dado que un revisor ha aprobado una justificación, cuando se procesa la aprobación, entonces el sistema envía automáticamente una notificación al estudiante que envió la justificación, incluyendo el identificador de la justificación, la fecha del registro de asistencia y el resultado como "Aprobada".
+- [ ] **AC1:** Dado que un revisor ha aprobado una justificación, cuando se procesa la aprobación, entonces el sistema envía automáticamente una notificación al estudiante que envió la justificación, incluyendo el identificador de la justificación, la fecha del registro de asistencia y el resultado como “Aprobada”.
 
-- [ ] **AC2:** Dado que un revisor ha rechazado una justificación, cuando se procesa el rechazo, entonces el sistema envía automáticamente una notificación al estudiante que envió la justificación, incluyendo el identificador de la justificación, la fecha del registro de asistencia y el resultado como "Rechazada".
+- [ ] **AC2:** Dado que un revisor ha rechazado una justificación, cuando se procesa el rechazo, entonces el sistema envía automáticamente una notificación al estudiante que envió la justificación, incluyendo el identificador de la justificación, la fecha del registro de asistencia y el resultado como “Rechazada”.
 
 - [ ] **AC3:** Dado que la notificación es enviada, cuando el estudiante accede al módulo de notificaciones o a su bandeja de notificaciones, entonces el estudiante puede ver la notificación con el resultado de la justificación, la fecha de la evaluación y el registro de asistencia asociado.
 

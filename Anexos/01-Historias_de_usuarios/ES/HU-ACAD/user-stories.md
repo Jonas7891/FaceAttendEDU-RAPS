@@ -32,7 +32,7 @@
 - Los datos del ambiente deben ser validados antes de la persistencia, según los criterios de aceptación del RF 2.1.
 - La información debe almacenarse de forma segura, según el RF 2.1 y el RNF 4.
 - Esta historia no incluye la asignación de horarios, cohortes o instructores. Esas relaciones se manejan en otras historias de ACAD.
-- La entidad de ambiente será utilizada posteriormente por el registro de asistencia, reportes y dashboards.
+- La entidad de ambiente será utilizada posteriormente por el registro de asistencia, reportes y tableros.
 - La interfaz de usuario debe permitir la consulta de ambientes registrados después de su creación.
 - Se recomienda la auditabilidad para los cambios administrativos.
 
@@ -201,7 +201,7 @@
   - Usuarios asociados con el administrador.
   - Usuarios de tipo profesor/instructor.
 - Esta historia aún no incluye la asignación de bloques de tiempo u horarios. Eso se cubre en la [HU-ACAD-005](#hu-acad-005-asignar-bloques-de-tiempojornadas).
-- La relación de instructor responsable será utilizada por la asistencia, historial, reportes y dashboards.
+- La relación de instructor responsable será utilizada por la asistencia, historial, reportes y tableros.
 - El sistema debe evitar asignar responsabilidad a usuarios sin un rol de instructor/profesor.
 - Se recomienda la auditabilidad porque esta asignación afecta la visibilidad académica y los permisos de reportes.
 - El equipo debe definir si una cohorte/curso puede tener uno o múltiples instructores responsables.
@@ -287,7 +287,7 @@
 - El SRS indica que los usuarios administrativos (Supervisor, Administrador y Profesor/Instructor) deben poder obtener la lista de cohortes correspondientes a su trabajo.
 - El sistema debe validar que el usuario responsable sea válido y que la cohorte/curso exista, según los criterios de aceptación del RF 2.3.1.
 - Esta historia complementa la [HU-ACAD-003](#hu-acad-003-asignar-instructores-responsables) al formalizar la visibilidad y asociación de cohortes asignadas a un usuario responsable.
-- La relación responsable-cohorte será utilizada por el registro de asistencia, historial, reportes, dashboards y permisos de instructor.
+- La relación responsable-cohorte será utilizada por el registro de asistencia, historial, reportes, tableros y permisos de instructor.
 - El sistema debe definir si un usuario responsable puede tener una o múltiples cohortes asignadas.
 - El sistema debe evitar asignar usuarios inactivos como usuarios responsables.
 - El acceso basado en roles debe aplicarse en el lado del servidor.
@@ -378,7 +378,7 @@
   - El bloque de tiempo no se solape con otro bloque ya asignado.
   - La cohorte tenga disponibilidad para el bloque de tiempo asignada.
 - Esta historia es esencial para la validación de la asistencia porque la [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-registro-de-asistencia-facial) depende de saber si los tiempos de entrada y salida son apropiados para el bloque asignada.
-- La relación horario/jornada será utilizada por el registro de asistencia, detección de retardos, detección de inasistencias, historial, reportes y dashboards.
+- La relación horario/jornada será utilizada por el registro de asistencia, detección de retardos, detección de inasistencias, historial, reportes y tableros.
 - El sistema debe evitar horarios duplicados o conflictivos para la misma cohorte, usuario responsable, ambiente o período de tiempo.
 - El equipo debe definir si la validación de solapamiento aplica solo a la misma cohorte, al mismo instructor responsable, al mismo ambiente, o a una combinación de estos.
 - El acceso basado en roles debe aplicarse:

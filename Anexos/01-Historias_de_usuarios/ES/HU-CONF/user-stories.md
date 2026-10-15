@@ -10,7 +10,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que el usuario está registrado y ha iniciado sesión en el sistema, cuando el usuario accede al módulo de configuración de alertas, entonces el sistema muestra las opciones de configuración de alertas disponibles.
 
@@ -102,7 +102,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que el usuario está registrado y ha iniciado sesión en el sistema, cuando el usuario accede al módulo de habilitación/deshabilitación de alertas, entonces el sistema muestra la lista de alertas disponibles con su estado actual de habilitado/deshabilitado.
 
@@ -198,7 +198,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que el usuario está registrado y ha iniciado sesión en el sistema, cuando el usuario accede al módulo de configuración de tonos de notificación, entonces el sistema muestra la lista de tonos de notificación disponibles.
 
@@ -227,7 +227,7 @@
 - El sistema debe proporcionar un conjunto predefinido de tonos de notificación para que el usuario elija. El equipo debe definir los tonos disponibles.
 - El sistema debe considerar:
   - Un tono predeterminado para los nuevos usuarios.
-  - Una opción de "silencio" o "solo vibración", si es aplicable.
+  - Una opción de “silencio” o “solo vibración”, si es aplicable.
   - Funcionalidad de vista previa antes de guardar.
 - El ajuste del tono de notificación debe almacenarse por usuario para permitir la personalización.
 - En dispositivos móviles, la aplicación debe solicitar los permisos apropiados para reproducir sonidos.
@@ -295,7 +295,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que el usuario está registrado y ha iniciado sesión en el sistema, cuando el usuario accede al módulo de configuración de idioma, entonces el sistema muestra la lista de idiomas disponibles.
 
@@ -396,7 +396,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que un administrador autenticado accede al módulo de configuración de paletas de colores, cuando el sistema carga el módulo, entonces muestra las paletas de colores actuales y la opción de agregar o modificar paletas.
 
@@ -491,7 +491,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que el usuario está registrado y ha iniciado sesión en el sistema, cuando el usuario solicita una actualización de parámetros faciales, entonces el sistema activa la cámara e inicia el proceso de captura facial.
 
@@ -591,7 +591,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que un dispositivo IoT registrado en el sistema detecta un fallo (mal funcionamiento de la cámara, pérdida de conectividad, error de hardware), cuando se detecta el fallo, entonces el sistema genera una alerta y notifica a los administradores o supervisores configurados.
 
@@ -613,7 +613,7 @@
 
 ## Notas Técnicas
 
-- ⚠️ **Nota de Inconsistencia del SRS:** El índice del SRS enumera el RF 4.5 como "Gestión de alertas de fallos de dispositivos IoT", pero la sección detallada del RF 4.5 describe "Desactivar y reactivar usuarios". Esta historia está documentada basándose en la **descripción del índice** (alertas de fallos de dispositivos IoT). La funcionalidad de activación/desactivación de usuarios está cubierta en la [HU-IAM-007](../Index_HU.md#historias-planificadas-pendientes-de-documentar) (RF 1.6). Esta inconsistencia debe ser validada con el instructor.
+- ⚠️ **Nota de Inconsistencia del SRS:** El índice del SRS enumera el RF 4.5 como “Gestión de alertas de fallos de dispositivos IoT”, pero la sección detallada del RF 4.5 describe “Desactivar y reactivar usuarios”. Esta historia está documentada basándose en la **descripción del índice** (alertas de fallos de dispositivos IoT). La funcionalidad de activación/desactivación de usuarios está cubierta en la [HU-IAM-007](../Index_HU.md#historias-planificadas-pendientes-de-documentar) (RF 1.6). Esta inconsistencia debe ser validada con el instructor.
 - La gestión de alertas de fallos de dispositivos IoT debe considerar:
   - Tipos de dispositivos: cámaras, sensores u otro hardware utilizado para el registro de asistencia.
   - Tipos de fallos: pérdida de conectividad, mal funcionamiento del hardware, fallo de la cámara, batería baja (si es aplicable).
@@ -692,7 +692,7 @@
 
 ## Criterios de Aceptación
 
-> Formato: "Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable]."
+> Formato: “Dado [contexto/estado inicial], cuando [acción del usuario], entonces [resultado esperado y verificable].”
 
 - [ ] **AC1:** Dado que un administrador autenticado accede al módulo de parametrización de retardos y justificaciones, cuando el sistema carga el módulo, entonces muestra la lista de justificaciones válidas configuradas actualmente y la opción de agregar, modificar o eliminar parámetros.
 
