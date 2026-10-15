@@ -70,7 +70,7 @@
 ## Definition of Done (DoD)
 
 > This HU can only be closed when it meets the team’s full DoD.  
-> See: [`00-governance/definition-of-done.md`](../../../00-governance/definition-of-done.md)
+> See: [`00-governance/definition-of-done.md`](https://github.com/code-sena/fae-docs/blob/main/00-governance/definition-of-done.md) (`fae-docs` repository).
 
 **Additional checks specific to this HU:**
 
@@ -97,7 +97,7 @@
 | Story Points | 8 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-001: Login; HU-USR-001: User registration; HU-ATT-000: Facial parameter enrollment; HU-ACAD-001: Assigned training block/schedule |
+| Dependencies | HU-IAM-001: User login; HU-IAM-002: User registration with role assignment; HU-ATT-002: Initial facial parameter enrollment; HU-ACAD-005: Assign conference/time blocks |
 
 ---
 
@@ -277,7 +277,7 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-002: User registration with role assignment; HU-ATT-001: Facial attendance registration; HU-ACAD-005: Assign jornadas/time blocks |
+| Dependencies | HU-IAM-002: User registration with role assignment; HU-ATT-001: Facial attendance registration; HU-ACAD-005: Assign conference/time blocks |
 
 ---
 

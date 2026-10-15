@@ -134,7 +134,7 @@
 | Story Points | 8 |
 | Priority | High |
 | Target sprint | Sprint 2 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-ATT-001: Facial attendance registration; HU-ACAD-005: Assign jornadas/time blocks |
+| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-ATT-001: Facial attendance registration; HU-ACAD-005: Assign conference/time blocks |
 
 ---
 

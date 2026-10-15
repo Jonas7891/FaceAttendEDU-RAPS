@@ -103,7 +103,7 @@
 | Story Points | 8 |
 | Priority | High |
 | Target sprint | Sprint 2 |
-| Dependencies | HU-IAM-001: User login; HU-ATT-001: Facial attendance registration; HU-HIST-001: Attendance and absence history consultation; HU-CONF-008: Justification parametrization |
+| Dependencies | HU-IAM-001: User login; HU-ATT-001: Facial attendance registration; HU-HIST-001: Attendance and absence query by parameters; HU-CONF-008: Delay and justification parametrization |
 
 ---
 
@@ -212,7 +212,7 @@
 | Story Points | 8 |
 | Priority | High |
 | Target sprint | Sprint 2 |
-| Dependencies | HU-JUS-001: Justification support upload; HU-CONF-008: Justification parametrization; HU-IAM-003: Role-based permission assignment |
+| Dependencies | HU-JUS-001: Justification support upload; HU-CONF-008: Delay and justification parametrization; HU-IAM-003: Role-based permission assignment |
 
 ---
 
@@ -316,4 +316,4 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 2 |
-| Dependencies | HU-JUS-002: Justification approval and rejection; HU-CONF-001: Alert configuration, if applicable; HU-CONF-002: Enable/disable alerts, if applicable |
+| Dependencies | HU-JUS-002: Justification approval and rejection; HU-CONF-001: Configure system alerts, if applicable; HU-CONF-002: Enable or disable alerts, if applicable |

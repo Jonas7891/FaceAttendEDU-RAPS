@@ -460,4 +460,4 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-HIST-001: Attendance and absence query by parameters; HU-CONF-008: Justification parametrization |
+| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-HIST-001: Attendance and absence query by parameters; HU-CONF-008: Delay and justification parametrization |
