@@ -75,7 +75,7 @@
 | Story Points | 3 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment |
 
 ---
 
@@ -159,7 +159,7 @@
 | Story Points | 3 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-ACAD-001 recommended for environment context |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment; [HU-ACAD-001](#hu-acad-001-register-environmentsclassrooms) recommended for environment context |
 
 ---
 
@@ -200,7 +200,7 @@
 - The system must show both:
   - Users associated with the administrator.
   - Users of type teacher/instructor.
-- This story does not yet include assignment of time blocks or schedules. That is covered in HU-ACAD-005.
+- This story does not yet include assignment of time blocks or schedules. That is covered in [HU-ACAD-005](#hu-acad-005-assign-conferencetime-blocks).
 - The responsible instructor relationship will be used by attendance, history, reports, and dashboards.
 - The system should prevent assigning responsibility to users without an instructor/teacher role.
 - Auditability is recommended because this assignment affects academic visibility and reporting permissions.
@@ -248,7 +248,7 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-001: User login; HU-IAM-002: User registration with role assignment; HU-ACAD-002: Register cohorts/courses |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-user-registration-with-role-assignment): User registration with role assignment; [HU-ACAD-002](#hu-acad-002-register-cohortscourses): Register cohorts/courses |
 
 ---
 
@@ -286,7 +286,7 @@
 
 - The SRS indicates that administrative users (Supervisor, Administrator, and Teacher/Instructor) must be able to obtain the list of cohorts corresponding to their work.
 - The system must validate that the responsible user is valid and that the cohort/course exists, according to RF 2.3.1 acceptance criteria.
-- This story complements HU-ACAD-003 by formalizing the visibility and association of cohorts assigned to a responsible user.
+- This story complements [HU-ACAD-003](#hu-acad-003-assign-responsible-instructors) by formalizing the visibility and association of cohorts assigned to a responsible user.
 - The responsible-cohort relationship will be used by attendance registration, history, reports, dashboards, and instructor permissions.
 - The system should define whether a responsible user can have one or multiple cohorts assigned.
 - The system should prevent assigning inactive users as responsible users.
@@ -334,7 +334,7 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-001: User login; HU-ACAD-002: Register cohorts/courses; HU-ACAD-003: Assign responsible instructors |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-ACAD-002](#hu-acad-002-register-cohortscourses): Register cohorts/courses; [HU-ACAD-003](#hu-acad-003-assign-responsible-instructors): Assign responsible instructors |
 
 ---
 conference
@@ -377,7 +377,7 @@ conference
   - The responsible user is valid.
   - The time block does not overlap with another already assigned block.
   - The cohort has availability for the assigned time block.
-- This story is essential for attendance validation because HU-ATT-001 depends on knowing whether entry and exit times are appropriate for the assigned block.
+- This story is essential for attendance validation because [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-facial-attendance-registration) depends on knowing whether entry and exit times are appropriate for the assigned block.
 - The schedule/jornada relationship will be used by attendance registration, late detection, absence detection, history, reports, and dashboards.
 - The system should prevent duplicate or conflicting schedules for the same cohort, responsible user, environment, or time period.
 - The team must define whether overlap validation applies only to the same cohort, to the same responsible instructor, to the same environment, or to a combination of these.
@@ -432,4 +432,4 @@ conference
 | Story Points | 8 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-001: User login; HU-ACAD-003: Assign responsible instructors; HU-ACAD-004: Assign cohorts to responsible users |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-ACAD-003](#hu-acad-003-assign-responsible-instructors): Assign responsible instructors; [HU-ACAD-004](#hu-acad-004-assign-cohorts-to-responsible-users): Assign cohorts to responsible users |

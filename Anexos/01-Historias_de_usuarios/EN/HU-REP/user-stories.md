@@ -59,9 +59,9 @@
   - User who requested the export.
   - Applied filters, if any.
 - Exported data must respect the user's role scope and must not include unauthorized records.
-- This story does not cover date-range filters. That is handled in HU-REP-003.
-- This story does not cover the analytical dashboard. That is handled in HU-REP-002.
-- This story does not cover delay/absence-specific queries by parameters. That is handled in HU-REP-004.
+- This story does not cover date-range filters. That is handled in [HU-REP-003](#hu-rep-003-date-range-reports).
+- This story does not cover the analytical dashboard. That is handled in [HU-REP-002](#hu-rep-002-role-based-analytical-dashboard).
+- This story does not cover delay/absence-specific queries by parameters. That is handled in [HU-REP-004](#hu-rep-004-delay-and-absence-query-by-parameters).
 - Performance for large exports may exceed the standard 5-second response time. The team should define whether asynchronous export is required.
 - Sensitive data included in exports must be protected according to RNF 4.
 
@@ -114,7 +114,7 @@
 | Story Points | 8 |
 | Priority | Medium |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-HIST-001: Attendance and absence query by parameters |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-attendance-and-absence-query-by-parameters): Attendance and absence query by parameters |
 
 ---
 
@@ -180,9 +180,9 @@
   - Accessibility best practices, according to RNF 2.
 - Role-based filtering must be enforced on the server side. Client-side filtering alone is not sufficient.
 - The dashboard should use cached or aggregated data where possible to improve performance.
-- This story does not cover report export. That is handled in HU-REP-001.
-- This story does not cover date-range reports. That is handled in HU-REP-003.
-- This story does not cover delay/absence-specific queries. That is handled in HU-REP-004.
+- This story does not cover report export. That is handled in [HU-REP-001](#hu-rep-001-report-export).
+- This story does not cover date-range reports. That is handled in [HU-REP-003](#hu-rep-003-date-range-reports).
+- This story does not cover delay/absence-specific queries. That is handled in [HU-REP-004](#hu-rep-004-delay-and-absence-query-by-parameters).
 - The team must define the specific KPIs and visual components for each role.
 
 **Responsible service(s):** Report service / Dashboard service, proposed.  
@@ -233,7 +233,7 @@
 | Story Points | 8 |
 | Priority | High |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-HIST-001: Attendance and absence query by parameters; HU-ATT-001: Facial attendance registration |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-attendance-and-absence-query-by-parameters): Attendance and absence query by parameters; [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-facial-attendance-registration): Facial attendance registration |
 
 ---
 
@@ -274,7 +274,7 @@
 ## Technical notes
 
 - RF 7.3 indicates that the system must validate the user's role and associate it with the export types they are allowed to request, similar to RF 7.1 but with date-range filtering.
-- The report types available for date-range export should align with HU-REP-001:
+- The report types available for date-range export should align with [HU-REP-001](#hu-rep-001-report-export):
   - Attendances (orig. ES "Asistencias").
   - Absences (orig. ES "Faltas").
   - Delays (orig. ES "Retardos").
@@ -294,9 +294,9 @@
   - Report type.
   - Generation date and time.
   - User who requested the export.
-- This story builds on HU-REP-001. The team should consider reusing the export generation logic.
-- This story does not cover the analytical dashboard. That is handled in HU-REP-002.
-- This story does not cover delay/absence-specific queries by parameters. That is handled in HU-REP-004.
+- This story builds on [HU-REP-001](#hu-rep-001-report-export). The team should consider reusing the export generation logic.
+- This story does not cover the analytical dashboard. That is handled in [HU-REP-002](#hu-rep-002-role-based-analytical-dashboard).
+- This story does not cover delay/absence-specific queries by parameters. That is handled in [HU-REP-004](#hu-rep-004-delay-and-absence-query-by-parameters).
 - Performance for large date ranges may require asynchronous export with notification when ready.
 - Sensitive data included in exports must be protected according to RNF 4.
 
@@ -348,7 +348,7 @@
 | Story Points | 5 |
 | Priority | Medium |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-REP-001: Report export; HU-IAM-003: Role-based permission assignment; HU-HIST-001: Attendance and absence query by parameters |
+| Dependencies | [HU-REP-001](#hu-rep-001-report-export): Report export; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-attendance-and-absence-query-by-parameters): Attendance and absence query by parameters |
 
 ---
 
@@ -405,9 +405,9 @@
 - The team should consider:
   - Sorting options (by date, user, type).
   - Export option for query results, if applicable.
-  - Integration with HU-REP-001 for exporting query results.
-- This story does not cover the analytical dashboard. That is handled in HU-REP-002.
-- This story does not cover general attendance/absence history queries. That is handled in HU-HIST-001.
+  - Integration with [HU-REP-001](#hu-rep-001-report-export) for exporting query results.
+- This story does not cover the analytical dashboard. That is handled in [HU-REP-002](#hu-rep-002-role-based-analytical-dashboard).
+- This story does not cover general attendance/absence history queries. That is handled in [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-attendance-and-absence-query-by-parameters).
 - This story focuses specifically on delays and absences, not on all attendance records.
 - Attendance data must be protected according to RNF 4, and access must be restricted according to the user's role.
 
@@ -460,4 +460,4 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-HIST-001: Attendance and absence query by parameters; HU-CONF-008: Delay and justification parametrization |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-attendance-and-absence-query-by-parameters): Attendance and absence query by parameters; [HU-CONF-008](../HU-CONF/user-stories.md#hu-conf-008-delay-and-justification-parametrization): Delay and justification parametrization |

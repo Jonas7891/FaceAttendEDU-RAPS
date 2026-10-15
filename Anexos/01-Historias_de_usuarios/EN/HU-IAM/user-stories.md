@@ -84,7 +84,7 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-002: User registration, or an initial seeded administrator user |
+| Dependencies | [HU-IAM-002](#hu-iam-002-user-registration-with-role-assignment): User registration, or an initial seeded administrator user |
 
 ---
 
@@ -120,7 +120,7 @@
 
 ## Technical notes
 
-- This story covers basic user registration and role assignment. Massive user import by CSV is covered separately in HU-IAM-004.
+- This story covers basic user registration and role assignment. Massive user import by CSV is covered separately in [HU-IAM-004](../Index_HU.md#planned-stories-pending-documentation).
 - The system must validate that the user does not exist before registration, according to RF 1.1 acceptance criteria.
 - The system must validate the entered data, according to RF 1.1 acceptance criteria.
 - Role assignment must include the relationship between user identifier and person identifier, according to RF 1.1.1.
@@ -183,7 +183,7 @@
 | Story Points | 8 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | Initial role catalog; HU-IAM-003 recommended for permission matrix |
+| Dependencies | Initial role catalog; [HU-IAM-003](#hu-iam-003-role-based-permission-assignment) recommended for permission matrix |
 
 ---
 
@@ -278,4 +278,4 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 1 / MVP |
-| Dependencies | HU-IAM-002: User registration with role assignment |
+| Dependencies | [HU-IAM-002](#hu-iam-002-user-registration-with-role-assignment): User registration with role assignment |

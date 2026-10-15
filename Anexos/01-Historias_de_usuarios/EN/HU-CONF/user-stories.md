@@ -33,17 +33,17 @@
 ## Technical notes
 
 - RF 4.1 indicates that the system must validate that the user is registered and has logged into the system before allowing alert configuration.
-- This story covers the general alert configuration module. Specific sub-options such as enabling/disabling alerts and changing notification tones are handled in separate stories (HU-CONF-002 and HU-CONF-003).
+- This story covers the general alert configuration module. Specific sub-options such as enabling/disabling alerts and changing notification tones are handled in separate stories ([HU-CONF-002](#hu-conf-002-enable-or-disable-alerts) and [HU-CONF-003](#hu-conf-003-change-notification-tone)).
 - The alert configuration should be stored per user to allow personalization.
 - The system should consider the following types of alerts:
   - Attendance records (entry/exit).
   - Justification results (approved/rejected).
   - System alerts (device failures, maintenance).
   - Academic alerts (delays, absences).
-- The alert configuration should be compatible with the notification delivery mechanism defined in HU-JUS-003.
+- The alert configuration should be compatible with the notification delivery mechanism defined in [HU-JUS-003](../HU-JUS/user-stories.md#hu-jus-003-automatic-notification-of-justification-result).
 - The system must validate that the user is authenticated before processing any configuration change.
 - Configuration changes must be auditable for traceability.
-- This story does not cover IoT device failure alerts. That is handled in HU-CONF-007.
+- This story does not cover IoT device failure alerts. That is handled in [HU-CONF-007](#hu-conf-007-iot-device-failure-alerts-management).
 - The team must define the default alert configuration for new users.
 
 **Responsible service(s):** Configuration service / Notification service, proposed.  
@@ -86,7 +86,7 @@
 | Story Points | 3 |
 | Priority | Medium |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login |
 
 ---
 
@@ -127,8 +127,8 @@
 ## Technical notes
 
 - RF 4.1.1 indicates that the system must validate that the user is registered and has logged into the system before allowing alert enable/disable operations.
-- This story specifically covers the enable/disable toggle for individual alerts, complementing the general configuration module in HU-CONF-001.
-- The alert types that can be enabled or disabled should align with the alert categories defined in HU-CONF-001:
+- This story specifically covers the enable/disable toggle for individual alerts, complementing the general configuration module in [HU-CONF-001](#hu-conf-001-configure-system-alerts).
+- The alert types that can be enabled or disabled should align with the alert categories defined in [HU-CONF-001](#hu-conf-001-configure-system-alerts):
   - Attendance records (entry/exit).
   - Justification results (approved/rejected).
   - System alerts (device failures, maintenance).
@@ -137,7 +137,7 @@
 - When an alert is disabled, the system must not send notifications for that alert type, but should still log the event for audit purposes.
 - The alert status should be stored per user to allow personalization.
 - The team must define whether critical alerts (such as security incidents) can be disabled by users or should always remain enabled.
-- This story does not cover changing notification tones. That is handled in HU-CONF-003.
+- This story does not cover changing notification tones. That is handled in [HU-CONF-003](#hu-conf-003-change-notification-tone).
 
 **Responsible service(s):** Configuration service / Notification service, proposed.  
 **Endpoint(s) implemented:**  
@@ -182,7 +182,7 @@
 | Story Points | 2 |
 | Priority | Low |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-CONF-001: Configure system alerts |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-CONF-001](#hu-conf-001-configure-system-alerts): Configure system alerts |
 
 ---
 
@@ -223,7 +223,7 @@
 ## Technical notes
 
 - RF 4.1.2 indicates that the system must validate that the user is registered and has logged into the system before allowing notification tone changes.
-- This story specifically covers the audio customization of notifications, complementing the general configuration module in HU-CONF-001.
+- This story specifically covers the audio customization of notifications, complementing the general configuration module in [HU-CONF-001](#hu-conf-001-configure-system-alerts).
 - The system should provide a predefined set of notification tones for the user to choose from. The team must define the available tones.
 - The system should consider:
   - A default tone for new users.
@@ -233,7 +233,7 @@
 - On mobile devices, the application must request appropriate permissions to play sounds.
 - On web browsers, the system should handle browser autoplay policies that may restrict audio playback.
 - The tone change should apply to all notification types unless the team decides to allow per-alert-type tone configuration.
-- This story does not cover enabling/disabling alerts. That is handled in HU-CONF-002.
+- This story does not cover enabling/disabling alerts. That is handled in [HU-CONF-002](#hu-conf-002-enable-or-disable-alerts).
 
 **Responsible service(s):** Configuration service / Notification service, proposed.  
 **Endpoint(s) implemented:**  
@@ -279,7 +279,7 @@
 | Story Points | 2 |
 | Priority | Low |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-CONF-001: Configure system alerts |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-CONF-001](#hu-conf-001-configure-system-alerts): Configure system alerts |
 
 ---
 
@@ -332,7 +332,7 @@
 - The system should apply the language change immediately without requiring a logout/login cycle, if feasible.
 - Error messages, validation messages, and notification texts should also be translated.
 - The system should consider a fallback language (default) in case a translation is missing.
-- This story does not cover color palette configuration. That is handled in HU-CONF-005.
+- This story does not cover color palette configuration. That is handled in [HU-CONF-005](#hu-conf-005-update-color-palettes).
 - The team must define whether the language configuration applies only to the web interface or also to mobile notifications and emails.
 
 **Responsible service(s):** Configuration service / Internationalization service, proposed.  
@@ -380,7 +380,7 @@
 | Story Points | 3 |
 | Priority | Medium |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login |
 
 ---
 
@@ -427,8 +427,8 @@
   - A default palette that is applied if no custom palette is configured.
 - The color palette changes should apply globally across the application or per institutional scope, depending on the team's decision.
 - The team must define whether multiple palettes can coexist and how they are applied (by institution, by role, or globally).
-- This story does not cover language configuration. That is handled in HU-CONF-004.
-- This story does not cover alert configuration. That is handled in HU-CONF-001.
+- This story does not cover language configuration. That is handled in [HU-CONF-004](#hu-conf-004-configure-application-language).
+- This story does not cover alert configuration. That is handled in [HU-CONF-001](#hu-conf-001-configure-system-alerts).
 
 **Responsible service(s):** Configuration service / UI theme service, proposed.  
 **Endpoint(s) implemented:**  
@@ -475,7 +475,7 @@
 | Story Points | 3 |
 | Priority | Medium |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment |
 
 ---
 
@@ -517,7 +517,7 @@
 
 - RF 4.4 indicates that the system must validate that the user is registered and has logged into the system before allowing facial parameter updates.
 - RF 4.4 specifies that this operation can be requested by the user themselves or by an administrator.
-- This story complements HU-ATT-002 (initial facial parameter enrollment). The enrollment story covers the first-time registration, while this story covers updates to existing parameters.
+- This story complements [HU-ATT-002](../HU-ATT/user-stories.md#hu-att-002-initial-facial-parameter-enrollment) (initial facial parameter enrollment). The enrollment story covers the first-time registration, while this story covers updates to existing parameters.
 - The facial parameter update should follow the same security and data-protection requirements as the initial enrollment:
   - Biometric data must be stored securely.
   - Facial templates or embeddings should be preferred over raw images.
@@ -528,8 +528,8 @@
   - Invalidating the previous parameters immediately after the update.
 - The facial parameter update may require re-authentication to confirm the user's identity before proceeding.
 - The system must not expose facial parameters or biometric data in logs or interface messages.
-- This story does not cover initial facial enrollment. That is handled in HU-ATT-002.
-- This story does not cover user activation/deactivation. That is handled in HU-IAM-007 or HU-CONF-007 depending on the SRS interpretation.
+- This story does not cover initial facial enrollment. That is handled in [HU-ATT-002](../HU-ATT/user-stories.md#hu-att-002-initial-facial-parameter-enrollment).
+- This story does not cover user activation/deactivation. That is handled in [HU-IAM-007](../Index_HU.md#planned-stories-pending-documentation) or [HU-CONF-007](#hu-conf-007-iot-device-failure-alerts-management) depending on the SRS interpretation.
 
 **Responsible service(s):** Configuration service / Biometric service, proposed.  
 **Endpoint(s) implemented:**  
@@ -575,7 +575,7 @@
 | Story Points | 5 |
 | Priority | Medium |
 | Target sprint | Sprint 2 |
-| Dependencies | HU-IAM-001: User login; HU-ATT-002: Initial facial parameter enrollment |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-ATT-002](../HU-ATT/user-stories.md#hu-att-002-initial-facial-parameter-enrollment): Initial facial parameter enrollment |
 
 ---
 
@@ -613,19 +613,19 @@
 
 ## Technical notes
 
-- ⚠️ **SRS Inconsistency Note:** The SRS index lists RF 4.5 as "Gestión de alertas de fallos de dispositivos IoT" [IoT device failure alert management], but the detailed RF 4.5 section describes "Desactivar y reactivar usuarios" [Deactivate and reactivate users]. This story is documented based on the **index description** (IoT device failure alerts). The user activation/deactivation functionality is covered in HU-IAM-007 (RF 1.6). This inconsistency should be validated with the instructor.
+- ⚠️ **SRS Inconsistency Note:** The SRS index lists RF 4.5 as "Gestión de alertas de fallos de dispositivos IoT" [IoT device failure alert management], but the detailed RF 4.5 section describes "Desactivar y reactivar usuarios" [Deactivate and reactivate users]. This story is documented based on the **index description** (IoT device failure alerts). The user activation/deactivation functionality is covered in [HU-IAM-007](../Index_HU.md#planned-stories-pending-documentation) (RF 1.6). This inconsistency should be validated with the instructor.
 - The IoT device failure alerts management should consider:
   - Device types: cameras, sensors, or other hardware used for attendance registration.
   - Failure types: connectivity loss, hardware malfunction, camera failure, low battery (if applicable).
   - Alert severity levels: informational, warning, critical.
-- The alert notification mechanism should integrate with the notification service defined in HU-CONF-001 and HU-JUS-003.
+- The alert notification mechanism should integrate with the notification service defined in [HU-CONF-001](#hu-conf-001-configure-system-alerts) and [HU-JUS-003](../HU-JUS/user-stories.md#hu-jus-003-automatic-notification-of-justification-result).
 - The system should consider:
   - Automatic health checks for registered IoT devices.
   - Configurable alert thresholds (e.g., alert after N consecutive failures).
   - Alert escalation for unresolved critical failures.
 - The device status should be updated in real-time or near-real-time.
 - The system should maintain a device registry with information such as device ID, location/environment, status, and last activity timestamp.
-- This story does not cover user activation/deactivation. That is handled in HU-IAM-007.
+- This story does not cover user activation/deactivation. That is handled in [HU-IAM-007](../Index_HU.md#planned-stories-pending-documentation).
 - The team must define the specific IoT device types and failure detection mechanisms.
 
 **Responsible service(s):** Configuration service / IoT monitoring service, proposed.  
@@ -676,7 +676,7 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 3 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment; HU-CONF-001: Configure system alerts |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment; [HU-CONF-001](#hu-conf-001-configure-system-alerts): Configure system alerts |
 
 ---
 
@@ -706,7 +706,7 @@
 
 - [ ] **AC6:** Given that the user attempting to access the parametrization module does not have administrator permissions, when the request is processed, then the system denies access and records an unauthorized access attempt.
 
-- [ ] **AC7:** Given that a justification parameter is configured, when a student submits a justification in HU-JUS-001, then the system uses the configured parameters to determine if the justification is valid during evaluation in HU-JUS-002.
+- [ ] **AC7:** Given that a justification parameter is configured, when a student submits a justification in [HU-JUS-001](../HU-JUS/user-stories.md#hu-jus-001-justification-support-upload), then the system uses the configured parameters to determine if the justification is valid during evaluation in [HU-JUS-002](../HU-JUS/user-stories.md#hu-jus-002-justification-approval-and-rejection).
 
 - [ ] **AC8:** Given normal network conditions, when the administrator saves the parametrization changes, then the system responds in less than 5 seconds, according to RNF 1.
 
@@ -725,17 +725,17 @@
   - Maximum validity period (e.g., justification must be submitted within N days).
   - Whether the justification requires approval from a specific role.
 - The configured parameters are used by:
-  - HU-JUS-001: To validate that the submitted justification matches a valid type.
-  - HU-JUS-002: To determine if the justification is valid during evaluation.
-  - HU-REP-004: To filter and report delays and absences by justification status.
+  - [HU-JUS-001](../HU-JUS/user-stories.md#hu-jus-001-justification-support-upload): To validate that the submitted justification matches a valid type.
+  - [HU-JUS-002](../HU-JUS/user-stories.md#hu-jus-002-justification-approval-and-rejection): To determine if the justification is valid during evaluation.
+  - [HU-REP-004](../HU-REP/user-stories.md#hu-rep-004-delay-and-absence-query-by-parameters): To filter and report delays and absences by justification status.
 - The system should consider:
   - Preventing removal of justification parameters that are actively used in pending justifications.
   - Maintaining a historical record of parameter changes for audit purposes.
   - Providing default justification types for initial setup.
 - The team must define whether justification parameters are institution-specific or global.
-- This story does not cover the justification submission process. That is handled in HU-JUS-001.
-- This story does not cover the justification evaluation process. That is handled in HU-JUS-002.
-- This story does not cover delay detection. That is handled in HU-ATT-001.
+- This story does not cover the justification submission process. That is handled in [HU-JUS-001](../HU-JUS/user-stories.md#hu-jus-001-justification-support-upload).
+- This story does not cover the justification evaluation process. That is handled in [HU-JUS-002](../HU-JUS/user-stories.md#hu-jus-002-justification-approval-and-rejection).
+- This story does not cover delay detection. That is handled in [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-facial-attendance-registration).
 
 **Responsible service(s):** Configuration service / Justification parametrization service, proposed.  
 **Endpoint(s) implemented:**  
@@ -784,4 +784,4 @@
 | Story Points | 5 |
 | Priority | High |
 | Target sprint | Sprint 2 |
-| Dependencies | HU-IAM-001: User login; HU-IAM-003: Role-based permission assignment |
+| Dependencies | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-user-login): User login; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-role-based-permission-assignment): Role-based permission assignment |
