@@ -78,9 +78,9 @@
   - Justificado.
 - Se debe considerar la paginación para conjuntos de resultados grandes.
 - El sistema debe considerar estrategias de almacenamiento en caché para reportes accedidos frecuentemente, si es aplicable.
-- Esta historia no cubre la exportación de reportes. Eso se maneja en la HU-REP-001.
-- Esta historia no cubre los tableros (dashboards). Eso se maneja en la HU-REP-002.
-- Esta historia no cubre consultas específicas de retardos/ausencias por parámetros. Eso se maneja en la HU-REP-004.
+- Esta historia no cubre la exportación de reportes. Eso se maneja en la [HU-REP-001](../HU-REP/user-stories.md#hu-rep-001-exportación-de-reportes).
+- Esta historia no cubre los tableros (dashboards). Eso se maneja en la [HU-REP-002](../HU-REP/user-stories.md#hu-rep-002-tablero-analítico-basado-en-roles).
+- Esta historia no cubre consultas específicas de retardos/ausencias por parámetros. Eso se maneja en la [HU-REP-004](../HU-REP/user-stories.md#hu-rep-004-consulta-de-retardos-y-ausencias-por-parámetros).
 - Los datos de asistencia deben protegerse de acuerdo con el RNF 4, y el acceso debe restringirse según el rol del usuario.
 
 **Servicio(s) responsable(s):** Servicio de Historial / Servicio de Consulta de Asistencia, propuesto.  
@@ -134,7 +134,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-ATT-001: Registro de asistencia facial; HU-ACAD-005: Asignar bloques de tiempo/jornadas |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; [HU-ACAD-005](../HU-ACAD/user-stories.md#hu-acad-005-asignar-bloques-de-tiempojornadas): Asignar bloques de tiempo/jornadas |
 
 ---
 
@@ -192,12 +192,12 @@
   - Que el usuario que realiza la consulta esté registrado en el sistema.
   - Que el usuario objetivo/filtrado exista.
 - Esta historia depende de que se generen eventos de auditoría por otros módulos:
-  - HU-IAM-001: Eventos de inicio de sesión.
-  - HU-IAM-002: Eventos de registro de usuario y asignación de roles.
-  - HU-IAM-007: Eventos de activación/desactivación de usuarios.
-  - HU-IAM-010: Eventos de cambio de rol.
-  - HU-ATT-002: Eventos de inscripción de parámetros faciales.
-  - HU-CONF-006: Eventos de actualización de parámetros faciales.
+  - [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Eventos de inicio de sesión.
+  - [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Eventos de registro de usuario y asignación de roles.
+  - [HU-IAM-007](../Index_HU.md#historias-planificadas-pendientes-de-documentar): Eventos de activación/desactivación de usuarios.
+  - [HU-IAM-010](../Index_HU.md#historias-planificadas-pendientes-de-documentar): Eventos de cambio de rol.
+  - [HU-ATT-002](../HU-ATT/user-stories.md#hu-att-002-inscripción-inicial-de-parámetros-faciales): Eventos de inscripción de parámetros faciales.
+  - [HU-CONF-006](../HU-CONF/user-stories.md#hu-conf-006-actualizar-parámetros-faciales-del-usuario): Eventos de actualización de parámetros faciales.
 - El historial de cambios debe ser inmutable: una vez registrado, las entradas del historial no deben modificarse ni eliminarse.
 - Los campos sensibles como contraseñas o parámetros biométricos no deben exponer sus valores reales en el historial de cambios. Solo debe registrarse el hecho de que ocurrió un cambio.
 - El historial de cambios debe soportar el filtrado por:
@@ -206,7 +206,7 @@
   - Tipo de cambio.
   - Usuario que realizó el cambio.
 - Se debe considerar la paginación para usuarios con muchos cambios.
-- Esta historia no cubre el historial de asistencia. Eso se maneja en la HU-HIST-001.
+- Esta historia no cubre el historial de asistencia. Eso se maneja en la [HU-HIST-001](#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros).
 - Esta historia no cubre la auditoría general de todas las acciones del sistema. Se enfoca específicamente en los cambios de datos de usuario.
 - El equipo debe definir el período de retención de los registros del historial de cambios, considerando las políticas institucionales y las regulaciones de protección de datos.
 
@@ -254,4 +254,4 @@
 | Story Points | 5 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-IAM-002: Registro de usuario con asignación de rol; HU-IAM-007: Activar/desactivar usuarios; HU-IAM-010: Cambio de rol |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-IAM-007](../Index_HU.md#historias-planificadas-pendientes-de-documentar): Activar/desactivar usuarios; [HU-IAM-010](../Index_HU.md#historias-planificadas-pendientes-de-documentar): Cambio de rol |

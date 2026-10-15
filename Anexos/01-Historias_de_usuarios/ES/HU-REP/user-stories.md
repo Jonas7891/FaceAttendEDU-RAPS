@@ -59,9 +59,9 @@
   - Usuario que solicitó la exportación.
   - Filtros aplicados, si existen.
 - Los datos exportados deben respetar el alcance del rol del usuario y no deben incluir registros no autorizados.
-- Esta historia no cubre los filtros por rango de fechas. Eso se maneja en la HU-REP-003.
-- Esta historia no cubre el tablero analítico. Eso se maneja en la HU-REP-002.
-- Esta historia no cubre las consultas específicas de retardos/ausencias por parámetros. Eso se maneja en la HU-REP-004.
+- Esta historia no cubre los filtros por rango de fechas. Eso se maneja en la [HU-REP-003](#hu-rep-003-reportes-por-rango-de-fechas).
+- Esta historia no cubre el tablero analítico. Eso se maneja en la [HU-REP-002](#hu-rep-002-tablero-analítico-basado-en-roles).
+- Esta historia no cubre las consultas específicas de retardos/ausencias por parámetros. Eso se maneja en la [HU-REP-004](#hu-rep-004-consulta-de-retardos-y-ausencias-por-parámetros).
 - El rendimiento de exportaciones grandes puede superar el tiempo de respuesta estándar de 5 segundos. El equipo debe definir si se requiere exportación asíncrona.
 - Los datos sensibles incluidos en las exportaciones deben protegerse según el RNF 4.
 
@@ -114,7 +114,7 @@
 | Story Points | 8 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros |
 
 ---
 
@@ -180,9 +180,9 @@
   - Buenas prácticas de accesibilidad, según el RNF 2.
 - El filtrado basado en roles debe aplicarse en el lado del servidor. El filtrado únicamente en el cliente no es suficiente.
 - El tablero debe usar datos en caché o agregados cuando sea posible para mejorar el rendimiento.
-- Esta historia no cubre la exportación de reportes. Eso se maneja en la HU-REP-001.
-- Esta historia no cubre los reportes por rango de fechas. Eso se maneja en la HU-REP-003.
-- Esta historia no cubre las consultas específicas de retardos/ausencias. Eso se maneja en la HU-REP-004.
+- Esta historia no cubre la exportación de reportes. Eso se maneja en la [HU-REP-001](#hu-rep-001-exportación-de-reportes).
+- Esta historia no cubre los reportes por rango de fechas. Eso se maneja en la [HU-REP-003](#hu-rep-003-reportes-por-rango-de-fechas).
+- Esta historia no cubre las consultas específicas de retardos/ausencias. Eso se maneja en la [HU-REP-004](#hu-rep-004-consulta-de-retardos-y-ausencias-por-parámetros).
 - El equipo debe definir los KPIs específicos y los componentes visuales para cada rol.
 
 **Servicio(s) responsable(s):** Servicio de Reportes / Servicio de Tableros, propuesto.  
@@ -233,7 +233,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros; HU-ATT-001: Registro de asistencia facial |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial |
 
 ---
 
@@ -274,7 +274,7 @@
 ## Notas Técnicas
 
 - El RF 7.3 indica que el sistema debe validar el rol del usuario y asociarlo con los tipos de exportación que está autorizado a solicitar, de forma similar al RF 7.1 pero con filtrado por rango de fechas.
-- Los tipos de reporte disponibles para la exportación por rango de fechas deben alinearse con la HU-REP-001:
+- Los tipos de reporte disponibles para la exportación por rango de fechas deben alinearse con la [HU-REP-001](#hu-rep-001-exportación-de-reportes):
   - Asistencias.
   - Faltas.
   - Retardos.
@@ -294,9 +294,9 @@
   - El tipo de reporte.
   - La fecha y hora de generación.
   - El usuario que solicitó la exportación.
-- Esta historia se basa en la HU-REP-001. El equipo debe considerar reutilizar la lógica de generación de exportaciones.
-- Esta historia no cubre el tablero analítico. Eso se maneja en la HU-REP-002.
-- Esta historia no cubre las consultas específicas de retardos/ausencias por parámetros. Eso se maneja en la HU-REP-004.
+- Esta historia se basa en la [HU-REP-001](#hu-rep-001-exportación-de-reportes). El equipo debe considerar reutilizar la lógica de generación de exportaciones.
+- Esta historia no cubre el tablero analítico. Eso se maneja en la [HU-REP-002](#hu-rep-002-tablero-analítico-basado-en-roles).
+- Esta historia no cubre las consultas específicas de retardos/ausencias por parámetros. Eso se maneja en la [HU-REP-004](#hu-rep-004-consulta-de-retardos-y-ausencias-por-parámetros).
 - El rendimiento para rangos de fechas amplios puede requerir una exportación asíncrona con notificación cuando esté lista.
 - Los datos sensibles incluidos en las exportaciones deben protegerse según el RNF 4.
 
@@ -348,7 +348,7 @@
 | Story Points | 5 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-REP-001: Exportación de reportes; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros |
+| Dependencias | [HU-REP-001](#hu-rep-001-exportación-de-reportes): Exportación de reportes; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros |
 
 ---
 
@@ -405,9 +405,9 @@
 - El equipo debe considerar:
   - Opciones de ordenamiento (por fecha, usuario, tipo).
   - Opción de exportar los resultados de la consulta, si aplica.
-  - Integración con la HU-REP-001 para exportar los resultados de la consulta.
-- Esta historia no cubre el tablero analítico. Eso se maneja en la HU-REP-002.
-- Esta historia no cubre las consultas generales del historial de asistencias/ausencias. Eso se maneja en la HU-HIST-001.
+  - Integración con la [HU-REP-001](#hu-rep-001-exportación-de-reportes) para exportar los resultados de la consulta.
+- Esta historia no cubre el tablero analítico. Eso se maneja en la [HU-REP-002](#hu-rep-002-tablero-analítico-basado-en-roles).
+- Esta historia no cubre las consultas generales del historial de asistencias/ausencias. Eso se maneja en la [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros).
 - Esta historia se enfoca específicamente en retardos y ausencias, no en todos los registros de asistencia.
 - Los datos de asistencia deben protegerse según el RNF 4, y el acceso debe restringirse según el rol del usuario.
 
@@ -460,4 +460,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-HIST-001: Consulta de asistencias y ausencias por parámetros; HU-CONF-008: Parametrización de retardos y justificaciones |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-CONF-008](../HU-CONF/user-stories.md#hu-conf-008-parametrización-de-retardos-y-justificaciones): Parametrización de retardos y justificaciones |

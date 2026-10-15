@@ -52,7 +52,7 @@
 **Endpoint(s) implementados:**  
 - `POST /api/v1/attendance/entry/facial` — propuesto.  
 - `POST /api/v1/attendance/exit/facial` — propuesto.  
-- `POST /api/v1/attendance/entry/alternative` — fallback, puede pertenecer a la HU-ATT-002.  
+- `POST /api/v1/attendance/entry/alternative` — fallback, puede pertenecer a la [HU-ATT-002](#hu-att-002-inscripción-inicial-de-parámetros-faciales).  
 
 **Eventos generados:**  
 - `AttendanceEntryRegistered`  
@@ -97,7 +97,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-002: Registro de usuario con asignación de rol; HU-ATT-002: Inscripción inicial de parámetros faciales; HU-ACAD-005: Asignar bloques de tiempo/jornadas |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-002](#hu-att-002-inscripción-inicial-de-parámetros-faciales): Inscripción inicial de parámetros faciales; [HU-ACAD-005](../HU-ACAD/user-stories.md#hu-acad-005-asignar-bloques-de-tiempojornadas): Asignar bloques de tiempo/jornadas |
 
 ---
 
@@ -133,14 +133,14 @@
 
 ## Notas Técnicas
 
-- Esta historia corresponde a la inscripción facial inicial requerida antes de utilizar el registro de asistencia facial de la HU-ATT-001.
+- Esta historia corresponde a la inscripción facial inicial requerida antes de utilizar el registro de asistencia facial de la [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial).
 - El SRS indica que el reconocimiento facial puede fallar por la iluminación o el movimiento del usuario, por lo que la interfaz debe proporcionar orientación clara.
 - La inscripción facial puede depender de un servicio externo de reconocimiento facial en la nube, según el supuesto 2.4.5 del SRS. Si el servicio externo falla, el sistema debe mostrar un error claro y permitir reintentar.
 - El sistema debe almacenar plantillas o parámetros faciales en lugar de imágenes faciales brutas, a menos que las imágenes brutas sean explícitamente requeridas y aprobadas.
 - Los datos biométricos deben cumplir con las regulaciones de protección de datos aplicables, como la Ley 1581 de 2012 de Colombia.
 - El usuario debe estar autenticado antes de asociar un parámetro facial a su cuenta.
 - Los permisos de cámara deben solicitarse y manejarse adecuadamente si son denegados.
-- Las actualizaciones del parámetro facial se cubren por separado en la HU-CONF-006.
+- Las actualizaciones del parámetro facial se cubren por separado en la [HU-CONF-006](../HU-CONF/user-stories.md#hu-conf-006-actualizar-parámetros-faciales-del-usuario).
 - Los datos biométricos sensibles no deben escribirse en logs ni mostrarse en la interfaz.
 
 **Servicio(s) responsable(s):** Servicio de Asistencia / Servicio de Inscripción Biométrica, propuesto.  
@@ -186,7 +186,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-002: Registro de usuario con asignación de rol |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol |
 
 ---
 
@@ -225,13 +225,13 @@
 - El SRS describe el registro alternativo como una encuesta con límite de tiempo, donde el usuario ingresa datos personales para ser comparados con los datos registrados.
 - El valor del límite de tiempo debe ser definido por el equipo. Un valor inicial propuesto es de 60 segundos, pero debe validarse.
 - Los campos de datos personales utilizados para la validación deben ser definidos por el equipo y deben seguir los principios de minimización de datos.
-- Esta historia es un mecanismo de respaldo de la HU-ATT-001 cuando el reconocimiento facial falla por la iluminación, el movimiento, una falla de cámara o parámetros faciales que no coinciden.
+- Esta historia es un mecanismo de respaldo de la [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial) cuando el reconocimiento facial falla por la iluminación, el movimiento, una falla de cámara o parámetros faciales que no coinciden.
 - El sistema debe validar que el usuario esté registrado en el sistema, según el RF 3.1.2.
 - El registro alternativo debe estar vinculado al bloque de asistencia, la fecha y el usuario correspondientes.
 - El sistema debe prevenir el abuso del flujo de registro alternativo mediante limitación de tasa (rate limiting) o controles de intentos.
 - Los datos personales utilizados para la validación no deben escribirse en logs ni mostrarse en la interfaz.
 - Si el flujo alternativo se utiliza en un quiosco o dispositivo compartido, el sistema no debe exponer información de usuarios ajenos.
-- Esta historia no cubre a los usuarios no registrados o NN. Ese caso se maneja en la HU-ATT-004 y la HU-ATT-005.
+- Esta historia no cubre a los usuarios no registrados o NN. Ese caso se maneja en la [HU-ATT-004](#hu-att-004-control-de-entrada-para-usuarios-no-registrados-o-nn) y la [HU-ATT-005](../Index_HU.md#historias-planificadas-pendientes-de-documentar).
 
 **Servicio(s) responsable(s):** Servicio de Asistencia / Servicio de Validación Alternativa, propuesto.  
 **Endpoint(s) implementados:**  
@@ -277,7 +277,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-002: Registro de usuario con asignación de rol; HU-ATT-001: Registro de asistencia facial; HU-ACAD-005: Asignar bloques de tiempo/jornadas |
+| Dependencias | [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; [HU-ACAD-005](../HU-ACAD/user-stories.md#hu-acad-005-asignar-bloques-de-tiempojornadas): Asignar bloques de tiempo/jornadas |
 
 ---
 
@@ -314,7 +314,7 @@
 - El RF 3.2 del SRS describe este requisito como la determinación de qué usuarios son objetivo del control de asistencia y cuáles son usuarios casuales.
 - La salida definida por el SRS es la asignación del tipo de usuario: NN/usuario.
 - El criterio de aceptación del SRS indica que el sistema debe validar si el usuario está registrado. Para esta historia, dicha validación se interpreta como verificar si la persona existe en el registro oficial de usuarios.
-- Esta historia cubre la clasificación y el control. El registro alternativo propiamente dicho para usuarios NN se maneja en la HU-ATT-005.
+- Esta historia cubre la clasificación y el control. El registro alternativo propiamente dicho para usuarios NN se maneja en la [HU-ATT-005](../Index_HU.md#historias-planificadas-pendientes-de-documentar).
 - El sistema debe evitar mezclar los registros oficiales de asistencia con los registros casuales o NN, a menos que la institución requiera explícitamente reportes consolidados.
 - Los datos personales utilizados para clasificar a una persona deben minimizarse y protegerse.
 - El proceso de clasificación puede utilizarse en escenarios de quiosco, recepción o terminal de asistencia.
@@ -365,4 +365,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-IAM-002: Registro de usuario con asignación de rol; HU-ATT-001: Registro de asistencia facial; relacionada con HU-ATT-005 |
+| Dependencias | [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; relacionada con [HU-ATT-005](../Index_HU.md#historias-planificadas-pendientes-de-documentar) |

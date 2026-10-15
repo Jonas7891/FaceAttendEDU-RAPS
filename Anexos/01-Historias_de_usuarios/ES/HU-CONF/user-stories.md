@@ -33,17 +33,17 @@
 ## Notas Técnicas
 
 - El RF 4.1 indica que el sistema debe validar que el usuario esté registrado y haya iniciado sesión en el sistema antes de permitir la configuración de alertas.
-- Esta historia cubre el módulo general de configuración de alertas. Las sub-opciones específicas, como habilitar/deshabilitar alertas y cambiar los tonos de notificación, se manejan en historias separadas (HU-CONF-002 y HU-CONF-003).
+- Esta historia cubre el módulo general de configuración de alertas. Las sub-opciones específicas, como habilitar/deshabilitar alertas y cambiar los tonos de notificación, se manejan en historias separadas ([HU-CONF-002](#hu-conf-002-habilitar-o-deshabilitar-alertas) y [HU-CONF-003](#hu-conf-003-cambiar-tono-de-notificación)).
 - La configuración de alertas debe almacenarse por usuario para permitir la personalización.
 - El sistema debe considerar los siguientes tipos de alertas:
   - Registros de asistencia (entrada/salida).
   - Resultados de justificaciones (aprobadas/rechazadas).
   - Alertas del sistema (fallos de dispositivos, mantenimiento).
   - Alertas académicas (retrasos, ausencias).
-- La configuración de alertas debe ser compatible con el mecanismo de entrega de notificaciones definido en la HU-JUS-003.
+- La configuración de alertas debe ser compatible con el mecanismo de entrega de notificaciones definido en la [HU-JUS-003](../HU-JUS/user-stories.md#hu-jus-003-notificación-automática-del-resultado-de-la-justificación).
 - El sistema debe validar que el usuario esté autenticado antes de procesar cualquier cambio de configuración.
 - Los cambios de configuración deben ser auditables para garantizar la trazabilidad.
-- Esta historia no cubre las alertas de fallos de dispositivos IoT. Eso se maneja en la HU-CONF-007.
+- Esta historia no cubre las alertas de fallos de dispositivos IoT. Eso se maneja en la [HU-CONF-007](#hu-conf-007-gestión-de-alertas-de-fallos-de-dispositivos-iot).
 - El equipo debe definir la configuración de alertas predeterminada para los nuevos usuarios.
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio de Notificación, propuesto.  
@@ -86,7 +86,7 @@
 | Story Points | 3 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario |
 
 ---
 
@@ -127,8 +127,8 @@
 ## Notas Técnicas
 
 - El RF 4.1.1 indica que el sistema debe validar que el usuario esté registrado y haya iniciado sesión en el sistema antes de permitir las operaciones de habilitación/deshabilitación de alertas.
-- Esta historia cubre específicamente el interruptor de habilitar/deshabilitar para alertas individuales, complementando el módulo de configuración general en la HU-CONF-001.
-- Los tipos de alertas que pueden habilitarse o deshabilitarse deben alinearse con las categorías de alertas definidas en la HU-CONF-001:
+- Esta historia cubre específicamente el interruptor de habilitar/deshabilitar para alertas individuales, complementando el módulo de configuración general en la [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema).
+- Los tipos de alertas que pueden habilitarse o deshabilitarse deben alinearse con las categorías de alertas definidas en la [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema):
   - Registros de asistencia (entrada/salida).
   - Resultados de justificaciones (aprobadas/rechazadas).
   - Alertas del sistema (fallos de dispositivos, mantenimiento).
@@ -137,7 +137,7 @@
 - Cuando una alerta está deshabilitada, el sistema no debe enviar notificaciones para ese tipo de alerta, pero debe seguir registrando el evento para fines de auditoría.
 - El estado de la alerta debe almacenarse por usuario para permitir la personalización.
 - El equipo debe definir si las alertas críticas (como incidentes de seguridad) pueden ser deshabilitadas por los usuarios o si deben permanecer siempre habilitadas.
-- Esta historia no cubre el cambio de tonos de notificación. Eso se maneja en la HU-CONF-003.
+- Esta historia no cubre el cambio de tonos de notificación. Eso se maneja en la [HU-CONF-003](#hu-conf-003-cambiar-tono-de-notificación).
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio de Notificación, propuesto.  
 **Endpoint(s) implementados:**  
@@ -182,7 +182,7 @@
 | Story Points | 2 |
 | Prioridad | Baja |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-CONF-001: Configurar alertas del sistema |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema): Configurar alertas del sistema |
 
 ---
 
@@ -223,7 +223,7 @@
 ## Notas Técnicas
 
 - El RF 4.1.2 indica que el sistema debe validar que el usuario esté registrado y haya iniciado sesión en el sistema antes de permitir los cambios de tono de notificación.
-- Esta historia cubre específicamente la personalización auditiva de las notificaciones, complementando el módulo de configuración general en la HU-CONF-001.
+- Esta historia cubre específicamente la personalización auditiva de las notificaciones, complementando el módulo de configuración general en la [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema).
 - El sistema debe proporcionar un conjunto predefinido de tonos de notificación para que el usuario elija. El equipo debe definir los tonos disponibles.
 - El sistema debe considerar:
   - Un tono predeterminado para los nuevos usuarios.
@@ -233,7 +233,7 @@
 - En dispositivos móviles, la aplicación debe solicitar los permisos apropiados para reproducir sonidos.
 - En navegadores web, el sistema debe manejar las políticas de reproducción automática del navegador que pueden restringir la reproducción de audio.
 - El cambio de tono debe aplicarse a todos los tipos de notificación, a menos que el equipo decida permitir la configuración de tonos por tipo de alerta.
-- Esta historia no cubre la habilitación/deshabilitación de alertas. Eso se maneja en la HU-CONF-002.
+- Esta historia no cubre la habilitación/deshabilitación de alertas. Eso se maneja en la [HU-CONF-002](#hu-conf-002-habilitar-o-deshabilitar-alertas).
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio de Notificación, propuesto.  
 **Endpoint(s) implementados:**  
@@ -279,7 +279,7 @@
 | Story Points | 2 |
 | Prioridad | Baja |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-CONF-001: Configurar alertas del sistema |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema): Configurar alertas del sistema |
 
 ---
 
@@ -332,7 +332,7 @@
 - El sistema debe aplicar el cambio de idioma inmediatamente sin requerir un ciclo de cierre/inicio de sesión, si es factible.
 - Los mensajes de error, los mensajes de validación y los textos de notificación también deben traducirse.
 - El sistema debe considerar un idioma de respaldo (predeterminado) en caso de que falte una traducción.
-- Esta historia no cubre la configuración de la paleta de colores. Eso se maneja en la HU-CONF-005.
+- Esta historia no cubre la configuración de la paleta de colores. Eso se maneja en la [HU-CONF-005](#hu-conf-005-actualizar-paletas-de-colores).
 - El equipo debe definir si la configuración del idioma se aplica solo a la interfaz web o también a las notificaciones móviles y correos electrónicos.
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio de Internacionalización, propuesto.  
@@ -380,7 +380,7 @@
 | Story Points | 3 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario |
 
 ---
 
@@ -427,8 +427,8 @@
   - Una paleta predeterminada que se aplica si no hay una paleta personalizada configurada.
 - Los cambios de la paleta de colores deben aplicarse globalmente en toda la aplicación o por ámbito institucional, dependiendo de la decisión del equipo.
 - El equipo debe definir si pueden coexistir múltiples paletas y cómo se aplican (por institución, por rol o globalmente).
-- Esta historia no cubre la configuración del idioma. Eso se maneja en la HU-CONF-004.
-- Esta historia no cubre la configuración de alertas. Eso se maneja en la HU-CONF-001.
+- Esta historia no cubre la configuración del idioma. Eso se maneja en la [HU-CONF-004](#hu-conf-004-configurar-idioma-de-la-aplicación).
+- Esta historia no cubre la configuración de alertas. Eso se maneja en la [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema).
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio de temas de UI, propuesto.  
 **Endpoint(s) implementados:**  
@@ -475,7 +475,7 @@
 | Story Points | 3 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles |
 
 ---
 
@@ -517,7 +517,7 @@
 
 - El RF 4.4 indica que el sistema debe validar que el usuario esté registrado y haya iniciado sesión en el sistema antes de permitir las actualizaciones de parámetros faciales.
 - El RF 4.4 especifica que esta operación puede ser solicitada por el propio usuario o por un administrador.
-- Esta historia complementa la HU-ATT-002 (inscripción inicial de parámetros faciales). La historia de inscripción cubre el registro por primera vez, mientras que esta historia cubre las actualizaciones de los parámetros existentes.
+- Esta historia complementa la [HU-ATT-002](../HU-ATT/user-stories.md#hu-att-002-inscripción-inicial-de-parámetros-faciales) (inscripción inicial de parámetros faciales). La historia de inscripción cubre el registro por primera vez, mientras que esta historia cubre las actualizaciones de los parámetros existentes.
 - La actualización de parámetros faciales debe seguir los mismos requisitos de seguridad y protección de datos que la inscripción inicial:
   - Los datos biométricos deben almacenarse de forma segura.
   - Se deben preferir plantillas o embeddings faciales sobre imágenes faciales brutas.
@@ -528,8 +528,8 @@
   - Invalidar los parámetros anteriores inmediatamente después de la actualización.
 - La actualización de los parámetros faciales puede requerir una re-autenticación para confirmar la identidad del usuario antes de proceder.
 - El sistema no debe exponer parámetros faciales o datos biométricos en logs o mensajes de la interfaz.
-- Esta historia no cubre la inscripción facial inicial. Eso se maneja en la HU-ATT-002.
-- Esta historia no cubre la activación/desactivación de usuarios. Eso se maneja en la HU-IAM-007 o HU-CONF-007 dependiendo de la interpretación del SRS.
+- Esta historia no cubre la inscripción facial inicial. Eso se maneja en la [HU-ATT-002](../HU-ATT/user-stories.md#hu-att-002-inscripción-inicial-de-parámetros-faciales).
+- Esta historia no cubre la activación/desactivación de usuarios. Eso se maneja en la [HU-IAM-007](../Index_HU.md#historias-planificadas-pendientes-de-documentar) o [HU-CONF-007](#hu-conf-007-gestión-de-alertas-de-fallos-de-dispositivos-iot) dependiendo de la interpretación del SRS.
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio Biométrico, propuesto.  
 **Endpoint(s) implementados:**  
@@ -575,7 +575,7 @@
 | Story Points | 5 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-ATT-002: Inscripción inicial de parámetros faciales |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-ATT-002](../HU-ATT/user-stories.md#hu-att-002-inscripción-inicial-de-parámetros-faciales): Inscripción inicial de parámetros faciales |
 
 ---
 
@@ -613,19 +613,19 @@
 
 ## Notas Técnicas
 
-- ⚠️ **Nota de Inconsistencia del SRS:** El índice del SRS enumera el RF 4.5 como "Gestión de alertas de fallos de dispositivos IoT", pero la sección detallada del RF 4.5 describe "Desactivar y reactivar usuarios". Esta historia está documentada basándose en la **descripción del índice** (alertas de fallos de dispositivos IoT). La funcionalidad de activación/desactivación de usuarios está cubierta en la HU-IAM-007 (RF 1.6). Esta inconsistencia debe ser validada con el instructor.
+- ⚠️ **Nota de Inconsistencia del SRS:** El índice del SRS enumera el RF 4.5 como "Gestión de alertas de fallos de dispositivos IoT", pero la sección detallada del RF 4.5 describe "Desactivar y reactivar usuarios". Esta historia está documentada basándose en la **descripción del índice** (alertas de fallos de dispositivos IoT). La funcionalidad de activación/desactivación de usuarios está cubierta en la [HU-IAM-007](../Index_HU.md#historias-planificadas-pendientes-de-documentar) (RF 1.6). Esta inconsistencia debe ser validada con el instructor.
 - La gestión de alertas de fallos de dispositivos IoT debe considerar:
   - Tipos de dispositivos: cámaras, sensores u otro hardware utilizado para el registro de asistencia.
   - Tipos de fallos: pérdida de conectividad, mal funcionamiento del hardware, fallo de la cámara, batería baja (si es aplicable).
   - Niveles de severidad de la alerta: informativa, advertencia, crítica.
-- El mecanismo de notificación de alertas debe integrarse con el servicio de notificaciones definido en la HU-CONF-001 y la HU-JUS-003.
+- El mecanismo de notificación de alertas debe integrarse con el servicio de notificaciones definido en la [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema) y la [HU-JUS-003](../HU-JUS/user-stories.md#hu-jus-003-notificación-automática-del-resultado-de-la-justificación).
 - El sistema debe considerar:
   - Verificaciones de salud automáticas para los dispositivos IoT registrados.
   - Umbrales de alerta configurables (por ejemplo, alertar después de N fallos consecutivos).
   - Escalamiento de alertas para fallos críticos no resueltos.
 - El estado del dispositivo debe actualizarse en tiempo real o casi real.
 - El sistema debe mantener un registro de dispositivos con información como el ID del dispositivo, ubicación/entorno, estado y marca de tiempo de la última actividad.
-- Esta historia no cubre la activación/desactivación de usuarios. Eso se maneja en la HU-IAM-007.
+- Esta historia no cubre la activación/desactivación de usuarios. Eso se maneja en la [HU-IAM-007](../Index_HU.md#historias-planificadas-pendientes-de-documentar).
 - El equipo debe definir los tipos específicos de dispositivos IoT y los mecanismos de detección de fallos.
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio de monitoreo de IoT, propuesto.  
@@ -676,7 +676,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles; HU-CONF-001: Configurar alertas del sistema |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-CONF-001](#hu-conf-001-configurar-alertas-del-sistema): Configurar alertas del sistema |
 
 ---
 
@@ -706,7 +706,7 @@
 
 - [ ] **AC6:** Dado que el usuario que intenta acceder al módulo de parametrización no tiene permisos de administrador, cuando se procesa la solicitud, entonces el sistema deniega el acceso y registra un intento de acceso no autorizado.
 
-- [ ] **AC7:** Dado que se ha configurado un parámetro de justificación, cuando un estudiante envía una justificación en la HU-JUS-001, entonces el sistema utiliza los parámetros configurados para determinar si la justificación es válida durante la evaluación en la HU-JUS-002.
+- [ ] **AC7:** Dado que se ha configurado un parámetro de justificación, cuando un estudiante envía una justificación en la [HU-JUS-001](../HU-JUS/user-stories.md#hu-jus-001-carga-del-soporte-de-justificación), entonces el sistema utiliza los parámetros configurados para determinar si la justificación es válida durante la evaluación en la [HU-JUS-002](../HU-JUS/user-stories.md#hu-jus-002-aprobación-y-rechazo-de-justificaciones).
 
 - [ ] **AC8:** Dadas condiciones normales de red, cuando el administrador guarda los cambios de parametrización, entonces el sistema responde en menos de 5 segundos, de acuerdo con el RNF 1.
 
@@ -725,17 +725,17 @@
   - Período máximo de validez (por ejemplo, la justificación debe enviarse dentro de N días).
   - Si la justificación requiere la aprobación de un rol específico.
 - Los parámetros configurados son utilizados por:
-  - HU-JUS-001: Para validar que la justificación enviada coincida con un tipo válido.
-  - HU-JUS-002: Para determinar si la justificación es válida durante la evaluación.
-  - HU-REP-004: Para filtrar y reportar retardos y ausencias por estado de justificación.
+  - [HU-JUS-001](../HU-JUS/user-stories.md#hu-jus-001-carga-del-soporte-de-justificación): Para validar que la justificación enviada coincida con un tipo válido.
+  - [HU-JUS-002](../HU-JUS/user-stories.md#hu-jus-002-aprobación-y-rechazo-de-justificaciones): Para determinar si la justificación es válida durante la evaluación.
+  - [HU-REP-004](../HU-REP/user-stories.md#hu-rep-004-consulta-de-retardos-y-ausencias-por-parámetros): Para filtrar y reportar retardos y ausencias por estado de justificación.
 - El sistema debe considerar:
   - Evitar la eliminación de parámetros de justificación que estén siendo utilizados activamente en justificaciones pendientes.
   - Mantener un registro histórico de los cambios de parámetros para fines de auditoría.
   - Proporcionar tipos de justificación predeterminados para la configuración inicial.
 - El equipo debe definir si los parámetros de justificación son específicos de la institución o globales.
-- Esta historia no cubre el proceso de envío de justificaciones. Eso se maneja en la HU-JUS-001.
-- Esta historia no cubre el proceso de evaluación de justificaciones. Eso se maneja en la HU-JUS-002.
-- Esta historia no cubre la detección de retardos. Eso se maneja en la HU-ATT-001.
+- Esta historia no cubre el proceso de envío de justificaciones. Eso se maneja en la [HU-JUS-001](../HU-JUS/user-stories.md#hu-jus-001-carga-del-soporte-de-justificación).
+- Esta historia no cubre el proceso de evaluación de justificaciones. Eso se maneja en la [HU-JUS-002](../HU-JUS/user-stories.md#hu-jus-002-aprobación-y-rechazo-de-justificaciones).
+- Esta historia no cubre la detección de retardos. Eso se maneja en la [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-registro-de-asistencia-facial).
 
 **Servicio(s) responsable(s):** Servicio de Configuración / Servicio de parametrización de justificaciones, propuesto.  
 **Endpoint(s) implementados:**  
@@ -784,4 +784,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | HU-IAM-001: Inicio de sesión de usuario; HU-IAM-003: Asignación de permisos basada en roles |
+| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles |

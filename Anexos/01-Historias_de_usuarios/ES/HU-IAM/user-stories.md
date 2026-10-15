@@ -84,7 +84,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-002: Registro de usuario, o un usuario administrador inicial precargado |
+| Dependencias | [HU-IAM-002](#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario, o un usuario administrador inicial precargado |
 
 ---
 
@@ -120,7 +120,7 @@
 
 ## Notas Técnicas
 
-- Esta historia cubre el registro básico de usuarios y la asignación de roles. La importación masiva de usuarios mediante CSV se cubre por separado en la HU-IAM-004.
+- Esta historia cubre el registro básico de usuarios y la asignación de roles. La importación masiva de usuarios mediante CSV se cubre por separado en la [HU-IAM-004](../Index_HU.md#historias-planificadas-pendientes-de-documentar).
 - El sistema debe validar que el usuario no exista antes del registro, según los criterios de aceptación del RF 1.1.
 - El sistema debe validar los datos ingresados, según los criterios de aceptación del RF 1.1.
 - La asignación de roles debe incluir la relación entre el identificador del usuario y el identificador de la persona, según el RF 1.1.1.
@@ -183,7 +183,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | Catálogo inicial de roles; se recomienda la HU-IAM-003 para la matriz de permisos |
+| Dependencias | Catálogo inicial de roles; se recomienda la [HU-IAM-003](#hu-iam-003-asignación-de-permisos-basada-en-roles) para la matriz de permisos |
 
 ---
 
@@ -278,4 +278,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | HU-IAM-002: Registro de usuario con asignación de rol |
+| Dependencias | [HU-IAM-002](#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol |
