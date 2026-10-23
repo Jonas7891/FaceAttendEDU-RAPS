@@ -634,10 +634,14 @@ Cada microservicio sigue el patrón de Puertos y Adaptadores:
 4. Respuesta: `{sessionId, userId, sessionStatus, startDate, endDate, sourceIp}`
 5. Fallos siempre retornan 401 "Invalid email or password" (sin enumeración de usuarios)
 
+**Ciclo de vida de la sesión:**
+- Vigencia de 480 minutos (`session_timeout_minutes`) desde `start_date`; la expiración es perezosa: se marca al leer la sesión.
+- `POST /api/v1/auth/refresh` con `{sessionId}` rota la sesión: devuelve un sessionId nuevo y cierra el anterior (un solo uso; 401 si venció o ya se renovó).
+- `POST /api/v1/auth/logout?sessionId=<UUID>` cierra la sesión (204).
+
 **Validación:**
-- Servicios Java (01/02/04/05): AuthTokenFilter valida el sessionId
-- TS/Python/Go services (03/06/07/08/09): Pendiente implementar (deuda técnica AT-004)
-- Kong NO valida el token (solo CORS + rate-limiting)
+- Kong (borde): una *pre-function* Lua global exige `Bearer <UUID>` en toda ruta no pública (públicas: login, login/verify, refresh, logout, forgot-password, verify-code, reset-password, `POST /api/v1/onboarding/schools` y health) y lo valida con `GET /api/v1/sessions/{id}` contra ms-identity, con caché de 10 s. Sin plugin `jwt` y sin inyectar cabeceras de identidad.
+- Cada servicio revalida por su cuenta: sesión contra ms-identity (`/api/v1/sessions/{id}`) y permisos contra ms-authorization (`/api/v1/users/{id}/roles` + `/api/v1/auth/evaluate?userId&permission`). Java (01/02/04/05): `AuthTokenFilter`; TypeScript (03/07/08/09): `authGuard.ts`; Python (06): `security.py`.
 
 ### 8.4 Eventos de Dominio
 
@@ -701,9 +705,9 @@ Todos los servicios cuentan con especificaciones OpenAPI 3.0.3 en `07-api/contra
 
 | ID | Descripción | Prioridad |
 |----|-------------|-----------|
-| AT-004 | Bearer no validado en TS/Python/Go services (03/06/07/08/09) | P0 |
-| AT-005 | Endpoints de recuperación de contraseña no implementados | P1 |
-| AT-007 | Kong no tiene plugin JWT | P1 |
+| AT-004 | ~~Bearer no validado en servicios TS/Python (03/06/07/08/09)~~ Resuelto: `authGuard.ts` y `security.py` validan sesión y permisos | — |
+| AT-005 | ~~Endpoints de recuperación de contraseña no implementados~~ Resuelto: `forgot-password`, `verify-code` y `reset-password` en ms-identity | — |
+| AT-007 | Kong no usa plugin JWT: valida la sesión opaca con una *pre-function* (decisión vigente; el token firmado es evolución futura, ADR-007) | P2 |
 
 ---
 
@@ -958,10 +962,10 @@ SMTP_PORT=1025
 | AT-001 | Single PostgreSQL instance es SPOF | P1 |
 | AT-002 | No hay lint rule de import-boundary | P2 |
 | AT-003 | Go runtime añade 4º runtime para 2 tablas | P2 |
-| AT-004 | Bearer no validado en TS/Python/Go services | P0 |
-| AT-005 | Endpoints de recuperación de contraseña no implementados | P1 |
+| AT-004 | ~~Bearer no validado en servicios TS/Python~~ Resuelto | — |
+| AT-005 | ~~Endpoints de recuperación de contraseña no implementados~~ Resuelto | — |
 | AT-006 | No hay circuit breaker, transactional outbox, ni Kafka DLQ | P1 |
-| AT-007 | Kong no tiene plugin JWT | P1 |
+| AT-007 | Kong no usa plugin JWT: valida la sesión opaca con una *pre-function* (ver ADR-007) | P2 |
 
 ---
 
@@ -974,7 +978,7 @@ SMTP_PORT=1025
 | **Bounded Context** | Contexto delimitado en DDD donde un modelo de dominio es consistente |
 | **Liveness Detection** | Verificación de que el rostro capturado pertenece a una persona viva |
 | **Embedding** | Vector numérico de 128 dimensiones que representa las características faciales |
-| **SessionId** | Identificador opaco (UUID) usado para autenticación sin estado |
+| **SessionId** | Identificador opaco (UUID) de una fila de `identity.user_session`; se usa como token Bearer y se valida contra ms-identity |
 | **RBAC** | Control de acceso basado en roles |
 | **Saga** | Patrón para gestionar transacciones distribuidas |
 | **DLQ** | Dead Letter Queue - cola de mensajes que no pudieron ser procesados |
