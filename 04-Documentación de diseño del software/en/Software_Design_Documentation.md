@@ -60,7 +60,7 @@ To ensure code quality and ease of maintenance, the following patterns have been
 - **Use Case / Interactor**: Each system functionality is encapsulated in a unique use case class, facilitating traceability and unit testing.
 - **Data Transfer Object (DTO)**: Specific objects are used for data transport between the API and the application, avoiding exposing domain entities directly to the client.
 - **Mapper Pattern**: Components responsible for transforming domain entities into DTOs and vice versa, maintaining the purity of the domain layer.
-- **API Gateway**: Implemented using **Kong 3.6**, centralizing authentication (JWT RS256), routing, rate limiting, and security.
+- **API Gateway**: Implemented using **Kong 3.6**, centralizing routing, rate limiting, CORS and edge authentication: a Lua *pre-function* requires `Authorization: Bearer <sessionId>` (opaque UUID, not a JWT) and validates it against ms-identity (`GET /api/v1/sessions/{id}`, 10 s cache). Permission checks are evaluated in each microservice.
 
 ## Data and Messaging Patterns
 - **Database-per-Service**: Each microservice has its own PostgreSQL schema, eliminating physical dependencies (FKs) between contexts and ensuring loose coupling.
@@ -101,7 +101,7 @@ The success of the FaceAttendEDU project is based on a technological selection o
 |---|---|---|---|
 | **Backend (Core)** | Java / Spring Boot | 21 / 4.1.1 | Identity and authorization services. |
 | **Backend (Biometrics)** | Python / FastAPI | 3.12 / 0.110 | Biometric vector processing. |
-| **Backend (Notifications)** | Go / Gin | 1.22 / v1.9.1 | High concurrency in alerts. |
+| **Backend (Notifications)** | TypeScript / Fastify (Node.js) | 5.4 / 4.26 (Node 20) | High concurrency in alerts (async I/O). |
 | **Backend (TS)** | TypeScript / Fastify | 5.4 / 4.26.0 | Lightweight and fast services. |
 | **Frontend** | React Native / Expo | RN 0.86 / Expo 57 | Multiplatform mobile app. |
 | **Gateway** | Kong | 3.6 | API Orchestration and Security. |
@@ -110,7 +110,7 @@ The success of the FaceAttendEDU project is based on a technological selection o
 
 ## Technical Success Factors
 1. **Total Decoupling**: Thanks to Hexagonal Architecture, the system can evolve its frameworks without rewriting the business logic.
-2. **Robust Security**: The use of JWT RS256 and a centralized Gateway ensures that no request reaches the microservices without being validated.
+2. **Robust Security**: Opaque sessions (`sessionId` UUID persisted in `identity.user_session`) are validated twice: at Kong and again in each microservice (session against ms-identity and permissions against ms-authorization), so no request reaches business logic without being validated.
 3. **Polyglot Persistence**: The use of MongoDB for biometrics and PostgreSQL for administration optimizes performance according to the nature of the data.
 4. **Modular Scalability**: The microservices structure allows independent scaling of the attendance module (high load) and the configuration module (low load).
 
