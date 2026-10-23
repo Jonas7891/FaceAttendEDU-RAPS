@@ -532,7 +532,7 @@ ADR-007 contempla, como mejora no implementada, que ms-identity emita un **JWT f
 
 ### 9.2 Cifrado de contraseñas
 
-- Las contraseñas se guardan con **BCrypt** (función de hash adaptativa con *salt* aleatorio por usuario), con factor de costo **10** (valor por defecto de Spring Security `BCryptPasswordEncoder`).
+- Las contraseñas se guardan con **BCrypt** (función de hash adaptativa con *salt* aleatorio por usuario), con factor de costo **12** y versión `$2b` (`SecurityConfig` de ms-identity).
 - Nunca se almacena ni se registra en logs la contraseña en texto plano; el campo `password_hash` jamás se devuelve en las respuestas de la API.
 - El hash no es reversible: para validar, se hashea el valor ingresado y se compara.
 

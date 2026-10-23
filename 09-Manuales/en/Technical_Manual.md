@@ -534,7 +534,7 @@ ADR-007 considers, as an improvement not yet implemented, having ms-identity iss
 
 ### 9.2 Password encryption
 
-- Passwords are stored with **BCrypt** (an adaptive hash function with a random per-user *salt*), with cost factor **10** (the default value of Spring Security's `BCryptPasswordEncoder`).
+- Passwords are stored with **BCrypt** (an adaptive hash function with a random per-user *salt*), with cost factor **12** and version `$2b` (ms-identity `SecurityConfig`).
 - The plain-text password is never stored or written to logs; the `password_hash` field is never returned in API responses.
 - The hash is not reversible: to validate, the supplied value is hashed and compared.
 
