@@ -42,7 +42,7 @@ sequenceDiagram
     end
 
     rect rgb(255, 246, 236)
-    Note over U,SVC: 3. Cada llamada autenticada, en cada uno de los 9 servicios — la verificación de borde de Kong corre primero, luego la guardia propia del servicio revalida (AuthTokenFilter en Java, registerAuthGuard en TS, require_permission en Python, AuthMiddleware en Go — mismo contrato, duplicado por servicio, sin módulo compartido)
+    Note over U,SVC: 3. Cada llamada autenticada, en cada uno de los 9 servicios — la verificación de borde de Kong corre primero, luego la guardia propia del servicio revalida (AuthTokenFilter en Java, registerAuthGuard en TS, require_permission en Python — mismo contrato, duplicado por servicio, sin módulo compartido)
     U->>GW: GET/PATCH/POST ... cabecera: Authorization Bearer sessionId
     GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
     alt falta cabecera, token no-UUID, o sesión no Active

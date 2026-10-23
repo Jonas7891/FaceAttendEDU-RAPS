@@ -42,7 +42,7 @@ sequenceDiagram
     end
 
     rect rgb(255, 246, 236)
-    Note over U,SVC: 3. Every authenticated call, on every one of the 9 services — Kong's edge check runs first, then the service's own guard re-validates (AuthTokenFilter in Java, registerAuthGuard in TS, require_permission in Python, AuthMiddleware in Go — same contract, duplicated per service, no shared module)
+    Note over U,SVC: 3. Every authenticated call, on every one of the 9 services — Kong's edge check runs first, then the service's own guard re-validates (AuthTokenFilter in Java, registerAuthGuard in TS, require_permission in Python — same contract, duplicated per service, no shared module)
     U->>GW: GET/PATCH/POST ... header: Authorization Bearer sessionId
     GW->>ID: edge pre-function: GET /api/v1/sessions/{sessionId}
     alt missing header, non-UUID token, or session not Active
