@@ -988,7 +988,7 @@ curl http://localhost:8080/api/v1/persons \
   -H "Authorization: Bearer <session-identifier>"
 ```
 
-**Note.** The system does not use credentials in JavaScript Web Token format. On login, the identity service issues an opaque session identifier that is sent with each request by means of the authorization header. The gateway does not validate credentials: each service checks the session on its own. Consequently, an unauthorized error never comes from the gateway, but from the destination service.
+**Note.** The system does not use JSON Web Tokens (JWT). On login, the identity service issues an opaque session identifier that is sent with each request by means of the authorization header. The gateway requires that identifier on every non-public route and validates it against the identity service (with a ten-second cache); in addition, each service checks the session and the permissions again on its own. Consequently, an unauthorized error can come from either the gateway or the destination service.
 
 ## Fourth Test: Web Interface
 
@@ -1448,7 +1448,7 @@ This appendix gathers in one place all of the ports used by the system, their de
 
 Main Routes of the Programming Interface
 
-All of the routes listed below pass through the gateway and require the authorization header with the session identifier, with the exception of the login endpoint.
+All of the routes listed below pass through the gateway and require the authorization header with the session identifier, except for the public authentication endpoints (login and its verification, refresh, logout and password recovery) and the campus sign-up.
 
 **Table 28**
 
