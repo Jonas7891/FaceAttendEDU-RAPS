@@ -47,7 +47,7 @@ To mitigate technological coupling, the system implements Hexagonal Architecture
 The system avoids dependency on a single database engine, applying persistence according to the nature of the data:
 - **PostgreSQL 17**: Used for relational and structured data across 8 independent schemas, ensuring ACID consistency.
 - **MongoDB 7**: Used exclusively by the biometric service for the storage of embeddings (high-dimensional vectors), optimizing similarity searches.
-- **Redis 7**: Implemented for session management and traffic control (rate limiting) in the Gateway, reducing response latency.
+- **Redis 7**: Implemented for traffic control (rate limiting) in the Gateway and, optionally, as the password-recovery code store in ms-identity. User sessions do not live in Redis: they are persisted in PostgreSQL (`identity.user_session`).
 
 ### Event-Driven Communication
 Synchronization between modules is carried out via **Apache Kafka 3.8.0**. The system employs a publish/subscribe model where services emit "Domain Events" (e.g., `UserCreated`, `AttendanceRecorded`). This allows services such as the Notification service to react asynchronously to changes in other modules without creating circular dependencies.
@@ -55,7 +55,7 @@ Synchronization between modules is carried out via **Apache Kafka 3.8.0**. The s
 ### Traffic Management and Security (Edge Routing)
 Access to the system is centralized in **Kong Gateway 3.6**, configured in *DB-less* mode. The Gateway is responsible for:
 - **Routing**: Mapping external routes to internal services.
-- **Security**: JWT RS256 token validation and application of CORS policies.
+- **Security**: A global Lua *pre-function* requires `Authorization: Bearer <sessionId>` (opaque UUID, not a JWT) on every non-public route and validates it against ms-identity (`GET /api/v1/sessions/{id}`, 10 s cache). It also applies the CORS policies. Kong does not inject identity headers: each microservice re-validates the session and evaluates permissions on its own.
 - **Resilience**: Rate limiting to prevent denial-of-service attacks.
 
 # Microservice Implementation
@@ -108,7 +108,7 @@ Manages global system configuration and the approval flow for biometric updates.
 Implements an audit process where any request to change a biometric template must pass through a `Review` state before being `Approved`, preventing a user from altering their data to impersonate another.
 
 ## 08-ms-notification: Alerting and Notification System
-Implemented in **Go**, this service optimizes the mass sending of alerts and push notifications.
+Implemented in **TypeScript** (Node.js 20 + Fastify), this service optimizes the mass sending of alerts and push notifications.
 
 ## Event-Driven Orchestration
 The service consumes Kafka topics from all other modules. For example, upon detecting an `AbsenteeismDetected` event, the service automatically triggers a notification to the tutor and the student via Firebase and SMTP.
@@ -124,7 +124,7 @@ $$\text{Global Score} = \sum (\text{Characteristic Score}_i \times \text{Weight}
 The Gateway acts as the facade of the system, abstracting the complexity of the internal microservices.
 
 ### Kong Implementation
-Configured in *DB-less* mode, the Gateway uses a declarative `kong.yml` file to define routing. It implements security at the "edge," validating that each request possesses a valid JWT token before redirecting it to the corresponding service.
+Configured in *DB-less* mode, the Gateway uses a declarative `kong.yml` file to define routing. It implements security at the "edge," validating that each non-public request carries the `sessionId` of an active session (lookup against ms-identity, 10 s cache) before redirecting it to the corresponding service. The public routes are the authentication ones (`/api/v1/auth/login`, `/login/verify`, `/refresh`, `/logout`, `/forgot-password`, `/verify-code`, `/reset-password`), the `POST /api/v1/onboarding/schools` sign-up and the health checks.
 
 # Cross-Cutting Concerns
 
