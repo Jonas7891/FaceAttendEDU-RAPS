@@ -118,7 +118,7 @@ Configuración declarativa en `kong/kong.yml` (`_format_version: "3.0"`). Las "l
 
 ### Mobile (`front-end/Mobile`, `faceattendedu v1.0.0`)
 
-27 dependencias. Solo-Mobile: `axios` ^1.16.1, `expo-camera` ~57.0.4 (captura facial), `expo-secure-store` ~57.0.3 (tokens), `expo-file-system` ~57.0.6, `expo-localization` ~57.0.1, `i18next` ^26.0.4 + `react-i18next` ^17.0.2, `jwt-decode` ^4.0.0, datetimepicker 8.4.4. NO incluye DigitalPersona, face-api ni xlsx. Dev: typescript ~5.9.2, jest ^29.7.0, jest-expo ~57.0.5, @react-native/jest-preset ^0.86.3, @types/react ~19.1.10.
+27 dependencias. Solo-Mobile: `axios` ^1.16.1, `expo-camera` ~57.0.4 (captura facial), `expo-secure-store` ~57.0.3 (guarda el `sessionId` en el keystore/Keychain; en web cae a AsyncStorage), `expo-file-system` ~57.0.6, `expo-localization` ~57.0.1, `i18next` ^26.0.4 + `react-i18next` ^17.0.2, `jwt-decode` ^4.0.0 (heredado: el backend emite `sessionId` UUID opacos, no JWT, así que solo se usa si el token tiene forma `header.payload.signature`; con el token actual no decodifica nada), datetimepicker 8.4.4. NO incluye DigitalPersona, face-api ni xlsx. Dev: typescript ~5.9.2, jest ^29.7.0, jest-expo ~57.0.5, @react-native/jest-preset ^0.86.3, @types/react ~19.1.10.
 
 ## 3. Notas transversales
 

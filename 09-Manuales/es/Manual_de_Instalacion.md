@@ -988,7 +988,7 @@ Dicho identificador se emplea a continuación para comprobar un extremo protegid
 >
 > -H "Authorization: Bearer <identificador-de-sesion>"
 
-**Nota.** El sistema no emplea credenciales en formato de testigo web de JavaScript. Al iniciar sesión, el servicio de identidad emite un identificador de sesión opaco que se remite en cada petición mediante la cabecera de autorización. La puerta de enlace no valida credenciales: cada servicio comprueba la sesión por su cuenta. Por consiguiente, un error de no autorizado nunca procede de la puerta de enlace, sino del servicio de destino.
+**Nota.** El sistema no emplea testigos web JSON (JWT). Al iniciar sesión, el servicio de identidad emite un identificador de sesión opaco que se remite en cada petición mediante la cabecera de autorización. La puerta de enlace exige ese identificador en toda ruta no pública y lo valida contra el servicio de identidad (con una caché de diez segundos); además, cada servicio vuelve a comprobar la sesión y los permisos por su cuenta. Por consiguiente, un error de no autorizado puede proceder tanto de la puerta de enlace como del servicio de destino.
 
 ## Cuarta Prueba: Interfaz Web
 
@@ -1464,7 +1464,7 @@ El presente apéndice reúne, en un solo lugar, la totalidad de los puertos empl
 
 Rutas Principales de la Interfaz de Programación
 
-La totalidad de las rutas relacionadas a continuación transitan por la puerta de enlace y requieren la cabecera de autorización con el identificador de sesión, con excepción del extremo de inicio de sesión.
+La totalidad de las rutas relacionadas a continuación transitan por la puerta de enlace y requieren la cabecera de autorización con el identificador de sesión, con excepción de los extremos públicos de autenticación (inicio de sesión y su verificación, renovación, cierre de sesión y recuperación de contraseña) y del alta de sedes.
 
 **Tabla 28**
 

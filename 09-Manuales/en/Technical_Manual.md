@@ -26,7 +26,7 @@ To develop and implement a technology platform that makes it possible to:
 
 1. **Record and verify educational attendance biometrically** (face and fingerprint), eliminating identity impersonation ("proxy attendance") and manual recording errors.
 2. **Manage the complete academic cycle**: programs, courses, schedules, scheduled sessions and student enrollment.
-3. **Guarantee security and traceability**: JWT RS256 authentication, RBAC authorization, auditing on all entities and layered network isolation.
+3. **Guarantee security and traceability**: opaque-session authentication (UUID sessionId validated against ms-identity), RBAC authorization, auditing on all entities and layered network isolation.
 4. **Demonstrate software quality under formal standards**, with objective metrics reported by a dedicated microservice (ms-quality) and test documentation compliant with IEEE 829 / ISTQB.
 5. **Operate reproducibly** by means of infrastructure as code (Docker Compose) and database as code (Liquibase + versioned SQL scripts).
 
@@ -53,7 +53,7 @@ To develop and implement a technology platform that makes it possible to:
 
 FaceAttend EDU implements a **layered client-server** pattern with synchronous (REST) and asynchronous (event-based) communication:
 
-- The **clients** (Web and Mobile, both React Native/Expo with MVVM logic) never access the services or the databases directly: every request passes through **Kong**, which resolves routes, applies CORS and rate limiting, and delegates the verification of **JWT RS256** tokens issued by `ms-identity` and the RBAC rules of `ms-authorization`.
+- The **clients** (Web and Mobile, both React Native/Expo with MVVM logic) never access the services or the databases directly: every request passes through **Kong**, which resolves routes, applies CORS and rate limiting, and requires the `sessionId` of an active session (validated against `ms-identity`). Each microservice validates the session again and evaluates the RBAC rules of `ms-authorization`.
 - At the application layer, each microservice encapsulates a bounded context: `identity` (users and authentication), `authorization` (roles/permissions), `academic` (programs, courses, enrollments), `scheduling` (schedules and sessions), `attendance` (attendance recording), `biometric` (facial/fingerprint templates and vector matching in MongoDB), `configuration` (system parameters) and `notification` (alerts and email delivery). `quality` exposes system verification metrics.
 - The **data layer** remains isolated in its own Docker network: PostgreSQL per context (no foreign keys between contexts — only logical UUIDs), MongoDB for embeddings, Kafka for domain events and Redis as gateway support.
 - The critical attendance flow combines both worlds: biometric verification → validation of the current session and of the enrollment → transactional write of the record → publication of the event on the `attendance-events` topic, best-effort and outside the transaction.
@@ -106,7 +106,7 @@ FaceAttend EDU implements a **layered client-server** pattern with synchronous (
 | Technology | Role | Version |
 |---|---|---|
 | Spring Security | Authentication/authorization in the Java services | included in Spring Boot 4.1.1 |
-| JWT RS256 | Session tokens signed with a key pair | `jjwt` library (Java) |
+| Opaque session | UUID `sessionId` persisted in `identity.user_session`; no JWT library | in-house (ms-identity) |
 | go-playground/validator | Input validation in Go | v10.16.0 |
 
 ### 5.5 Version control
@@ -183,7 +183,7 @@ flowchart TB
 
 **Synchronous flow (REST through Kong):**
 
-1. **Authentication:** the client sends credentials to `POST /api/v1/auth/login` → Kong routes to **ms-identity** → validates the credentials (BCrypt) against PostgreSQL → issues a **JWT RS256** with role claims → **ms-authorization** defines the associated RBAC permissions.
+1. **Authentication:** the client sends credentials to `POST /api/v1/auth/login` → Kong routes to **ms-identity** → validates the credentials (BCrypt) against PostgreSQL → creates a row in `identity.user_session` and returns its `sessionId` (opaque UUID) → **ms-authorization** resolves roles and RBAC permissions on every request.
 2. **Biometric enrollment:** face/fingerprint capture → **ms-biometric** generates the embedding (vector) and stores it in **MongoDB**; the template is linked to the student via UUID.
 3. **Attendance recording:** the teacher opens a session (**ms-scheduling**) → the student is verified → **ms-attendance** coordinates: biometric *matching* (ms-biometric), temporal validity of the session (ms-scheduling) and active enrollment (ms-academic) → writes the record transactionally to PostgreSQL.
 
@@ -232,12 +232,12 @@ flowchart TB
 │       │   ├── models/                 # Types per context: identity, academic, attendance,
 │       │   │                           #   scheduling, authorization, notification, ...
 │       │   ├── navigations/            # React Navigation
-│       │   └── storage/                # Local persistence (JWT tokens)
+│       │   └── storage/                # Local persistence of the sessionId (SecureStore)
 │       ├── scripts/                    # Development utilities
 │       └── seed/                       # Seed data for mobile testing
 │
 ├── back-end/                           # Microservices + gateway (DDD + hexagonal)
-│   ├── 01-ms-identity/                 # Java 21 / Spring Boot — users and JWT authentication
+│   ├── 01-ms-identity/                 # Java 21 / Spring Boot — users, authentication and sessions
 │   │   └── src/main/java/com/faceattend_edu/identity_service/
 │   │       ├── domain/                 # Entities and ports
 │   │       ├── application/            # Use cases
@@ -507,34 +507,41 @@ Before relying on a name or a type, check `database/faceattend_edu_mr_v4.dbml` f
 
 Security is applied in **layers** (defense in depth): network, gateway, authentication, authorization, data and auditing.
 
-### 9.1 Authentication (JWT RS256)
+### 9.1 Authentication (opaque session)
 
-1. The client sends its credentials to `POST /api/v1/auth/login` through Kong.
-2. **ms-identity** looks up the user and compares the password against the stored **BCrypt** hash.
-3. If it is valid, it issues a **JWT signed with RS256** (asymmetric algorithm): it signs with the **private key** (known only to ms-identity) and the other services verify with the **public key**.
-4. The token includes identity and role *claims* (`sub`, `roles`, `iat`, `exp`).
-5. The client sends the token on every request: `Authorization: Bearer <token>`.
+1. The client sends `{identifier, password}` to `POST /api/v1/auth/login` through Kong (public route).
+2. **ms-identity** looks up the user and compares the password against the stored **BCrypt** hash. On failure it answers 401 with the same message for an unknown user and a wrong password.
+3. If it is valid, it inserts a row in `identity.user_session` and answers `{sessionId, userId, sessionStatus, startDate, endDate, sourceIp}`. The `sessionId` is an **opaque UUID**: it is not a JWT and carries no *claims* or signature.
+4. The client sends the `sessionId` on every request: `Authorization: Bearer <sessionId>`.
+5. **Kong** (global Lua pre-function) rejects with 401 any non-public route without `Bearer <UUID>` and validates the session with `GET /api/v1/sessions/{id}` against ms-identity (10 s cache). It does not inject identity headers.
+6. **Each microservice** validates again: session against ms-identity (`/api/v1/sessions/{id}`) and permissions against ms-authorization (`/api/v1/users/{id}/roles` and `GET /api/v1/auth/evaluate?userId&permission`).
 
 | Parameter | Value |
 |---|---|
-| Signing algorithm | **RS256** (RSA + SHA-256) |
-| Library | **jjwt** (Java) |
-| *Access token* lifetime | **15 minutes** |
-| *Refresh token* lifetime | **7 days** |
-| Client-side storage | **Web:** browser local storage · **Mobile:** local storage in `src/storage` |
+| Token type | Opaque UUID `sessionId` (row of `identity.user_session`) |
+| JWT library | None in the backend |
+| Session lifetime | **480 minutes** (`session_timeout_minutes`); lazy expiry when the session is read |
+| Renewal | `POST /api/v1/auth/refresh {sessionId}`: rotates the session (new `sessionId`, the old one is closed); single use |
+| Logout | `POST /api/v1/auth/logout?sessionId=<UUID>` (204); Kong drops its cache entry for that session |
+| Per-service guards | Java: `AuthTokenFilter` · TypeScript: `authGuard.ts` · Python: `security.py` |
+| Client-side storage | **Web:** browser local storage · **Mobile:** `expo-secure-store` (keystore/Keychain); AsyncStorage only as the web fallback |
 
-**Why RS256 and not HS256:** with HS256 all services would share a secret capable of *signing* tokens; with RS256 only ms-identity can issue them and the rest can only verify them, so compromising a consuming service does not make it possible to forge sessions.
+**Why an opaque session:** revocation is immediate (close the `user_session` row), there are no keys to guard or rotate and no service can forge sessions. The cost is one ms-identity lookup per request, softened by short caches (10 s) in Kong and in the services.
+
+#### Future evolution (ADR-007)
+
+ADR-007 considers, as an improvement not yet implemented, having ms-identity issue a **JWT signed with RS256** (private key only in ms-identity, verification with the public key in the other services, for example with the `jjwt` library) to avoid the session lookup on every request. Until it is adopted, nothing in the system issues or validates JWTs.
 
 ### 9.2 Password encryption
 
-- Passwords are stored with **BCrypt** (an adaptive hash function with a random per-user *salt*), with cost factor **10** (the default value of Spring Security's `BCryptPasswordEncoder`).
+- Passwords are stored with **BCrypt** (an adaptive hash function with a random per-user *salt*), with cost factor **12** and version `$2b` (ms-identity `SecurityConfig`).
 - The plain-text password is never stored or written to logs; the `password_hash` field is never returned in API responses.
 - The hash is not reversible: to validate, the supplied value is hashed and compared.
 
 ### 9.3 Role-based authorization (RBAC)
 
 - **ms-authorization** defines the roles (**ADMIN, TEACHER, STUDENT**) and the permissions associated with each one (`roles` ↔ `permissions` model, section 8.3).
-- Each Java microservice validates the JWT signature with **Spring Security** and checks that the token's role/permission authorizes the requested operation. The TypeScript, Python and Go services perform the same verification with the public key.
+- Each microservice validates the session against ms-identity and asks ms-authorization whether the user holds the permission the operation requires: `AuthTokenFilter` in Java, `authGuard.ts` in TypeScript and `security.py` in Python.
 
 | Role | Scope (summary) |
 |---|---|
@@ -547,7 +554,7 @@ Security is applied in **layers** (defense in depth): network, gateway, authenti
 | Measure | How it is applied |
 |---|---|
 | **Role-based authorization** | Every endpoint requires a minimum role/permission; a `STUDENT` cannot invoke `TEACHER` or `ADMIN` operations. |
-| **Owner-based filtering** | Queries take the identity from the token's `sub` (not from a parameter the client can send), so a student only sees their own records. |
+| **Owner-based filtering** | Queries take the identity from the `userId` of the validated session (not from a parameter the client can send), so a student only sees their own records. |
 | **A single entry point** | The client can only reach **Kong**; the microservices and the databases are not accessible from outside. |
 | **Network segmentation into 3 zones** | `edge` (client ↔ Kong), `app` (Kong ↔ microservices) and `data` (microservices ↔ databases only). A client cannot reach the `data` network. |
 | **Rate limiting (Kong + Redis)** | Limits the number of requests per consumer/IP, mitigating brute force and API abuse. |
@@ -561,7 +568,7 @@ Security is applied in **layers** (defense in depth): network, gateway, authenti
 
 - **Per-service users (DCL):** the scripts in `database/<NN>-ms-*-db/03-dcl` create one database role per microservice with least privileges (`SELECT/INSERT/UPDATE/DELETE` only on its own schema; no `SUPERUSER` and no `CREATE DB`).
 - **Separate migration user:** Liquibase uses its own user with DDL privileges; the running services do **not** have DDL privileges.
-- **Secrets outside the code:** DB passwords, JWT keys and credentials are injected by means of **environment variables / an `.env` file** (excluded from version control with `.gitignore`).
+- **Secrets outside the code:** DB passwords, internal secrets (e.g. `EMAIL_INTERNAL_TOKEN`) and credentials are injected by means of **environment variables / an `.env` file** (excluded from version control with `.gitignore`).
 - **Biometric data:** only **vectors (embeddings)** are stored, not images of the face or the fingerprint.
 - **Concurrent integrity:** the `version` field (*optimistic locking*) prevents simultaneous overwrites.
 
@@ -573,7 +580,7 @@ Security is applied in **layers** (defense in depth): network, gateway, authenti
 |---|---|---|---|
 | **PostgreSQL** | All schemas of `faceattend_edu` | `pg_dump` (custom format) | **Daily** (full) |
 | **MongoDB** | `biometric_embeddings` collection | `mongodump` | **Daily** |
-| **JWT keys and `.env`** | RSA key pair and environment variables | Encrypted copy in secure storage | On generation / rotation |
+| **`.env` file** | Environment variables and secrets | Encrypted copy in secure storage | On generation / rotation |
 | **Code and scripts** | Repository (includes `database/` with DDL and rollbacks) | Git + GitHub | On every *push* |
 
 **Steps to back up PostgreSQL (Docker Compose):**
@@ -625,7 +632,7 @@ docker compose exec -T mongo mongorestore --archive --gzip < mongo_YYYY-MM-DD.gz
 - Review vulnerabilities **at least once a month** and always before a delivery.
 - Update *patch/minor* versions first; *major* ones (e.g. Spring Boot, Expo) require testing the complete system with the ms-quality test suite.
 - After every update: run the tests, bring the stack up with `docker compose up --build` and validate the *healthchecks*.
-- **Rotate the JWT keys** (RSA pair) periodically (**every 6 months** or on suspicion of compromise); this invalidates the active sessions.
+- **Rotate the `.env` secrets** (DB passwords, `EMAIL_INTERNAL_TOKEN`, SMTP) periodically (**every 6 months** or on suspicion of compromise). To end every active session, close them in `identity.user_session`.
 - Change the default passwords of the development environments before any real deployment.
 
 ### 10.3 Monitoring and support
@@ -649,7 +656,7 @@ The whole API is exposed through **Kong** at a single entry point. Clients never
 | Entry point | `http://<host>:8080` (Kong proxy port) |
 | Version prefix | `/api/v1/...` — every valid route begins with this prefix |
 | Exchange format | JSON (`Content-Type: application/json`) |
-| Authentication | `Authorization: Bearer <token>` header; `POST /api/v1/auth/login` is the exception |
+| Authentication | `Authorization: Bearer <sessionId>` header; the public `/api/v1/auth` routes (login, login/verify, refresh, logout, forgot-password, verify-code, reset-password) and `POST /api/v1/onboarding/schools` are the exceptions |
 | Identifiers | **UUID v4** on all resources; never auto-incrementing integers |
 | Dates and times | ISO 8601 with time zone (`timestamptz`), for example `2026-10-07T08:30:00-05:00` |
 | Pagination | `page` (zero-based) and `size` parameters; the response includes `totalElements` and `totalPages` |
@@ -670,8 +677,8 @@ The whole API is exposed through **Kong** at a single entry point. Clients never
 | Code | Meaning in the system |
 |---|---|
 | `400 Bad Request` | DTO validation failed (missing field, invalid format). |
-| `401 Unauthorized` | Token missing, expired or with an invalid signature. **It is issued by the destination microservice**, not by Kong. |
-| `403 Forbidden` | Valid token but the role does not hold the required RBAC permission. |
+| `401 Unauthorized` | `sessionId` missing, malformed, closed or expired. Issued by **Kong** at the edge and, if the request gets through, also by the destination microservice's guard. |
+| `403 Forbidden` | Valid session but the role does not hold the required RBAC permission. |
 | `404 Not Found` | The resource does not exist or has been logically deleted. |
 | `409 Conflict` | Uniqueness violation (duplicate email or document number) or version conflict. |
 | `422 Unprocessable Entity` | Business rule breached (e.g. recording attendance in a closed session). |
@@ -701,10 +708,10 @@ The `code` field follows the pattern `<CONTEXT>-<HTTP>-<SEQUENCE>` and is catalo
 
 | Endpoint | Verb | Description |
 |---|---|---|
-| `/api/v1/auth/login` | `POST` | Receives `identifier` and `password`; returns the *access token*, the *refresh token* and the user data. The only public endpoint. |
-| `/api/v1/auth/refresh` | `POST` | Exchanges a valid *refresh token* for a new *access token*. |
-| `/api/v1/auth/logout` | `POST` | Invalidates the current session. |
-| `/api/v1/auth/evaluate` | `POST` | Exposed by **ms-authorization**; evaluates whether the presented token authorizes a specific action. |
+| `/api/v1/auth/login` | `POST` | Receives `identifier` and `password`; returns `{sessionId, userId, sessionStatus, startDate, endDate, sourceIp}`. Public. |
+| `/api/v1/auth/refresh` | `POST` | Receives a valid `{sessionId}`; returns a new session and closes the old one (single use). Public. |
+| `/api/v1/auth/logout` | `POST` | `?sessionId=<UUID>`; closes the session (204). Public. |
+| `/api/v1/auth/evaluate` | `GET` | Exposed by **ms-authorization**; `?userId&permission` answers whether the user holds that permission. |
 
 ```bash
 # Login
@@ -714,10 +721,10 @@ curl -X POST http://localhost:8080/api/v1/auth/login \
 
 # Using the token on a protected endpoint
 curl http://localhost:8080/api/v1/persons \
-  -H "Authorization: Bearer <access_token>"
+  -H "Authorization: Bearer <sessionId>"
 ```
 
-**Lifetimes:** *access token* 15 minutes; *refresh token* 7 days (section 9.1).
+**Lifetime:** 480-minute session; `refresh` rotates it before it expires (section 9.1).
 
 ### 11.5 Route map by context
 
@@ -816,7 +823,7 @@ Publication is **best-effort and non-blocking**: the publisher catches any failu
 | **Compatibility** | Versioned REST API; Web and Mobile clients from a single code base (Expo). |
 | **Usability** | MVVM pattern, accessible themes, color-blindness modes and WCAG contrast evaluator in the client. |
 | **Reliability** | *Healthchecks*, startup retries, logical deletion and *optimistic locking*. |
-| **Security** | JWT RS256, RBAC, BCrypt, network segmentation into 3 zones, per-service DB users (section 9). |
+| **Security** | Opaque session validated at Kong and in every service, RBAC, BCrypt, network segmentation into 3 zones, per-service DB users (section 9). |
 | **Maintainability** | DDD + hexagonal architecture, ADRs, database-as-code, catalog of error codes. |
 | **Portability** | The whole stack is brought up with Docker Compose; no dependencies on the host system. |
 
@@ -912,7 +919,7 @@ The complete configuration resides in a single `.env` file at the root of `FULL/
 | `FACEATTEND_LIQUIBASE_IMAGE` | Image that runs the migrations; pins the Liquibase version. |
 | `BOOTSTRAP_*` / `SEED_*` | Initial users created by the migrations and the user of the seeding tool. |
 
-**Rule:** the `.env` file is excluded from version control (`.gitignore`) and must never be published. The JWT keys and the passwords are injected by environment variable (section 9.5).
+**Rule:** the `.env` file is excluded from version control (`.gitignore`) and must never be published. The passwords and internal secrets are injected by environment variable (section 9.5).
 
 ### 13.5 Operation commands
 
@@ -1013,7 +1020,7 @@ No schema change is applied by hand:
 | **DDD** | *Domain-Driven Design.* Design approach centered on the domain model. |
 | **Embedding** | Numeric vector that represents facial or fingerprint features. It does not allow the original image to be reconstructed. |
 | **Healthcheck** | Periodic check that Docker runs against a container to determine whether it is operational. |
-| **JWT RS256** | Session token signed with an RSA private key and verifiable with the corresponding public key. |
+| **sessionId** | Opaque UUID identifier of an `identity.user_session` row; sent as `Bearer` and validated against ms-identity. |
 | **KRaft** | Kafka operating mode that removes the dependency on Zookeeper. |
 | **Liquibase** | Tool for versioned database migrations (*database-as-code*). |
 | **MVVM** | *Model–View–ViewModel.* Pattern of the Web and Mobile clients: the view consumes *view models* that encapsulate the presentation logic. |

@@ -14,7 +14,7 @@
 - **Web**: Utiliza un stack de navegación de dos niveles: `AppNavigator` (público) $\rightarrow$ `AuthenticatedNavigator` (privado). La barra lateral (`PersistentSidebar`) es un componente persistente fuera del stack interno para mantener el estado durante la navegación.
   - Patrón aplicado: **Navigator $\rightarrow$ Screen $\rightarrow$ View**. Las rutas registran Screens; las Views se encargan de la representación y no gestionan la navegación.
 
-- **Mobile**: Emplea un stack raíz que alterna entre ramas pública y privada basándose en el estado de autenticación (`isAuthenticated`), validando el token en `AsyncStorage` y el `userRole`.
+- **Mobile**: Emplea un stack raíz que alterna entre ramas pública y privada basándose en el estado de autenticación (`isAuthenticated`), validando el `sessionId` guardado con `expo-secure-store` (AsyncStorage solo como respaldo en web) y el `userRole`.
 
 - **Deep linking en Web**: Rutas expuestas `/`, `/login`, `/register`, `/dashboard`, con fallback SPA mediante `nginx try_files`.
 
@@ -104,7 +104,7 @@
 
 ## 4. Reglas de Navegación y Seguridad
 
-- **Autenticación**: Todas las rutas privadas requieren un JWT válido emitido por Kong. En Web, el acceso sin sesión redirige a `NotAuthorized` o `/login`. En Mobile, se intercambia el stack raíz.
+- **Autenticación**: Todas las rutas privadas requieren un `sessionId` válido (UUID opaco emitido por `ms-identity` en el login, no un JWT); Kong lo valida contra `ms-identity` y cada servicio lo vuelve a validar. En Web, el acceso sin sesión redirige a `NotAuthorized` o `/login`. En Mobile, se intercambia el stack raíz.
 - **Control de Acceso (RBAC)**: El acceso a pestañas y menús está filtrado por `useRolePermissions.js`. Los roles no reconocidos no tienen acceso a ninguna función privada.
 - **Persistencia de Estado**: La barra lateral en Web es persistente para evitar recargas de estado del menú.
 - **Validaciones de Borde**: Kong Gateway aplica un *rate-limit* de 100 req/min para proteger los microservicios.
@@ -124,4 +124,4 @@
 | `07-ms-configuration` | `ms-configuration:8087` | Parámetros del Sistema y Seguridad |
 | `08-ms-notification` | `ms-notification:8088` | Alertas y Notificaciones Event-Driven |
 | `09-ms-quality` | `quality-service` | Métricas ISO 25010 / 29110 |
-| `99-api-gateway` | Kong `:8080` | Punto de entrada único y Seguridad JWT |
+| `99-api-gateway` | Kong `:8080` | Punto de entrada único y validación de sesión opaca |

@@ -589,11 +589,11 @@ The following elements belong to the deployment configuration and are not modifi
 >
 > MONGO_DB=...
 >
-> JWT_SECRET=\*\*\*\*\*\*\*\*
+> EMAIL_INTERNAL_TOKEN=\*\*\*\*\*\*\*\*
 >
 > SESSION_TIMEOUT=...
 
-*Note.* The figure presents only the structure of the variables. The manual must not publish passwords, private keys, tokens, or real connection strings.
+*Note.* The figure presents only the structure of the variables. The manual must not publish passwords, private keys, tokens, or real connection strings. There is no JWT secret: sessions are opaque UUID identifiers stored in the identity database, so there are no signing keys to configure or rotate.
 
 # **Management of Core Information**
 
