@@ -6,7 +6,7 @@ sequenceDiagram
     participant AZ as ms-authorization :8082
     participant SVC as Cualquier servicio 01-09
 
-    Note over GW: La pre-función global de Kong valida el sessionId opaco contra identity en cada ruta no pública (401/503 en el borde), más cors + limitación de tasa — sin plugin jwt, sin consumidores. Cada servicio detrás (Java 01/02/04/05, TS 03/07/09, Python 06, Go 08) también revalida la sesión y evalúa RBAC de nuevo por su cuenta, con una guardia por servicio — "duplicado por servicio a propósito: sin módulo compartido" (ver nota al final)
+    Note over GW: La pre-función global de Kong valida el sessionId opaco contra identity en cada ruta no pública (401/503 en el borde), más cors + limitación de tasa — sin plugin jwt, sin consumidores. Cada servicio detrás (Java 01/02/04/05, TS 03/07/08/09, Python 06) también revalida la sesión y evalúa RBAC de nuevo por su cuenta, con una guardia por servicio — "duplicado por servicio a propósito: sin módulo compartido" (ver nota al final)
 
     rect rgb(238, 245, 238)
     Note over U,ID: 1. Inicio de sesión — ruta pública de arranque, la pre-función no corre
@@ -42,7 +42,7 @@ sequenceDiagram
     end
 
     rect rgb(255, 246, 236)
-    Note over U,SVC: 3. Cada llamada autenticada, en cada uno de los 9 servicios — la verificación de borde de Kong corre primero, luego la guardia propia del servicio revalida (AuthTokenFilter en Java, registerAuthGuard en TS, require_permission en Python, AuthMiddleware en Go — mismo contrato, duplicado por servicio, sin módulo compartido)
+    Note over U,SVC: 3. Cada llamada autenticada, en cada uno de los 9 servicios — la verificación de borde de Kong corre primero, luego la guardia propia del servicio revalida (AuthTokenFilter en Java, registerAuthGuard en TS, require_permission en Python — mismo contrato, duplicado por servicio, sin módulo compartido)
     U->>GW: GET/PATCH/POST ... cabecera: Authorization Bearer sessionId
     GW->>ID: pre-función de borde: GET /api/v1/sessions/{sessionId}
     alt falta cabecera, token no-UUID, o sesión no Active
@@ -53,9 +53,9 @@ sequenceDiagram
         GW->>SVC: reenviar
         SVC->>ID: GET /api/v1/sessions/{sessionId} (revalida — sin caché, sin estado compartido con Kong)
         ID-->>SVC: sesión (debe estar Active)
-        SVC->>AZ: GET /api/v1/users/{id}/roles (solo Java) o GET /api/v1/auth/evaluate directo (TS/Python/Go — más grueso, permiso derivado de la ruta)
+        SVC->>AZ: GET /api/v1/users/{id}/roles (solo Java) o GET /api/v1/auth/evaluate directo (TS/Python — más grueso, permiso derivado de la ruta)
         AZ-->>SVC: roles / allowed?
-        SVC->>SVC: Java fija X-User-Id / X-User-Roles — TS/Python/Go solo fijan req.userId
+        SVC->>SVC: Java fija X-User-Id / X-User-Roles — TS/Python solo fijan req.userId
         alt permiso concedido
             SVC-->>U: respuesta 2xx
         else permiso denegado
@@ -73,4 +73,4 @@ sequenceDiagram
     Note over U,ID: el refresco es de un solo uso: POST /api/v1/auth/refresh {sessionId} cierra la sesión vieja y devuelve una nueva — un sessionId repetido o vencido recibe 401
     end
 
-    Note over SVC: Verificado 2026-10 contra FULL — cada servicio, no solo Java, registra su propia guardia de sesión+RBAC al arrancar (03/07/09 TS registerAuthGuard, 06 Python require_permission, 08 Go AuthMiddleware), aplicada a cada ruta /api/** salvo /health. Una llamada directa al puerto propio de un servicio igual choca con una verificación real, no es una omisión abierta. La brecha de cobertura AT-004 de 07-api/authentication.md (solo 01/02/04/05 tienen filtro) y R-003 de 15-project-control/risks.md describen un estado anterior del código, hoy obsoleto y nunca actualizado cuando se añadieron estas guardias
+    Note over SVC: Verificado 2026-10 contra FULL — cada servicio, no solo Java, registra su propia guardia de sesión+RBAC al arrancar (03/07/08/09 TS registerAuthGuard, 06 Python require_permission), aplicada a cada ruta /api/** salvo /health. Una llamada directa al puerto propio de un servicio igual choca con una verificación real, no es una omisión abierta. La brecha de cobertura AT-004 de 07-api/authentication.md (solo 01/02/04/05 tienen filtro) y R-003 de 15-project-control/risks.md describen un estado anterior del código, hoy obsoleto y nunca actualizado cuando se añadieron estas guardias

@@ -60,7 +60,7 @@ Para asegurar la calidad del código y la facilidad de mantenimiento, se han apl
 - **Use Case / Interactor**: Cada funcionalidad del sistema se encapsula en una clase de caso de uso única, facilitando la trazabilidad y las pruebas unitarias.
 - **Data Transfer Object (DTO)**: Se utilizan objetos específicos para el transporte de datos entre la API y la aplicación, evitando exponer las entidades del dominio directamente al cliente.
 - **Mapper Pattern**: Componentes encargados de transformar entidades de dominio en DTOs y viceversa, manteniendo la pureza de la capa de dominio.
-- **API Gateway**: Implementado mediante **Kong 3.6**, centralizando la autenticación (JWT RS256), el enrutamiento, la limitación de tasa (*rate limiting*) y la seguridad.
+- **API Gateway**: Implementado mediante **Kong 3.6**, centralizando el enrutamiento, la limitación de tasa (*rate limiting*), CORS y la autenticación en el borde: una *pre-function* Lua exige `Authorization: Bearer <sessionId>` (UUID opaco, no JWT) y lo valida contra ms-identity (`GET /api/v1/sessions/{id}`, caché de 10 s). La autorización por permisos se evalúa en cada microservicio.
 
 ## Patrones de Datos y Mensajería
 - **Database-per-Service**: Cada microservicio posee su propio esquema en PostgreSQL, eliminando dependencias físicas (FKs) entre contextos y asegurando el bajo acoplamiento.
@@ -101,7 +101,7 @@ El éxito del proyecto FaceAttendEDU se basa en una selección tecnológica orie
 |---|---|---|---|
 | **Backend (Core)** | Java / Spring Boot | 21 / 4.1.1 | Servicios de identidad y autorización. |
 | **Backend (Biometría)** | Python / FastAPI | 3.12 / 0.110 | Procesamiento de vectores biométricos. |
-| **Backend (Notificaciones)** | Go / Gin | 1.22 / v1.9.1 | Alta concurrencia en alertas. |
+| **Backend (Notificaciones)** | TypeScript / Fastify (Node.js) | 5.4 / 4.26 (Node 20) | Alta concurrencia en alertas (E/S asíncrona). |
 | **Backend (TS)** | TypeScript / Fastify | 5.4 / 4.26.0 | Servicios ligeros y rápidos. |
 | **Frontend** | React Native / Expo | RN 0.86 / Expo 57 | App móvil multiplataforma. |
 | **Gateway** | Kong | 3.6 | Orquestación de API y Seguridad. |
@@ -110,7 +110,7 @@ El éxito del proyecto FaceAttendEDU se basa en una selección tecnológica orie
 
 ## Factores de Éxito Técnico
 1. **Desacoplamiento Total**: Gracias a la Arquitectura Hexagonal, el sistema puede evolucionar sus frameworks sin reescribir la lógica de negocio.
-2. **Seguridad Robusta**: El uso de JWT RS256 y un Gateway centralizado garantiza que ninguna solicitud llegue a los microservicios sin ser validada.
+2. **Seguridad Robusta**: Sesiones opacas (`sessionId` UUID persistido en `identity.user_session`) validadas dos veces: en Kong y de nuevo en cada microservicio (sesión contra ms-identity y permisos contra ms-authorization), de modo que ninguna solicitud llega a la lógica de negocio sin ser validada.
 3. **Persistencia Políglota**: El uso de MongoDB para biometría y PostgreSQL para administración optimiza el rendimiento según la naturaleza del dato.
 4. **Escalabilidad Modular**: La estructura de microservicios permite escalar independientemente el módulo de asistencia (alta carga) del módulo de configuración (baja carga).
 

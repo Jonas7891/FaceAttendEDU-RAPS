@@ -47,7 +47,7 @@ Para mitigar el acoplamiento tecnológico, el sistema implementa la Arquitectura
 El sistema evita la dependencia de un único motor de base de datos, aplicando la persistencia según la naturaleza del dato:
 - **PostgreSQL 17**: Utilizado para datos relacionales y estructurados en 8 esquemas independientes, garantizando consistencia ACID.
 - **MongoDB 7**: Empleado exclusivamente por el servicio biométrico para el almacenamiento de *embeddings* (vectores de alta dimensionalidad), optimizando la búsqueda de similitudes.
-- **Redis 7**: Implementado para la gestión de sesiones y el control de tráfico (*rate limiting*) en el Gateway, reduciendo la latencia de respuesta.
+- **Redis 7**: Implementado para el control de tráfico (*rate limiting*) en el Gateway y, de forma opcional, como almacén de códigos de recuperación de contraseña en ms-identity. Las sesiones de usuario no viven en Redis: se persisten en PostgreSQL (`identity.user_session`).
 
 ### Comunicación Basada en Eventos
 La sincronización entre módulos se realiza mediante **Apache Kafka 3.8.0**. El sistema emplea un modelo de publicación/suscripción donde los servicios emiten "Eventos de Dominio" (ej. `UserCreated`, `AttendanceRecorded`). Esto permite que servicios como el de Notificaciones reaccionen asíncronamente a cambios en otros módulos sin generar dependencias circulares.
@@ -55,7 +55,7 @@ La sincronización entre módulos se realiza mediante **Apache Kafka 3.8.0**. El
 ### Gestión de Tráfico y Seguridad (Edge Routing)
 El acceso al sistema está centralizado en **Kong Gateway 3.6**, configurado en modo *DB-less*. El Gateway es responsable de:
 - **Enrutamiento**: Mapeo de rutas externas a servicios internos.
-- **Seguridad**: Validación de tokens JWT RS256 y aplicación de políticas de CORS.
+- **Seguridad**: Una *pre-function* Lua global exige `Authorization: Bearer <sessionId>` (UUID opaco, no JWT) en toda ruta no pública y lo valida contra ms-identity (`GET /api/v1/sessions/{id}`, caché de 10 s). También aplica las políticas de CORS. Kong no inyecta cabeceras de identidad: cada microservicio revalida la sesión y evalúa permisos por su cuenta.
 - **Resiliencia**: Limitación de tasa para prevenir ataques de denegación de servicio.
 
 # Implementación de los Microservicios
@@ -108,7 +108,7 @@ Gestiona la configuración global del sistema y el flujo de aprobación para cam
 Implementa un proceso de auditoría donde cualquier solicitud de cambio de plantilla biométrica debe pasar por un estado de `Revisión` antes de ser `Aprobada`, evitando que un usuario altere sus datos para suplantar a otro.
 
 ## 08-ms-notification: Sistema de Alertas y Notificaciones
-Implementado en **Go**, este servicio optimiza el envío de alertas masivas y notificaciones push.
+Implementado en **TypeScript** (Node.js 20 + Fastify), este servicio optimiza el envío de alertas masivas y notificaciones push.
 
 ### Orquestación Basada en Eventos
 El servicio consume tópicos de Kafka de todos los demás módulos. Por ejemplo, al detectar un evento de `InasistenciaDetectada`, el servicio dispara automáticamente una notificación al tutor y al estudiante a través de Firebase y SMTP.
@@ -124,7 +124,7 @@ $$\text{Puntaje Global} = \sum (\text{Puntaje Característica}_i \times \text{Pe
 El Gateway actúa como la fachada del sistema, abstrayendo la complejidad de los microservicios internos.
 
 ### Implementación de Kong
-Configurado en modo *DB-less*, el Gateway utiliza un archivo declarativo `kong.yml` para definir el enrutamiento. Implementa la seguridad en el "borde" (*edge*), validando que cada solicitud posea un token JWT válido antes de redirigirla al servicio correspondiente.
+Configurado en modo *DB-less*, el Gateway utiliza un archivo declarativo `kong.yml` para definir el enrutamiento. Implementa la seguridad en el "borde" (*edge*), validando que cada solicitud no pública lleve un `sessionId` de sesión activa (consulta a ms-identity, caché de 10 s) antes de redirigirla al servicio correspondiente. Las rutas públicas son las de autenticación (`/api/v1/auth/login`, `/login/verify`, `/refresh`, `/logout`, `/forgot-password`, `/verify-code`, `/reset-password`), el alta `POST /api/v1/onboarding/schools` y los *health checks*.
 
 # Consideraciones Transversales
 

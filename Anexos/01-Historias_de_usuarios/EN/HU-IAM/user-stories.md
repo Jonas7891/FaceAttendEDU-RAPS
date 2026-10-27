@@ -37,7 +37,7 @@
 - The SRS RF 1.3 presents an inconsistency: the input is described as “Registro en FaceAttend EDU”, but the correct input is the **`identifier` field** (email **or** username — `@JsonAlias({"username","email"})`) plus password.
 - Passwords must not be stored or transmitted in plain text; hashing is **bcrypt cost 12, `$2b`** (ADR-008, `SecurityConfig`).
 - Failed login attempts are logged without exposing sensitive data (generic 401 always).
-- There are **no access/refresh tokens**: sessions are rows in `identity.user_session` (`session_status` Active/Closed) and are closed by `DELETE /api/v1/auth/logout`. Kong has no `jwt` plugin; each Java service validates the bearer with `AuthTokenFilter`.
+- There is **no JWT and no separate access/refresh token pair**: the token is the `sessionId` (opaque UUID) of a row in `identity.user_session` (`session_status` Active/Closed), valid for 480 minutes. `POST /api/v1/auth/refresh` rotates the session (single use) and `POST /api/v1/auth/logout?sessionId=<UUID>` closes it. Kong has no `jwt` plugin: a *pre-function* validates the session against identity, and each service validates it again (`AuthTokenFilter` in Java, `authGuard.ts` in TypeScript, `security.py` in Python).
 - The login flow must consider role-based redirection after successful authentication (Web maps roles via `backendRoles.js`: `Administrador|Instructor|Aprendiz`, legacy names accepted).
 - Sensitive authentication data must not be written to logs or shown in the user interface.
 

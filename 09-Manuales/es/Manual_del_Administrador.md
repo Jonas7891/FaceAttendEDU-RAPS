@@ -585,11 +585,11 @@ Los siguientes elementos pertenecen a la configuración de despliegue y no se mo
 >
 > MONGO_DB=...
 >
-> JWT_SECRET=********
+> EMAIL_INTERNAL_TOKEN=********
 >
 > SESSION_TIMEOUT=...
 
-*Nota.* La figura presenta únicamente la estructura de las variables. El manual no debe publicar contraseñas, llaves privadas, tokens ni cadenas de conexión reales.
+*Nota.* La figura presenta únicamente la estructura de las variables. El manual no debe publicar contraseñas, llaves privadas, tokens ni cadenas de conexión reales. No existe un secreto JWT: las sesiones son identificadores UUID opacos guardados en la base de datos de identidad, por lo que no hay llaves de firma que configurar ni rotar.
 
 # **Gestión de la Información Principal**
 
