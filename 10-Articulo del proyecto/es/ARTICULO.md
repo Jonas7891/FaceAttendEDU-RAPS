@@ -1,9 +1,6 @@
 # FaceAttend EDU: diseño, implementación y revisión de una plataforma de asistencia facial basada en microservicios
 
-**[Nombre Apellido¹], [Nombre Apellido²], [Nombre Apellido³]**
-¹ [Dependencia], [Institución], [Ciudad], Colombia — [correo]
-² [Dependencia], [Institución], [Ciudad], Colombia — [correo]
-³ [Dependencia], [Institución], [Ciudad], Colombia — [correo]
+**[Jonattan Steven Rizo Solano¹], [Diego Andres Gutierrez Nuñez²], [Juan David Arboleda Perdomo³]**
 
 *Nota para los autores: nombres, afiliaciones y correos son marcadores. Completarlos antes de enviar.*
 
