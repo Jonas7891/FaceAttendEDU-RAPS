@@ -72,7 +72,7 @@ It contains no source code. The code and the team's working documentation live i
 
 ### [10-Articulo del proyecto](10-Articulo%20del%20proyecto/en/) — Project article
 
-- [Article_FaceAttendEDU.md](10-Articulo%20del%20proyecto/en/Article_FaceAttendEDU.md)
+- [ARTICLE.md](10-Articulo%20del%20proyecto/en/ARTICLE.md)
 
 ### [Anexos](Anexos/) — Annexes
 

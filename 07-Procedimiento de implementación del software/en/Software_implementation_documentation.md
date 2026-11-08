@@ -14,7 +14,7 @@ keywords:
 
 # Introduction
 
-The software implementation is the phase where the architectural design and the developed code are transformed into an operational and accessible system for users. For FaceAttendEDU, given the complexity of having nine microservices implemented in four different languages (Java, TypeScript, Python, and Go), a container-based deployment strategy has been adopted.
+The software implementation is the phase where the architectural design and the developed code are transformed into an operational and accessible system for users. For FaceAttendEDU, given the complexity of having nine microservices implemented in three different languages (Java, TypeScript, and Python), a container-based deployment strategy has been adopted.
 
 This approach eliminates the need to manually install each runtime environment on the host machine, encapsulating all dependencies within standardized images. This ensures that the system behaves identically in development, testing, and production environments.
 

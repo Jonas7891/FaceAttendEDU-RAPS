@@ -114,7 +114,7 @@
 | Story Points | 8 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/Historia_de_usuario.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/Historia_de_usuario.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros |
 
 ---
 
@@ -233,7 +233,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/Historia_de_usuario.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/Historia_de_usuario.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-ATT-001](../HU-ATT/Historia_de_usuario.md#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial |
 
 ---
 
@@ -348,7 +348,7 @@
 | Story Points | 5 |
 | Prioridad | Media |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | [HU-REP-001](#hu-rep-001-exportación-de-reportes): Exportación de reportes; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros |
+| Dependencias | [HU-REP-001](#hu-rep-001-exportación-de-reportes): Exportación de reportes; [HU-IAM-003](../HU-IAM/Historia_de_usuario.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/Historia_de_usuario.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros |
 
 ---
 
@@ -407,7 +407,7 @@
   - Opción de exportar los resultados de la consulta, si aplica.
   - Integración con la [HU-REP-001](#hu-rep-001-exportación-de-reportes) para exportar los resultados de la consulta.
 - Esta historia no cubre el tablero analítico. Eso se maneja en la [HU-REP-002](#hu-rep-002-tablero-analítico-basado-en-roles).
-- Esta historia no cubre las consultas generales del historial de asistencias/ausencias. Eso se maneja en la [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros).
+- Esta historia no cubre las consultas generales del historial de asistencias/ausencias. Eso se maneja en la [HU-HIST-001](../HU-HIST/Historia_de_usuario.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros).
 - Esta historia se enfoca específicamente en retardos y ausencias, no en todos los registros de asistencia.
 - Los datos de asistencia deben protegerse según el RNF 4, y el acceso debe restringirse según el rol del usuario.
 
@@ -460,4 +460,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 3 |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-CONF-008](../HU-CONF/user-stories.md#hu-conf-008-parametrización-de-retardos-y-justificaciones): Parametrización de retardos y justificaciones |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/Historia_de_usuario.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-HIST-001](../HU-HIST/Historia_de_usuario.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-CONF-008](../HU-CONF/Historia_de_usuario.md#hu-conf-008-parametrización-de-retardos-y-justificaciones): Parametrización de retardos y justificaciones |

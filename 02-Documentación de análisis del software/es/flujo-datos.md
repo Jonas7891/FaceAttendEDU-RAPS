@@ -39,7 +39,7 @@ Kong 3.6 en modo DB-less (`kong.yml`) aplica, en orden: una pre-función Lua, CO
 
 ## Etapa 2 — Autenticación y autorización en cada llamada
 
-El login (`POST /api/v1/auth/login` con correo o username más contraseña) verifica el hash BCrypt contra `identity.app_user.password_hash` e inserta una fila en `identity.user_session` en estado `Active`, devolviendo `{sessionId, userId}` con un 401 genérico que evita la enumeración de usuarios. El cliente carga luego su contexto (roles, evaluación de permisos, perfil de persona). Cada petición posterior pasa dos verificaciones: el chequeo de borde en Kong y la guarda del microservicio dueño (filtro de token en los servicios Java, guarda de autenticación en los TypeScript, requerimiento de permiso en Python, middleware en Go), que revalida la sesión y el permiso específico. La renovación rota el identificador de sesión (un solo uso) y el logout cierra la fila.
+El login (`POST /api/v1/auth/login` con correo o username más contraseña) verifica el hash BCrypt contra `identity.app_user.password_hash` e inserta una fila en `identity.user_session` en estado `Active`, devolviendo `{sessionId, userId}` con un 401 genérico que evita la enumeración de usuarios. El cliente carga luego su contexto (roles, evaluación de permisos, perfil de persona). Cada petición posterior pasa dos verificaciones: el chequeo de borde en Kong y la guarda del microservicio dueño (filtro de token en los servicios Java, guarda de autenticación en los TypeScript y requerimiento de permiso en Python), que revalida la sesión y el permiso específico. La renovación rota el identificador de sesión (un solo uso) y el logout cierra la fila.
 
 ## Etapa 3 — Propiedad de los datos: un microservicio, un schema
 

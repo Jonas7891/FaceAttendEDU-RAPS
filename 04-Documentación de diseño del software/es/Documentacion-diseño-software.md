@@ -16,7 +16,7 @@ keywords:
 
 El diseño arquitectónico de FaceAttendEDU representa la traducción de los requerimientos funcionales y no funcionales en una estructura técnica robusta. A diferencia del análisis de software, que define el "qué" y el "por qué", este documento se centra en el "cómo": la organización del código, la gestión de datos, la comunicación entre componentes y la selección tecnológica.
 
-El sistema ha sido concebido bajo un enfoque de **Polyglot Modular Monolith** (organizado en un monorepo), donde cada módulo opera como un microservicio independiente con su propio contexto delimitado (*bounded context*), permitiendo la coexistencia de múltiples lenguajes de programación según la necesidad técnica (Java, TypeScript, JavaScript, Python y Go).
+El sistema ha sido concebido bajo un enfoque de **Polyglot Modular Monolith** (organizado en un monorepo), donde cada módulo opera como un microservicio independiente con su propio contexto delimitado (*bounded context*), permitiendo la coexistencia de múltiples lenguajes de programación según la necesidad técnica (Java, TypeScript, JavaScript y Python).
 
 ## Objetivo del documento
 Proporcionar una descripción detallada y formal de la arquitectura del sistema, los patrones de diseño aplicados y el modelo de datos, estableciendo la base técnica para la implementación, el despliegue y la evolución del software.
@@ -45,7 +45,7 @@ Actúa como el orquestador del sistema.
 ### 3. Capa de Infraestructura (Adapters)
 Contiene las implementaciones concretas de los puertos.
 - **Adaptadores de Entrada (Driving Adapters)**: Controladores REST (Spring Boot, FastAPI, etc.) que reciben solicitudes HTTP y las traducen a llamadas de casos de uso.
-- **Adaptadores de Salida (Driven Adapters)**: Implementaciones de persistencia (JPA, MongoDB, pgx) que traducen las necesidades del dominio en consultas a bases de datos.
+- **Adaptadores de Salida (Driven Adapters)**: Implementaciones de persistencia (JPA, MongoDB, `pg`) que traducen las necesidades del dominio en consultas a bases de datos.
 
 ## Flujo de Información
 Un flujo típico de una solicitud sigue la siguiente ruta:
@@ -99,10 +99,10 @@ El éxito del proyecto FaceAttendEDU se basa en una selección tecnológica orie
 ## Stack Tecnológico
 | Componente | Tecnología | Versión | Propósito |
 |---|---|---|---|
-| **Backend (Core)** | Java / Spring Boot | 21 / 4.1.1 | Servicios de identidad y autorización. |
-| **Backend (Biometría)** | Python / FastAPI | 3.12 / 0.110 | Procesamiento de vectores biométricos. |
-| **Backend (Notificaciones)** | TypeScript / Fastify (Node.js) | 5.4 / 4.26 (Node 20) | Alta concurrencia en alertas (E/S asíncrona). |
-| **Backend (TS)** | TypeScript / Fastify | 5.4 / 4.26.0 | Servicios ligeros y rápidos. |
+| **Backend (Core)** | Java / Spring Boot | 21 / 4.1.2 | Servicios de identidad y autorización. |
+| **Backend (Biometría)** | Python / FastAPI | 3.12 / 0.162 | Procesamiento de vectores biométricos. |
+| **Backend (Notificaciones)** | TypeScript / Fastify (Node.js) | 5.4 / 5.12 (Node 24) | Alta concurrencia en alertas (E/S asíncrona). |
+| **Backend (TS)** | TypeScript / Fastify | 5.4 / 5.12.7 | Servicios ligeros y rápidos. |
 | **Frontend** | React Native / Expo | RN 0.86 / Expo 57 | App móvil multiplataforma. |
 | **Gateway** | Kong | 3.6 | Orquestación de API y Seguridad. |
 | **Mensajería** | Apache Kafka | 3.8.0 | Comunicación asíncrona. |
@@ -116,7 +116,7 @@ El éxito del proyecto FaceAttendEDU se basa en una selección tecnológica orie
 
 # Conclusiones
 
-El diseño arquitectónico de FaceAttendEDU no es solo una elección técnica, sino una estrategia para mitigar los riesgos identificados en la fase de análisis. La adopción de la Arquitectura Hexagonal y DDD permite que el sistema sea resiliente al cambio y fácil de auditar. La combinación de lenguajes especializados (Java para robustez, Python para IA/Biometría, Go para velocidad) asegura que cada componente sea implementado con la herramienta más eficiente para su propósito.
+El diseño arquitectónico de FaceAttendEDU no es solo una elección técnica, sino una estrategia para mitigar los riesgos identificados en la fase de análisis. La adopción de la Arquitectura Hexagonal y DDD permite que el sistema sea resiliente al cambio y fácil de auditar. La combinación de lenguajes especializados (Java para robustez, Python para IA/Biometría, TypeScript para servicios ligeros de E/S) asegura que cada componente sea implementado con la herramienta más eficiente para su propósito.
 
 **Nota del autor.** Jonas es el autor y responsable técnico del diseño arquitectónico. La correspondencia técnica puede dirigirse a jonas@consultoria.example.
 

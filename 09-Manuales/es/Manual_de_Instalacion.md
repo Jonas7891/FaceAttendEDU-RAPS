@@ -352,9 +352,9 @@ Conviene comprender la naturaleza de aquello que se va a instalar antes de inici
 
 El sistema está construido sobre una arquitectura de microservicios. En lugar de un programa único de gran tamaño, se compone de nueve servicios independientes, cada uno responsable de una porción delimitada del negocio: identidad, autorización, gestión académica, programación de horarios, asistencia, biometría, configuración, notificaciones y calidad. Delante de ellos opera una puerta de enlace que recibe la totalidad de las peticiones y las dirige al servicio correspondiente; detrás se sitúan las bases de datos y el intermediario de mensajería.
 
-La instalación manual de este conjunto resultaría inviable, por cuanto cada servicio está implementado en un lenguaje de programación distinto —Java, TypeScript, Python y Go— y posee dependencias propias. Por este motivo, el proyecto emplea contenedores, mecanismo que empaqueta cada servicio junto con todos sus requisitos de ejecución (Docker Inc., s.f.-a), y una herramienta de orquestación que despliega los dieciocho contenedores en el orden correcto mediante un único comando (Docker Inc., s.f.-b).
+La instalación manual de este conjunto resultaría inviable, por cuanto cada servicio está implementado en un lenguaje de programación distinto —Java, TypeScript y Python— y posee dependencias propias. Por este motivo, el proyecto emplea contenedores, mecanismo que empaqueta cada servicio junto con todos sus requisitos de ejecución (Docker Inc., s.f.-a), y una herramienta de orquestación que despliega los dieciocho contenedores en el orden correcto mediante un único comando (Docker Inc., s.f.-b).
 
-La consecuencia práctica de esta decisión resulta relevante para el instalador: no se requiere instalar Java, Node.js, Python ni Go en el equipo, puesto que la plataforma de contenedores los descarga y los ejecuta en el interior de cada contenedor. Únicamente se precisan Docker y Git. La instalación manual de los lenguajes se describe en el apartado Instalación sin Contenedores y solo resulta necesaria cuando se pretende modificar el código fuente.
+La consecuencia práctica de esta decisión resulta relevante para el instalador: no se requiere instalar Java, Node.js ni Python en el equipo, puesto que la plataforma de contenedores los descarga y los ejecuta en el interior de cada contenedor. Únicamente se precisan Docker y Git. La instalación manual de los lenguajes se describe en el apartado Instalación sin Contenedores y solo resulta necesaria cuando se pretende modificar el código fuente.
 
 ## Componentes del Sistema
 
@@ -382,7 +382,7 @@ El despliegue completo levanta dieciocho contenedores, agrupados en tres capas. 
 | ms-attendance    | Java 21 y Spring Boot | 8085        | Registros de asistencia y justificaciones                                                         |
 | ms-biometric     | Python 3.12 y FastAPI | 8086        | Vectores biométricos faciales y dactilares                                                        |
 | ms-configuration | TypeScript y Fastify  | 8087        | Parámetros académicos y de seguridad                                                              |
-| ms-notification  | Go 1.22 y Gin         | 8088        | Alertas y envío de correo electrónico                                                             |
+| ms-notification  | TypeScript y Fastify  | 8088        | Alertas y envío de correo electrónico                                                             |
 | ms-quality       | TypeScript y Fastify  | 8089        | Instrumento de evaluación de calidad                                                              |
 | redis            | Redis 7               | 6379        | Almacén del límite de peticiones de la puerta de enlace                                           |
 
@@ -541,7 +541,6 @@ Durante la primera instalación, el equipo descarga imágenes de contenedor y de
 >
 > • pypi.org, para las dependencias del servicio en Python.
 >
-> • proxy.golang.org, para las dependencias del servicio en Go.
 >
 > • github.com, para la descarga del código fuente del proyecto.
 
@@ -660,7 +659,7 @@ FULL/
 |   +-- 05-ms-attendance/      Java 21 y Spring Boot
 |   +-- 06-ms-biometric/       Python 3.12 y FastAPI
 |   +-- 07-ms-configuration/   TypeScript y Fastify
-|   +-- 08-ms-notification/    Go 1.22 y Gin
+|   +-- 08-ms-notification/    TypeScript y Fastify
 |   +-- 09-ms-quality/         TypeScript y Fastify
 |   +-- 99-api-gateway/        Kong OSS 3.6
 |
@@ -1294,7 +1293,6 @@ Cada servicio exige su propio entorno de ejecución instalado en el equipo.
 | Maven        | 3.9         | Los mismos cuatro servicios                          | maven.apache.org | mvn --version    |
 | Node.js      | 20          | Académico, configuración, calidad y ambas interfaces | nodejs.org       | node --version   |
 | Python       | 3.12        | Biometría                                            | python.org       | python --version |
-| Go           | 1.22        | Notificaciones                                       | go.dev           | go version       |
 
 ## Enfoque Recomendado: Modo Híbrido
 

@@ -39,7 +39,7 @@ Kong 3.6 in DB-less mode (`kong.yml`) applies, in order: a Lua pre-function, COR
 
 ## Stage 2 — Authentication and Authorization on Every Call
 
-Login (`POST /api/v1/auth/login` with email or username plus password) verifies the BCrypt hash against `identity.app_user.password_hash` and inserts a row in `identity.user_session` with `Active` status, returning `{sessionId, userId}` with a generic 401 that avoids user enumeration. The client then loads its context (roles, permission evaluation, person profile). Each subsequent request passes two checks: the Kong edge check and the owning microservice guard (token filter in the Java services, auth guard in the TypeScript services, permission requirement in Python, middleware in Go), which revalidates the session and the specific permission. Refresh rotates the session identifier (single use) and logout closes the row.
+Login (`POST /api/v1/auth/login` with email or username plus password) verifies the BCrypt hash against `identity.app_user.password_hash` and inserts a row in `identity.user_session` with `Active` status, returning `{sessionId, userId}` with a generic 401 that avoids user enumeration. The client then loads its context (roles, permission evaluation, person profile). Each subsequent request passes two checks: the Kong edge check and the owning microservice guard (token filter in the Java services, auth guard in the TypeScript services, and permission requirement in Python), which revalidates the session and the specific permission. Refresh rotates the session identifier (single use) and logout closes the row.
 
 ## Stage 3 — Data Ownership: One Microservice, One Schema
 

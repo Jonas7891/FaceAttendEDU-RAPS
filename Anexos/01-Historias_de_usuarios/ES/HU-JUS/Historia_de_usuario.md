@@ -52,7 +52,7 @@
 - La justificación debe estar vinculada a un único registro de asistencia, según la regla de dominio RN-32 definida en `entities-and-rules.md`.
 - Una justificación no puede aprobarse sin al menos un documento de soporte válido, según la regla de dominio RN-33.
 - El documento de soporte debe almacenarse de forma segura y no debe exponer su contenido en logs ni en la interfaz.
-- La parametrización de justificaciones, como los tipos de justificación válidos, se gestiona en la [HU-CONF-008](../HU-CONF/user-stories.md#hu-conf-008-parametrización-de-retardos-y-justificaciones) y el RF 4.7.
+- La parametrización de justificaciones, como los tipos de justificación válidos, se gestiona en la [HU-CONF-008](../HU-CONF/Historia_de_usuario.md#hu-conf-008-parametrización-de-retardos-y-justificaciones) y el RF 4.7.
 - Esta historia no cubre el flujo de aprobación/rechazo. Eso se maneja en la [HU-JUS-002](#hu-jus-002-aprobación-y-rechazo-de-justificaciones).
 - Esta historia no cubre la notificación automática del resultado. Eso se maneja en la [HU-JUS-003](#hu-jus-003-notificación-automática-del-resultado-de-la-justificación).
 
@@ -103,7 +103,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; [HU-HIST-001](../HU-HIST/user-stories.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-CONF-008](../HU-CONF/user-stories.md#hu-conf-008-parametrización-de-retardos-y-justificaciones): Parametrización de retardos y justificaciones |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-ATT-001](../HU-ATT/Historia_de_usuario.md#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; [HU-HIST-001](../HU-HIST/Historia_de_usuario.md#hu-hist-001-consulta-de-asistencias-y-ausencias-por-parámetros): Consulta de asistencias y ausencias por parámetros; [HU-CONF-008](../HU-CONF/Historia_de_usuario.md#hu-conf-008-parametrización-de-retardos-y-justificaciones): Parametrización de retardos y justificaciones |
 
 ---
 
@@ -212,7 +212,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | [HU-JUS-001](#hu-jus-001-carga-del-soporte-de-justificación): Carga del soporte de justificación; [HU-CONF-008](../HU-CONF/user-stories.md#hu-conf-008-parametrización-de-retardos-y-justificaciones): Parametrización de retardos y justificaciones; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles |
+| Dependencias | [HU-JUS-001](#hu-jus-001-carga-del-soporte-de-justificación): Carga del soporte de justificación; [HU-CONF-008](../HU-CONF/Historia_de_usuario.md#hu-conf-008-parametrización-de-retardos-y-justificaciones): Parametrización de retardos y justificaciones; [HU-IAM-003](../HU-IAM/Historia_de_usuario.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles |
 
 ---
 
@@ -266,7 +266,7 @@
   - Reintentar según una política configurada, o marcarla para revisión administrativa.
   - No bloquear el proceso de evaluación de la justificación.
 - El estudiante debe poder consultar sus notificaciones aun si perdió la entrega inicial.
-- Las preferencias de notificación pueden ser gestionadas por el estudiante mediante la [HU-CONF-001](../HU-CONF/user-stories.md#hu-conf-001-configurar-alertas-del-sistema) y la [HU-CONF-002](../HU-CONF/user-stories.md#hu-conf-002-habilitar-o-deshabilitar-alertas), si esas historias se implementan.
+- Las preferencias de notificación pueden ser gestionadas por el estudiante mediante la [HU-CONF-001](../HU-CONF/Historia_de_usuario.md#hu-conf-001-configurar-alertas-del-sistema) y la [HU-CONF-002](../HU-CONF/Historia_de_usuario.md#hu-conf-002-habilitar-o-deshabilitar-alertas), si esas historias se implementan.
 - La regla de dominio RN-36 establece que el resultado de una justificación debe notificarse automáticamente al usuario solicitante.
 - El equipo debe definir el retraso máximo aceptable entre la evaluación y la entrega de la notificación. Valor inicial propuesto: 60 segundos.
 
@@ -316,4 +316,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | [HU-JUS-002](#hu-jus-002-aprobación-y-rechazo-de-justificaciones): Aprobación y rechazo de justificaciones; [HU-CONF-001](../HU-CONF/user-stories.md#hu-conf-001-configurar-alertas-del-sistema): Configurar alertas del sistema, si aplica; [HU-CONF-002](../HU-CONF/user-stories.md#hu-conf-002-habilitar-o-deshabilitar-alertas): Habilitar o deshabilitar alertas, si aplica |
+| Dependencias | [HU-JUS-002](#hu-jus-002-aprobación-y-rechazo-de-justificaciones): Aprobación y rechazo de justificaciones; [HU-CONF-001](../HU-CONF/Historia_de_usuario.md#hu-conf-001-configurar-alertas-del-sistema): Configurar alertas del sistema, si aplica; [HU-CONF-002](../HU-CONF/Historia_de_usuario.md#hu-conf-002-habilitar-o-deshabilitar-alertas): Habilitar o deshabilitar alertas, si aplica |

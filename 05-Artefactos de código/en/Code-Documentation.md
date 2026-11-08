@@ -3,7 +3,7 @@ title: "Technical Code Documentation — FaceAttendEDU"
 authors: Jonattan Steven Rizo Solano, Diego Andres Gutierrez Nuñez, Juan Davida Arboleda Perdomo
 date: "October 10, 2026"
 abstract: |
-  This document constitutes the formal documentation of the FaceAttendEDU source code, authored under the standards of the seventh edition of the APA guidelines. It describes the implementation of a polyglot modular monolith, structured through a hexagonal architecture (ports and adapters) to ensure the segregation of business logic from infrastructure. The system integrates nine specialized microservices developed in Java, TypeScript, Python, and Go, coordinated via an API Gateway (Kong) and an asynchronous event bus (Apache Kafka). Polyglot persistence is detailed using PostgreSQL, MongoDB, and Redis, as well as the implementation of cosine similarity algorithms for biometric processing and weighted scoring models for quality assessment based on the ISO/IEC 25010 standard. This documentation serves as technical evidence of the alignment between the architectural design and the actual software implementation.
+  This document constitutes the formal documentation of the FaceAttendEDU source code, authored under the standards of the seventh edition of the APA guidelines. It describes the implementation of a polyglot modular monolith, structured through a hexagonal architecture (ports and adapters) to ensure the segregation of business logic from infrastructure. The system integrates nine specialized microservices developed in Java, TypeScript, and Python, coordinated via an API Gateway (Kong) and an asynchronous event bus (Apache Kafka). Polyglot persistence is detailed using PostgreSQL, MongoDB, and Redis, as well as the implementation of cosine similarity algorithms for biometric processing and weighted scoring models for quality assessment based on the ISO/IEC 25010 standard. This documentation serves as technical evidence of the alignment between the architectural design and the actual software implementation.
 keywords:
   - hexagonal architecture
   - polyglot modular monolith
@@ -24,7 +24,7 @@ Academic attendance management often faces problems of identity spoofing and the
 The primary objective of this document is to provide an exhaustive and formal description of the source code implementation. It seeks to document not only "what" the system does but "how" it is built, detailing the relationship between domain entities, use cases, and infrastructure adapters, ensuring that the system is maintainable, auditable, and scalable.
 
 ## Scope of Documentation
-This document covers the entirety of the system's back-end, including the nine business microservices and the API Gateway. It details the logic implemented in Java, TypeScript, Python, and Go, as well as the data infrastructure configuration and container orchestration.
+This document covers the entirety of the system's back-end, including the nine business microservices and the API Gateway. It details the logic implemented in Java, TypeScript, and Python, as well as the data infrastructure configuration and container orchestration.
 
 # System Architecture
 
@@ -33,7 +33,7 @@ The FaceAttendEDU system is based on a **Polyglot Modular Monolith** paradigm. U
 ## Architectural Patterns
 
 ### Polyglot Modular Monolith
-The choice of a polyglot approach responds to the need to optimize performance according to the task. Java was implemented for robust process orchestration, Python for the scientific processing of biometric vectors, Go for high-concurrency notifications, and TypeScript for lightweight services. This strategy allows each module to be developed with the most efficient tool for its specific purpose.
+The choice of a polyglot approach responds to the need to optimize performance according to the task. Java was implemented for robust process orchestration, Python for the scientific processing of biometric vectors, and TypeScript for lightweight I/O services, notifications included. This strategy allows each module to be developed with the most efficient tool for its specific purpose.
 
 ### Hexagonal Architecture (Ports and Adapters)
 To mitigate technological coupling, the system implements Hexagonal Architecture. This structure organizes the code into three concentric layers:
@@ -79,7 +79,7 @@ The system maps the relationship `User $\rightarrow$ Role $\rightarrow$ Permissi
 Manages the organizational hierarchy of the institution, from the campus to the student.
 
 ### Data Modeling
-Uses a complex relational model that links `School` $\rightarrow$ `Program` $\rightarrow$ `Cohort` $\rightarrow$ `Course`. To manage these relations with high efficiency, it implements **Drizzle ORM**, facilitating the execution of optimized JOINs over the `academic` schema.
+Uses a complex relational model that links `School` $\rightarrow$ `Program` $\rightarrow$ `Cohort` $\rightarrow$ `Course`. To manage these relations with high efficiency, it uses the `pg` driver with parameterized SQL and explicit JOINs over the `academic` schema, without an ORM.
 
 ## 04-ms-scheduling: Session Scheduling
 Translates the academic structure into an operational class calendar.
@@ -108,7 +108,7 @@ Manages global system configuration and the approval flow for biometric updates.
 Implements an audit process where any request to change a biometric template must pass through a `Review` state before being `Approved`, preventing a user from altering their data to impersonate another.
 
 ## 08-ms-notification: Alerting and Notification System
-Implemented in **TypeScript** (Node.js 20 + Fastify), this service optimizes the mass sending of alerts and push notifications.
+Implemented in **TypeScript** (Node.js 24 + Fastify 5), this service optimizes the mass sending of alerts and push notifications.
 
 ## Event-Driven Orchestration
 The service consumes Kafka topics from all other modules. For example, upon detecting an `AbsenteeismDetected` event, the service automatically triggers a notification to the tutor and the student via Firebase and SMTP.

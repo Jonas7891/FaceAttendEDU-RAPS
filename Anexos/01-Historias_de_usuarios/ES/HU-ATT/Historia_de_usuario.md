@@ -97,7 +97,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-002](#hu-att-002-inscripción-inicial-de-parámetros-faciales): Inscripción inicial de parámetros faciales; [HU-ACAD-005](../HU-ACAD/user-stories.md#hu-acad-005-asignar-bloques-de-tiempojornadas): Asignar bloques de tiempo/jornadas |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/Historia_de_usuario.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-002](#hu-att-002-inscripción-inicial-de-parámetros-faciales): Inscripción inicial de parámetros faciales; [HU-ACAD-005](../HU-ACAD/Historia_de_usuario.md#hu-acad-005-asignar-bloques-de-tiempojornadas): Asignar bloques de tiempo/jornadas |
 
 ---
 
@@ -140,7 +140,7 @@
 - Los datos biométricos deben cumplir con las regulaciones de protección de datos aplicables, como la Ley 1581 de 2012 de Colombia.
 - El usuario debe estar autenticado antes de asociar un parámetro facial a su cuenta.
 - Los permisos de cámara deben solicitarse y manejarse adecuadamente si son denegados.
-- Las actualizaciones del parámetro facial se cubren por separado en la [HU-CONF-006](../HU-CONF/user-stories.md#hu-conf-006-actualizar-parámetros-faciales-del-usuario).
+- Las actualizaciones del parámetro facial se cubren por separado en la [HU-CONF-006](../HU-CONF/Historia_de_usuario.md#hu-conf-006-actualizar-parámetros-faciales-del-usuario).
 - Los datos biométricos sensibles no deben escribirse en logs ni mostrarse en la interfaz.
 
 **Servicio(s) responsable(s):** Servicio de Asistencia / Servicio de Inscripción Biométrica, propuesto.  
@@ -186,7 +186,7 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/Historia_de_usuario.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol |
 
 ---
 
@@ -277,7 +277,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; [HU-ACAD-005](../HU-ACAD/user-stories.md#hu-acad-005-asignar-bloques-de-tiempojornadas): Asignar bloques de tiempo/jornadas |
+| Dependencias | [HU-IAM-002](../HU-IAM/Historia_de_usuario.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; [HU-ACAD-005](../HU-ACAD/Historia_de_usuario.md#hu-acad-005-asignar-bloques-de-tiempojornadas): Asignar bloques de tiempo/jornadas |
 
 ---
 
@@ -365,4 +365,4 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 2 |
-| Dependencias | [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; relacionada con [HU-ATT-005](../Index_HU.md#historias-planificadas-pendientes-de-documentar) |
+| Dependencias | [HU-IAM-002](../HU-IAM/Historia_de_usuario.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ATT-001](#hu-att-001-registro-de-asistencia-facial): Registro de asistencia facial; relacionada con [HU-ATT-005](../Index_HU.md#historias-planificadas-pendientes-de-documentar) |

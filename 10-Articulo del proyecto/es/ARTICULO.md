@@ -50,7 +50,7 @@ El backend tiene nueve servicios y un gateway. Cada servicio es dueño de su esq
 |---|---|---|
 | 01 identity | Personas, usuarios, sesiones, segundo factor, recuperación | Java, Spring Boot 4.1.x |
 | 02 authorization | Roles, permisos, evaluación RBAC | Java, Spring Boot 4.1.x |
-| 03 academic | Sedes, programas, cohortes, matrículas | TypeScript, Fastify 5, Drizzle |
+| 03 academic | Sedes, programas, cohortes, matrículas | TypeScript, Fastify 5, pg |
 | 04 scheduling | Bloques horarios, sesiones de clase | Java, Spring Boot 4.1.x |
 | 05 attendance | Registros, justificaciones, reportes | Java, Spring Boot 4.1.x |
 | 06 biometric | Enrolamiento, verificación, prueba de vida | Python 3.12, FastAPI |
