@@ -14,7 +14,7 @@ keywords:
 
 # Introducción
 
-La implementación del software es la fase donde la arquitectura diseñada y el código desarrollado se transforman en un sistema operativo y accesible para los usuarios. Para FaceAttendEDU, dada la complejidad de contar con nueve microservicios implementados en cuatro lenguajes diferentes (Java, TypeScript, Python y Go) y múltiples motores de persistencia, se ha optado por una estrategia de despliegue basada en contenedores.
+La implementación del software es la fase donde la arquitectura diseñada y el código desarrollado se transforman en un sistema operativo y accesible para los usuarios. Para FaceAttendEDU, dada la complejidad de contar con nueve microservicios implementados en tres lenguajes diferentes (Java, TypeScript y Python) y múltiples motores de persistencia, se ha optado por una estrategia de despliegue basada en contenedores.
 
 Este enfoque elimina la necesidad de instalar manualmente cada entorno de ejecución en la máquina host, encapsulando todas las dependencias dentro de imágenes estandarizadas. Esto asegura que el sistema se comporte de la misma manera en el entorno de desarrollo, pruebas y producción.
 

@@ -216,6 +216,8 @@ FaceAttend EDU is a system composed of:
 | Go | 1.22 | Notification microservice |
 | Gin | 1.9.1 | Go HTTP framework |
 
+> **Implementation note (November 2026):** this table is the original technical proposal. In the built system (tag `final-delivery-2026`) the notification service was rewritten in **TypeScript + Fastify** instead of Go/Gin (ADR-021 in `fae-docs`), the TypeScript services use the `pg` driver without Drizzle ORM, and the current versions are Spring Boot 4.1.2, Fastify 5.12, FastAPI 0.162 and Node 24. The up-to-date inventory is in `05-Artefactos de código/en/dependencies.md`.
+
 #### 4.1.3 Frontend Technologies
 
 | Technology | Version | Use |
@@ -421,6 +423,8 @@ The system implements a **Polyglot Microservices** architecture with **Hexagonal
 | 08 | ms-notification | 8088 | Go 1.22 | Gin | PostgreSQL | Alerts and notifications |
 | 09 | ms-quality | 8089 | TypeScript | Fastify | PostgreSQL | ISO 25010/29110 quality evaluation, ISTQB |
 | 99 | api-gateway | 8080/8001 | - | Kong OSS 3.6 | Redis | Routing, auth, rate-limit, CORS |
+
+> **Implementation note (November 2026):** this table is the original technical proposal. In the built system (tag `final-delivery-2026`) the notification service was rewritten in **TypeScript + Fastify** instead of Go/Gin (ADR-021 in `fae-docs`), the TypeScript services use the `pg` driver without Drizzle ORM, and the current versions are Spring Boot 4.1.2, Fastify 5.12, FastAPI 0.162 and Node 24. The up-to-date inventory is in `05-Artefactos de código/en/dependencies.md`.
 
 ### 6.4 Hexagonal Architecture
 

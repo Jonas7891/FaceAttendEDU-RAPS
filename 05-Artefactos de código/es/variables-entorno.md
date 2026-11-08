@@ -75,13 +75,13 @@ Nota: `.env` NO incluye `WEBHOOK_URL`, `WEBHOOK_SECRET`, `WEBHOOK_TIMEOUT_SECOND
 | SPRING_DATA_MONGODB_URI | ms-attendance | Mongo con credenciales interpoladas (`?authSource=admin`) | mongodb://mongoadmin:****@mongodb:27017/… |
 | MONGODB_URL | ms-biometric | Igual que la anterior (FastAPI+Motor) | ídem |
 | SPRING_KAFKA_BOOTSTRAP_SERVERS | Java ×4 | Broker interno | kafka:29092 |
-| KAFKA_BROKERS | ms-academic/configuration/biometric/notification/quality | Equivalente Node/Go/Python | kafka:29092 |
+| KAFKA_BROKERS | ms-academic/configuration/biometric/notification/quality | Equivalente Node/Python | kafka:29092 |
 | SPRING_LIQUIBASE_ENABLED=false, SPRING_JPA_HIBERNATE_DDL_AUTO=update | Java ×4 | Liquibase externo migra; Hibernate `update` | fijos |
 | FACEATTEND_AUTH_IDENTITY_URL, FACEATTEND_AUTH_AUTHORIZATION_URL | Java ×4 + ms-biometric | Guardas de sesión/RBAC | http://ms-identity:8081, http://ms-authorization:8082 |
-| IDENTITY_URL, AUTHORIZATION_URL | ms-academic/configuration/biometric/notification/quality | Equivalente Node/Go/Python | ídem |
+| IDENTITY_URL, AUTHORIZATION_URL | ms-academic/configuration/biometric/notification/quality | Equivalente Node/Python | ídem |
 | FACEATTEND_NOTIFICATION_BASE_URL | ms-identity | identity→notification `POST /api/v1/emails` | http://ms-notification:8088 |
 | FACEATTEND_NOTIFICATION_INTERNAL_TOKEN | ms-identity (secreto) | Copia de EMAIL_INTERNAL_TOKEN | **** |
-| DATABASE_URL | ms-academic/configuration/notification/quality | URL PG Drizzle/Go (notification añade `?sslmode=disable`) | postgres://postgres:****@postgres:5432/faceattend_db |
+| DATABASE_URL | ms-academic/configuration/notification/quality | URL PostgreSQL para el driver `pg` (notification añade `?sslmode=disable`) | postgres://postgres:****@postgres:5432/faceattend_db |
 | PG_SCHEMA | ms-academic/configuration/notification/quality | Schema propio | academic / configuration / notification / quality |
 | PORT | ms-academic/configuration/biometric/notification/quality | Puerto interno | 8083 / 8087 / 8086 / 8088 / 8089 |
 | SERVER_PORT | Java ×4 | Puerto Spring | 8081 / 8082 / 8084 / 8085 |
