@@ -356,9 +356,9 @@ It is worth understanding the nature of what is to be installed before starting 
 
 The system is built on a microservice architecture. Instead of a single large program, it is composed of nine independent services, each responsible for a delimited portion of the business: identity, authorization, academic management, scheduling, attendance, biometrics, configuration, notifications, and quality. In front of them operates a gateway that receives all of the requests and directs them to the corresponding service; behind them sit the databases and the messaging broker.
 
-Installing this set manually would be unfeasible, since each service is implemented in a different programming language — Java, TypeScript, Python, and Go — and has its own dependencies. For this reason, the project uses containers, a mechanism that packages each service together with all of its runtime requirements (Docker Inc., n.d.-a), and an orchestration tool that deploys the eighteen containers in the correct order with a single command (Docker Inc., n.d.-b).
+Installing this set manually would be unfeasible, since each service is implemented in a different programming language — Java, TypeScript, and Python — and has its own dependencies. For this reason, the project uses containers, a mechanism that packages each service together with all of its runtime requirements (Docker Inc., n.d.-a), and an orchestration tool that deploys the eighteen containers in the correct order with a single command (Docker Inc., n.d.-b).
 
-The practical consequence of this decision is relevant for the installer: there is no need to install Java, Node.js, Python, or Go on the machine, since the container platform downloads and runs them inside each container. Only Docker and Git are required. Manual installation of the languages is described in the Installation Without Containers section and is only necessary when the source code is to be modified.
+The practical consequence of this decision is relevant for the installer: there is no need to install Java, Node.js, or Python on the machine, since the container platform downloads and runs them inside each container. Only Docker and Git are required. Manual installation of the languages is described in the Installation Without Containers section and is only necessary when the source code is to be modified.
 
 ## System Components
 
@@ -386,7 +386,7 @@ The complete deployment brings up eighteen containers, grouped into three layers
 | ms-attendance     | Java 21 and Spring Boot | 8085         | Attendance records and justifications                                                      |
 | ms-biometric      | Python 3.12 and FastAPI | 8086         | Facial and fingerprint biometric vectors                                                   |
 | ms-configuration  | TypeScript and Fastify  | 8087         | Academic and security parameters                                                           |
-| ms-notification   | Go 1.22 and Gin         | 8088         | Alerts and email sending                                                                   |
+| ms-notification   | TypeScript and Fastify  | 8088         | Alerts and email sending                                                                   |
 | ms-quality        | TypeScript and Fastify  | 8089         | Quality assessment instrument                                                              |
 | redis             | Redis 7                 | 6379         | Store for the gateway's rate limit                                                         |
 
@@ -545,7 +545,6 @@ During the first installation, the machine downloads container images and depend
 >
 > • pypi.org, for the dependencies of the Python service.
 >
-> • proxy.golang.org, for the dependencies of the Go service.
 >
 > • github.com, for downloading the project source code.
 
@@ -662,7 +661,7 @@ FULL/
 |   +-- 05-ms-attendance/      Java 21 and Spring Boot
 |   +-- 06-ms-biometric/       Python 3.12 and FastAPI
 |   +-- 07-ms-configuration/   TypeScript and Fastify
-|   +-- 08-ms-notification/    Go 1.22 and Gin
+|   +-- 08-ms-notification/    TypeScript and Fastify
 |   +-- 09-ms-quality/         TypeScript and Fastify
 |   +-- 99-api-gateway/        Kong OSS 3.6
 |
@@ -1281,7 +1280,6 @@ Each service requires its own runtime environment installed on the machine.
 | Maven        | 3.9         | The same four services                                 | maven.apache.org | mvn --version    |
 | Node.js      | 20          | Academic, configuration, quality, and both interfaces  | nodejs.org       | node --version   |
 | Python       | 3.12        | Biometrics                                             | python.org       | python --version |
-| Go           | 1.22        | Notifications                                          | go.dev           | go version       |
 
 ## Recommended Approach: Hybrid Mode
 

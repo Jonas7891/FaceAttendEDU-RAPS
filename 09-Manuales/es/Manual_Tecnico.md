@@ -33,10 +33,10 @@ Desarrollar e implementar una plataforma tecnológica que permita:
 **Dentro del alcance:**
 
 - Arquitectura **monolito modular políglota** con DDD (8 bounded contexts de dominio + API Gateway) y **arquitectura hexagonal** (puertos y adaptadores) dentro de cada servicio.
-- **9 microservicios** especializados en Java 21, TypeScript, Python 3.12 y Go 1.22, orquestados con Docker Compose.
+- **9 microservicios** especializados en Java 21, TypeScript (Node 24) y Python 3.12, orquestados con Docker Compose.
 - **API Gateway Kong 3.6** (modo DB-less) como único punto de entrada público, con rate-limiting vía Redis.
 - Persistencia: **PostgreSQL 17** multi-schema (estrategia database-per-service), **MongoDB 7** para embeddings biométricos, **Redis 7** para caché/límite de peticiones y **Kafka 3.8 (KRaft)** como event bus asíncrono.
-- Migraciones versionadas con **Liquibase 4.29** y golang-migrate; modelado documental en **DBML**.
+- Migraciones versionadas con **Liquibase 4.29**; modelado documental en **DBML**.
 - Clientes **Web** y **Mobile** construidos con React Native + Expo (la web exportada con `expo export --platform web` y servida por Nginx), organizados bajo patrón **MVVM**.
 - Segmentación de red en **3 zonas** (`edge`, `app`, `data`) como control de seguridad de infraestructura.
 - Módulo de calidad con reportes ISO/IEC 25010, ISTQB, IEEE 829 e ISO 29110, y catálogo de códigos de error/calidad.
@@ -63,15 +63,15 @@ FaceAttend EDU implementa un patrón **cliente-servidor en capas** con comunicac
 
 | Componente | Lenguaje | Versión exacta | Framework / Librería principal | Versión |
 |---|---|---|---|---|
-| 01-ms-identity | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.1 |
-| 02-ms-authorization | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.1 |
-| 04-ms-scheduling | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.1 |
-| 05-ms-attendance | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.1 |
-| 03-ms-academic | TypeScript | ^5.4.0 (runtime Node 20) | Fastify + Drizzle ORM | ^4.26.0 / ^0.31.0 |
-| 07-ms-configuration | TypeScript | ^5.4.0 (runtime Node 20) | Fastify + pg | ^4.26.0 / ^8.11.0 |
-| 09-ms-quality | TypeScript | ^5.4.0 (runtime Node 20) | Fastify | ^4.26.0 |
-| 06-ms-biometric | Python | ^3.12 | FastAPI + Uvicorn + OpenCV | ^0.110.0 / ^0.28.0 / ^4.9.0 |
-| 08-ms-notification | Go | 1.22 | Gin + pgx + Zap | v1.9.1 / v5.5.0 / v1.26.0 |
+| 01-ms-identity | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.2 |
+| 02-ms-authorization | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.2 |
+| 04-ms-scheduling | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.2 |
+| 05-ms-attendance | Java | 21 (Eclipse Temurin) | Spring Boot | 4.1.2 |
+| 03-ms-academic | TypeScript | ^5.4.0 (Node 24) | Fastify + pg | ^5.12.7 / ^8.11.0 |
+| 07-ms-configuration | TypeScript | ^5.4.0 (Node 24) | Fastify + pg | ^5.12.7 / ^8.11.0 |
+| 09-ms-quality | TypeScript | ^5.4.0 (Node 24) | Fastify + pg | ^5.12.7 / ^8.11.0 |
+| 06-ms-biometric | Python | ^3.12 | FastAPI + Uvicorn + OpenCV | ^0.162.0 / ^0.54.0 / ^4.9.0 |
+| 08-ms-notification | TypeScript | ^5.4.0 (Node 24) | Fastify + pg + nodemailer | ^5.12.7 / ^8.11.0 / ^10.2.1 |
 | Frontend Web | JavaScript/TypeScript | TS ~6.0.3 · React 19.2.3 | React Native + Expo (`react-native-web`) | RN 0.86.3 / Expo ^57.0.20 |
 | Frontend Mobile | JavaScript/TypeScript | TS ~5.9.2 · React 19.2.3 | React Native + Expo | RN 0.86.3 / Expo ~57.0.0 |
 
@@ -84,7 +84,6 @@ FaceAttend EDU implementa un patrón **cliente-servidor en capas** con comunicac
 | Redis | Caché y rate-limiting del gateway | 7-alpine |
 | Apache Kafka (KRaft, sin Zookeeper) | Event bus asíncrono entre contextos | 3.8.0 |
 | Liquibase | Migraciones de esquema (database-as-code) | 4.29.0 |
-| golang-migrate | Migraciones del servicio de notificaciones | v4.17.0 |
 | DBML | Modelado documental del esquema (`faceattend_edu_mr_v4.dbml`) | — |
 
 ### 5.3 Infraestructura, gateway y despliegue
@@ -94,18 +93,16 @@ FaceAttend EDU implementa un patrón **cliente-servidor en capas** con comunicac
 | Kong (OSS, DB-less) | API Gateway: routing, CORS, rate-limiting | 3.6 |
 | Docker Compose | Orquestación local con 3 redes segmentadas | stack declarativo propio |
 | Nginx | Servidor estático del bundle web (`expo export`) | 1.27-alpine |
-| Node.js | Runtime de build del frontend | 20-alpine |
+| Node.js | Runtime de los servicios TypeScript (`node:24-slim`) y build del frontend (`node:24-alpine`) | 24 |
 | Maven (wrapper mvnw) | Build de los servicios Java | 3.9 (imagen `maven:3.9-eclipse-temurin-21-alpine`) |
 | Poetry | Gestión de dependencias Python (biométrico) | python ^3.12 |
-| OpenTelemetry (Go) | Observabilidad en ms-notification | v1.24.0 |
 
 ### 5.4 Seguridad
 
 | Tecnología | Rol | Versión |
 |---|---|---|
-| Spring Security | Autenticación/autorización en servicios Java | incluida en Spring Boot 4.1.1 |
+| Spring Security | Autenticación/autorización en servicios Java | incluida en Spring Boot 4.1.2 |
 | Sesión opaca | `sessionId` UUID persistido en `identity.user_session`; sin librería JWT | propia (ms-identity) |
-| go-playground/validator | Validación de entrada en Go | v10.16.0 |
 
 ### 5.5 Control de versiones
 
@@ -138,7 +135,7 @@ flowchart TB
         ATT["05 Attendance<br/>Java/Spring"]
         BIO["06 Biometric<br/>Python/FastAPI"]
         CFG["07 Configuration<br/>TS/Fastify"]
-        NOT["08 Notification<br/>Go/Gin"]
+        NOT["08 Notification<br/>TS/Fastify"]
         QLT["09 Quality<br/>TS/Fastify"]
     end
 
@@ -171,7 +168,7 @@ flowchart TB
 │  │               el dominio                │  │
 │  │  ┌───────────────────────────────────┐  │  │
 │  │  │ infrastructure/adapters/          │  │  │  ← HTTP controllers,
-│  │  │  http · persistence · messaging   │  │  │    JPA/Drizzle/pgx/Mongo,
+│  │  │  http · persistence · messaging   │  │  │    JPA/pg/Mongo,
 │  │  └───────────────────────────────────┘  │  │    producers/consumers Kafka
 │  └─────────────────────────────────────────┘  │
 └───────────────────────────────────────────────┘
@@ -189,7 +186,7 @@ flowchart TB
 
 - Cada acción relevante publica un evento de dominio en el topic de su entidad (`attendance-events`, `identity-events`, `role-events`, etc.; véase la sección 11.8).
 - La publicación no bloquea el flujo transaccional: si el broker no responde, el fallo se registra como advertencia y la operación continúa.
-- **Todavía no hay consumidores.** `ms-notification` (Go) no declara dependencia de Kafka: genera sus alertas a partir de las peticiones HTTP que recibe y las envía por SMTP. El bus queda preparado para incorporar consumidores sin tocar a los productores.
+- **Consumidor actual:** `ms-notification` (TypeScript, `kafkajs`) consume `attendance.justification.events` (grupo `notification-service`) y `scheduling.class-session.closed` (grupo `notification-service-class-session`) para generar alertas, que envía por SMTP. Los demás topics no tienen consumidores todavía; se pueden incorporar sin tocar a los productores.
 
 **Reglas transversales:**
 
@@ -251,7 +248,7 @@ flowchart TB
 │   │   └── {domain/{entities,value_objects,ports}, infrastructure/{web,persistence},
 │   │        tests/{unit,support}}
 │   ├── 07-ms-configuration/            # TS/Fastify — parámetros del sistema
-│   ├── 08-ms-notification/             # Go/Gin — alertas + correo SMTP
+│   ├── 08-ms-notification/             # TypeScript/Fastify — alertas + correo SMTP
 │   │   └── {cmd/, internal/{domain/port, application/usecase,
 │   │            infrastructure/{http,postgres,config}}, migrations/}
 │   ├── 09-ms-quality/                  # TS/Fastify — métricas ISO/IEC 25010 y reportes
@@ -337,7 +334,7 @@ Un único servidor PostgreSQL aloja **ocho schemas**, uno por bounded context. E
 - **La clave primaria se elige por tabla, no es uniforme.** Se usa `uuid` donde el identificador viaja entre contextos o se expone públicamente (`person`, `app_user`, `user_session`, `attendance_report`, `biometric_update_case`); se usan columnas de identidad `int`, `smallint` o `bigint` en catálogos y en tablas de alto volumen; y las dos tablas puente del schema `authorization` usan **clave primaria compuesta**.
 - **Auditoría estándar en todas las tablas**, con siete columnas: `created_at`, `updated_at`, `deleted_at` (`TIMESTAMP`), `created_by`, `updated_by`, `deleted_by` (`UUID`) y `row_version` (`BIGINT`, por defecto 1) para *optimistic locking*. El borrado es siempre lógico (*soft-delete*).
 - **Unicidad acotada al dueño.** Los códigos son únicos dentro de su sede o su programa, no globalmente: `uq_program_code_school`, `uq_course_code_program`, `uq_environment_code_school`, `uq_period_name_school`. El correo de una persona es único solo entre las filas vivas (`where: deleted_at IS NULL`), de modo que un soft-delete libera la dirección para reutilizarla.
-- **Database-as-code:** el esquema se crea con changelogs versionados de Liquibase en `database/<NN>-ms-*-db/01-ddl`, organizados en `00-extensions`, `01-schemas`, `02-types`, `03-tables`, `05-materialized-views`, `06-functions`, `07-procedures`, `08-triggers` y `09-indexes`, cada uno con su rollback. El servicio de notificaciones usa además **golang-migrate v4.17.0**.
+- **Database-as-code:** el esquema se crea con changelogs versionados de Liquibase en `database/<NN>-ms-*-db/01-ddl`, organizados en `00-extensions`, `01-schemas`, `02-types`, `03-tables`, `05-materialized-views`, `06-functions`, `07-procedures`, `08-triggers` y `09-indexes`, cada uno con su rollback. Todos los servicios, incluido el de notificaciones, migran con Liquibase.
 
 ### 8.3 Diagramas entidad-relación
 
@@ -557,8 +554,8 @@ ADR-007 contempla, como mejora no implementada, que ms-identity emita un **JWT f
 | **Segmentación de red en 3 zonas** | `edge` (cliente ↔ Kong), `app` (Kong ↔ microservicios) y `data` (solo microservicios ↔ bases de datos). Un cliente no puede llegar a la red `data`. |
 | **Rate-limiting (Kong + Redis)** | Limita el número de peticiones por consumidor/IP, mitigando fuerza bruta y abuso de la API. |
 | **CORS restringido** | Kong solo acepta orígenes autorizados (el frontend web). |
-| **Validación de entrada** | Validación de DTOs en cada servicio (Bean Validation en Java, esquemas en Fastify, Pydantic en FastAPI, `validator` v10 en Go). |
-| **Consultas parametrizadas** | JPA, Drizzle y pgx usan *prepared statements*, previniendo inyección SQL. |
+| **Validación de entrada** | Validación de DTOs en cada servicio (Bean Validation en Java, esquemas en Fastify (zod), Pydantic en FastAPI). |
+| **Consultas parametrizadas** | JPA y el driver `pg` usan *prepared statements*, previniendo inyección SQL. |
 | **Aislamiento de datos por servicio** | Cada microservicio solo tiene credenciales sobre su propio schema; no puede leer tablas de otro contexto. |
 | **Soft-delete y auditoría** | Los registros no se borran físicamente (`deleted_at`) y todo cambio queda con autor y fecha (`created_by`, `updated_by`). |
 
@@ -622,7 +619,6 @@ docker compose exec -T mongo mongorestore --archive --gzip < mongo_AAAA-MM-DD.gz
 | **Node.js / TypeScript** | ms-academic, ms-configuration, ms-quality, frontends | `npm audit` · `npm outdated` | `npm audit fix` / `npm update` |
 | **Java / Maven** | ms-identity, ms-authorization, ms-scheduling, ms-attendance | `./mvnw versions:display-dependency-updates` | Actualizar versiones en `pom.xml` |
 | **Python / Poetry** | ms-biometric | `poetry show --outdated` | `poetry update` |
-| **Go** | ms-notification | `go list -u -m all` | `go get -u ./...` y `go mod tidy` |
 | **Imágenes Docker** | Todo el stack | `docker compose pull` | Reconstruir con `docker compose build --no-cache` |
 
 **Recomendaciones:**
@@ -636,7 +632,7 @@ docker compose exec -T mongo mongorestore --archive --gzip < mongo_AAAA-MM-DD.gz
 ### 10.3 Monitoreo y soporte
 
 - **Estado del sistema:** `docker compose ps` y los *healthchecks* de cada contenedor; **ms-quality** expone métricas de verificación.
-- **Logs:** `docker compose logs -f <servicio>` (el servicio de notificaciones usa Zap con observabilidad OpenTelemetry).
+- **Logs:** `docker compose logs -f <servicio>` (los servicios Node registran con pino, los Java con el logging de Spring Boot y el de Python con structlog).
 - **Tabla de errores:** el catálogo `back-end/quality/quality-codes.md` permite identificar rápidamente el origen de un fallo.
 - **Incidencias:** registrar los incidentes según el formato IEEE 829 (`back-end/*incidencias*.md`).
 - **Soporte técnico:** reportar los problemas mediante *issues* en el repositorio de GitHub, adjuntando logs, versión (**1.0.0**) y pasos para reproducir.
@@ -749,7 +745,7 @@ curl http://localhost:8080/api/v1/persons \
 | Spring Boot (scheduling, attendance, authorization) | `/actuator/health` |
 | Fastify (academic, configuration, quality) | `/health` |
 | FastAPI (biometric) | `/health` · documentación interactiva en `/docs` |
-| Gin (notification) | `/health` |
+| Fastify (notification) | `/health` |
 
 Los servicios Java publican además su documentación OpenAPI en `/swagger-ui.html`.
 
@@ -832,7 +828,7 @@ La publicación es **best-effort y no bloqueante**: el publicador captura cualqu
 
 | Nivel | Alcance | Herramientas por stack |
 |---|---|---|
-| **Unitaria** | Entidades, *value objects* y casos de uso, sin infraestructura. | JUnit 5 + Mockito (Java) · Vitest/Jest (TS) · pytest (Python, `tests/unit`) · `testing` + testify (Go) |
+| **Unitaria** | Entidades, *value objects* y casos de uso, sin infraestructura. | JUnit 5 + Mockito (Java) · Jest (TS) · pytest (Python, `tests/unit`) |
 | **Integración** | Adaptadores de persistencia y mensajería contra motores reales. | Spring Boot Test · Testcontainers ^10.4.0 (declarado en `03-ms-academic`, aún sin usar en pruebas) · pytest con fixtures (`tests/support`) |
 | **De componente / API** | Contrato de cada microservicio a través de su puerto HTTP. | Postman/Insomnia · `curl` · colecciones de verificación |
 | **De sistema (E2E)** | Flujo completo a través de Kong, con datos reales de la API. | `tools/seed-api-test-data` (carga por API, valida contratos) |
@@ -938,8 +934,8 @@ docker compose down -v               # DESTRUCTIVO: elimina también los datos
 
 | Elemento | Implementación |
 |---|---|
-| Logs estructurados | Zap en `ms-notification`; logging de Spring Boot, Fastify y FastAPI en los demás. |
-| Trazas | **OpenTelemetry (Go) v1.24.0** en `ms-notification`; es el único servicio instrumentado; extenderlo al resto es trabajo pendiente. |
+| Logs estructurados | pino en los servicios Node (Fastify), logging de Spring Boot en Java y structlog en FastAPI. |
+| Trazas | Ningún servicio está instrumentado con trazas distribuidas (OpenTelemetry); es trabajo pendiente. |
 | Métricas de salud | `/actuator/health`, `/health` y `/health/quality`; `docker compose ps` para el estado agregado. |
 | Correlación | Identificador de correlación propagado en la cabecera y registrado en el cuerpo del error (sección 11.3). |
 
@@ -959,7 +955,7 @@ Todo servicio nuevo respeta la **arquitectura hexagonal** descrita en la secció
 - `application/` — casos de uso que orquestan el dominio.
 - `infrastructure/` o `adapter/` — adaptadores HTTP, de persistencia y de mensajería.
 
-**Regla de dependencia:** las capas externas dependen de las internas, nunca al contrario. El dominio no importa Spring, Fastify, FastAPI ni Gin.
+**Regla de dependencia:** las capas externas dependen de las internas, nunca al contrario. El dominio no importa Spring, Fastify ni FastAPI.
 
 ### 14.3 Convenciones de nombres
 
@@ -993,7 +989,7 @@ Ningún cambio de esquema se aplica a mano:
 1. Se escribe el script en la carpeta correspondiente (`01-ddl`, `02-dml`, `03-dcl`, `04-tcl`).
 2. Se escribe **obligatoriamente** su *rollback* en `05-rollbacks`.
 3. Se registra el *changeset* en el `changelog.xml` del contexto.
-4. Liquibase lo aplica en el siguiente arranque; `golang-migrate` cumple el mismo papel en `ms-notification`.
+4. Liquibase lo aplica en el siguiente arranque, también para `ms-notification`.
 5. El modelo documental `database/faceattend_edu_mr_v4.dbml` se actualiza para reflejar el cambio.
 
 ### 14.6 Criterios para integrar un cambio
