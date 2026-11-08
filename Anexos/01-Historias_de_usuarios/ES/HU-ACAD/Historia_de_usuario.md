@@ -75,7 +75,7 @@
 | Story Points | 3 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/Historia_de_usuario.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles |
 
 ---
 
@@ -159,7 +159,7 @@
 | Story Points | 3 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/user-stories.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-ACAD-001](#hu-acad-001-registrar-ambientessalones) recomendado para contexto de ambiente |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-003](../HU-IAM/Historia_de_usuario.md#hu-iam-003-asignación-de-permisos-basada-en-roles): Asignación de permisos basada en roles; [HU-ACAD-001](#hu-acad-001-registrar-ambientessalones) recomendado para contexto de ambiente |
 
 ---
 
@@ -248,7 +248,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/user-stories.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ACAD-002](#hu-acad-002-registrar-cohortescursos): Registrar cohortes/cursos |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-IAM-002](../HU-IAM/Historia_de_usuario.md#hu-iam-002-registro-de-usuario-con-asignación-de-rol): Registro de usuario con asignación de rol; [HU-ACAD-002](#hu-acad-002-registrar-cohortescursos): Registrar cohortes/cursos |
 
 ---
 
@@ -334,7 +334,7 @@
 | Story Points | 5 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-ACAD-002](#hu-acad-002-registrar-cohortescursos): Registrar cohortes/cursos; [HU-ACAD-003](#hu-acad-003-asignar-instructores-responsables): Asignar instructores responsables |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-ACAD-002](#hu-acad-002-registrar-cohortescursos): Registrar cohortes/cursos; [HU-ACAD-003](#hu-acad-003-asignar-instructores-responsables): Asignar instructores responsables |
 
 ---
 
@@ -377,7 +377,7 @@
   - El usuario responsable sea válido.
   - El bloque de tiempo no se solape con otro bloque ya asignado.
   - La cohorte tenga disponibilidad para el bloque de tiempo asignada.
-- Esta historia es esencial para la validación de la asistencia porque la [HU-ATT-001](../HU-ATT/user-stories.md#hu-att-001-registro-de-asistencia-facial) depende de saber si los tiempos de entrada y salida son apropiados para el bloque asignada.
+- Esta historia es esencial para la validación de la asistencia porque la [HU-ATT-001](../HU-ATT/Historia_de_usuario.md#hu-att-001-registro-de-asistencia-facial) depende de saber si los tiempos de entrada y salida son apropiados para el bloque asignada.
 - La relación horario/jornada será utilizada por el registro de asistencia, detección de retardos, detección de inasistencias, historial, reportes y tableros.
 - El sistema debe evitar horarios duplicados o conflictivos para la misma cohorte, usuario responsable, ambiente o período de tiempo.
 - El equipo debe definir si la validación de solapamiento aplica solo a la misma cohorte, al mismo instructor responsable, al mismo ambiente, o a una combinación de estos.
@@ -432,4 +432,4 @@
 | Story Points | 8 |
 | Prioridad | Alta |
 | Sprint objetivo | Sprint 1 / MVP |
-| Dependencias | [HU-IAM-001](../HU-IAM/user-stories.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-ACAD-003](#hu-acad-003-asignar-instructores-responsables): Asignar instructores responsables; [HU-ACAD-004](#hu-acad-004-asignar-cohortes-a-usuarios-responsables): Asignar cohortes a usuarios responsables |
+| Dependencias | [HU-IAM-001](../HU-IAM/Historia_de_usuario.md#hu-iam-001-inicio-de-sesión-de-usuario): Inicio de sesión de usuario; [HU-ACAD-003](#hu-acad-003-asignar-instructores-responsables): Asignar instructores responsables; [HU-ACAD-004](#hu-acad-004-asignar-cohortes-a-usuarios-responsables): Asignar cohortes a usuarios responsables |

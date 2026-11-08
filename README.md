@@ -71,7 +71,7 @@ No contiene código fuente. El código y la documentación de trabajo del equipo
 
 ### [10-Articulo del proyecto](10-Articulo%20del%20proyecto/es/)
 
-- [Articulo_FaceAttendEDU.md](10-Articulo%20del%20proyecto/es/Articulo_FaceAttendEDU.md)
+- [ARTICULO.md](10-Articulo%20del%20proyecto/es/ARTICULO.md)
 
 ### [Anexos](Anexos/)
 
