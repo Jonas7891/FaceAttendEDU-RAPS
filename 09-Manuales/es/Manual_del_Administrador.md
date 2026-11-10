@@ -44,143 +44,143 @@ Toda modificación a este manual debe quedar registrada antes de volver a entreg
 
 # **Tabla de Contenido**
 
-[**Control de Versiones**](#_heading=) **2**
+[**Control de Versiones**](#control-de-versiones) **2**
 
-> [Regla de Actualización](#_heading=) 2
+> [Regla de Actualización](#regla-de-actualización) 2
 
-[**Tabla de Contenido**](#_heading=) **3**
+[**Tabla de Contenido**](#tabla-de-contenido) **3**
 
-[**Introducción**](#_heading=) **6**
+[**Introducción**](#introducción) **6**
 
-[**Objetivo**](#_heading=) **8**
+[**Objetivo**](#objetivo) **8**
 
-> [Objetivos Específicos](#_heading=) 8
+> [Objetivos Específicos](#objetivos-específicos) 8
 
-[**Alcance**](#_heading=) **9**
+[**Alcance**](#alcance) **9**
 
-> [Contenido Cubierto por el Manual](#_heading=) 9
+> [Contenido Cubierto por el Manual](#contenido-cubierto-por-el-manual) 9
 >
-> [Contenido No Cubierto por el Manual](#_heading=) 9
+> [Contenido No Cubierto por el Manual](#contenido-no-cubierto-por-el-manual) 9
 
-[**Perfil del Administrador**](#_heading=) **11**
+[**Perfil del Administrador**](#perfil-del-administrador) **11**
 
-> [Responsabilidades del Administrador](#_heading=) 11
+> [Responsabilidades del Administrador](#responsabilidades-del-administrador) 11
 >
-> [Responsabilidades Diarias](#_heading=) 11
+> [Responsabilidades Diarias](#responsabilidades-diarias) 11
 >
-> [Responsabilidades Semanales](#_heading=) 11
+> [Responsabilidades Semanales](#responsabilidades-semanales) 11
 >
-> [Responsabilidades Mensuales](#_heading=) 12
+> [Responsabilidades Mensuales](#responsabilidades-mensuales) 12
 >
-> [Responsabilidades por Evento](#_heading=) 12
+> [Responsabilidades por Evento](#responsabilidades-por-evento) 12
 >
-> [Límites del Rol](#_heading=) 12
+> [Límites del Rol](#límites-del-rol) 12
 
-[**Acceso al Panel de Administración**](#_heading=) **13**
+[**Acceso al Panel de Administración**](#acceso-al-panel-de-administración) **13**
 
-> [Procedimiento de Ingreso](#_heading=) 13
+> [Procedimiento de Ingreso](#procedimiento-de-ingreso) 13
 
-[**Gestión de Usuarios**](#_heading=) **15**
+[**Gestión de Usuarios**](#gestión-de-usuarios) **15**
 
-> [Crear un Usuario](#_heading=) 15
+> [Crear un Usuario](#crear-un-usuario) 15
 >
-> [Editar un Usuario](#_heading=) 16
+> [Editar un Usuario](#editar-un-usuario) 16
 >
-> [Activar o Desactivar un Usuario](#_heading=) 16
+> [Activar o Desactivar un Usuario](#activar-o-desactivar-un-usuario) 16
 >
-> [Restablecer la Contraseña de un Usuario](#_heading=) 17
+> [Restablecer la Contraseña de un Usuario](#restablecer-la-contraseña-de-un-usuario) 17
 >
-> [Consultar y Filtrar Usuarios](#_heading=) 17
+> [Consultar y Filtrar Usuarios](#consultar-y-filtrar-usuarios) 17
 
-[**Gestión de Roles y Permisos**](#_heading=) **19**
+[**Gestión de Roles y Permisos**](#gestión-de-roles-y-permisos) **19**
 
-> [Asignar o Cambiar un Rol](#_heading=) 19
+> [Asignar o Cambiar un Rol](#asignar-o-cambiar-un-rol) 19
 >
-> [Matriz de Permisos por Operación](#_heading=) 20
+> [Matriz de Permisos por Operación](#matriz-de-permisos-por-operación) 20
 
-[**Configuración del Sistema**](#_heading=) **21**
+[**Configuración del Sistema**](#configuración-del-sistema) **21**
 
-> [Procedimiento para Modificar un Parámetro](#_heading=) 21
+> [Procedimiento para Modificar un Parámetro](#procedimiento-para-modificar-un-parámetro) 21
 >
-> [Parámetros Externos al Panel](#_heading=) 22
+> [Parámetros Externos al Panel](#parámetros-externos-al-panel) 22
 
-[**Gestión de la Información Principal**](#_heading=) **23**
+[**Gestión de la Información Principal**](#gestión-de-la-información-principal) **23**
 
-> [Administrar Fichas](#_heading=) 23
+> [Administrar Fichas](#administrar-fichas) 23
 >
-> [Crear una Ficha](#_heading=) 23
+> [Crear una Ficha](#crear-una-ficha) 23
 >
-> [Reglas de Administración de Fichas](#_heading=) 23
+> [Reglas de Administración de Fichas](#reglas-de-administración-de-fichas) 23
 >
-> [Administrar Cursos](#_heading=) 24
+> [Administrar Cursos](#administrar-cursos) 24
 >
-> [Administrar Horarios](#_heading=) 24
+> [Administrar Horarios](#administrar-horarios) 24
 >
-> [Gestión de Novedades de Asistencia](#_heading=) 25
+> [Gestión de Novedades de Asistencia](#gestión-de-novedades-de-asistencia) 25
 >
-> [Módulos Pendientes de Documentar](#_heading=) 26
+> [Módulos Pendientes de Documentar](#módulos-pendientes-de-documentar) 26
 
-[**Reportes Administrativos**](#_heading=) **27**
+[**Reportes Administrativos**](#reportes-administrativos) **27**
 
-> [Generar y Exportar un Reporte](#_heading=) 27
+> [Generar y Exportar un Reporte](#generar-y-exportar-un-reporte) 27
 >
-> [Métricas de Seguimiento](#_heading=) 28
+> [Métricas de Seguimiento](#métricas-de-seguimiento) 28
 >
-> [Buenas Prácticas en el Manejo de Reportes](#_heading=) 29
+> [Buenas Prácticas en el Manejo de Reportes](#buenas-prácticas-en-el-manejo-de-reportes) 29
 
-[**Copias de Seguridad**](#_heading=) **30**
+[**Copias de Seguridad**](#copias-de-seguridad) **30**
 
-> [Procedimiento desde el Panel](#_heading=) 30
+> [Procedimiento desde el Panel](#procedimiento-desde-el-panel) 30
 >
-> [Procedimiento Alterno por Línea de Comandos](#_heading=) 31
+> [Procedimiento Alterno por Línea de Comandos](#procedimiento-alterno-por-línea-de-comandos) 31
 >
-> [Almacenamiento de los Respaldos](#_heading=) 32
+> [Almacenamiento de los Respaldos](#almacenamiento-de-los-respaldos) 32
 
-[**Restauración de Información**](#_heading=) **33**
+[**Restauración de Información**](#restauración-de-información) **33**
 
-> [Procedimiento de Restauración](#_heading=) 33
+> [Procedimiento de Restauración](#procedimiento-de-restauración) 33
 >
-> [Verificación Posterior a la Restauración](#_heading=) 34
+> [Verificación Posterior a la Restauración](#verificación-posterior-a-la-restauración) 34
 >
-> [Procedimiento Alterno por Línea de Comandos](#_heading=) 34
+> [Procedimiento Alterno por Línea de Comandos](#procedimiento-alterno-por-línea-de-comandos-1) 34
 
-[**Auditoría e Historial de Acciones**](#_heading=) **36**
+[**Auditoría e Historial de Acciones**](#auditoría-e-historial-de-acciones) **36**
 
-> [Consultar el Historial](#_heading=) 36
+> [Consultar el Historial](#consultar-el-historial) 36
 >
-> [Revisión Periódica](#_heading=) 37
+> [Revisión Periódica](#revisión-periódica) 37
 >
-> [Acciones No Registradas por el Sistema](#_heading=) 37
+> [Acciones No Registradas por el Sistema](#acciones-no-registradas-por-el-sistema) 37
 
-[**Recomendaciones de Seguridad y Procedimientos de Apoyo**](#_heading=) **38**
+[**Recomendaciones de Seguridad y Procedimientos de Apoyo**](#recomendaciones-de-seguridad-y-procedimientos-de-apoyo) **38**
 
-> [Seguridad de las Cuentas](#_heading=) 38
+> [Seguridad de las Cuentas](#seguridad-de-las-cuentas) 38
 >
-> [Seguridad de la Información](#_heading=) 38
+> [Seguridad de la Información](#seguridad-de-la-información) 38
 >
-> [Comunicación con los Usuarios](#_heading=) 38
+> [Comunicación con los Usuarios](#comunicación-con-los-usuarios) 38
 >
-> [Gestión de Incidentes y Escalamiento](#_heading=) 39
+> [Gestión de Incidentes y Escalamiento](#gestión-de-incidentes-y-escalamiento) 39
 >
-> [Gestión de Cambios](#_heading=) 40
+> [Gestión de Cambios](#gestión-de-cambios) 40
 >
-> [Riesgos Conocidos y Plan de Contingencia](#_heading=) 41
+> [Riesgos Conocidos y Plan de Contingencia](#riesgos-conocidos-y-plan-de-contingencia) 41
 
-[**Glosario**](#_heading=) **42**
+[**Glosario**](#glosario) **42**
 
-[**Referencias**](#_heading=) **43**
+[**Referencias**](#referencias) **43**
 
-[**Apéndice A**](#_heading=) **44**
+[**Apéndice A**](#apéndice-a) **44**
 
-[**Apéndice B**](#_heading=) **45**
+[**Apéndice B**](#apéndice-b) **45**
 
-[**Apéndice C**](#_heading=) **46**
+[**Apéndice C**](#apéndice-c) **46**
 
-[**Apéndice D**](#_heading=) **47**
+[**Apéndice D**](#apéndice-d) **47**
 
-[**Apéndice E**](#_heading=) **48**
+[**Apéndice E**](#apéndice-e) **48**
 
-[**Apéndice F**](#_heading=) **49**
+[**Apéndice F**](#apéndice-f) **49**
 
 # **Introducción**
 

@@ -47,201 +47,201 @@ El manual se revisa obligatoriamente después de cada despliegue que modifique l
 
 # Tabla de Contenido
 
-[**Control de Versiones**](#_heading=) **2**
+[**Control de Versiones**](#control-de-versiones) **2**
 
-> [Regla de Actualización](#_heading=) 2
+> [Regla de Actualización](#regla-de-actualización) 2
 
-[**Tabla de Contenido**](#_heading=) **3**
+[**Tabla de Contenido**](#tabla-de-contenido) **3**
 
-[**Introducción**](#_heading=) **6**
+[**Introducción**](#introducción) **6**
 
-[**Objetivo**](#_heading=) **8**
+[**Objetivo**](#objetivo) **8**
 
-> [Objetivos Específicos](#_heading=) 8
+> [Objetivos Específicos](#objetivos-específicos) 8
 
-[**Alcance**](#_heading=) **9**
+[**Alcance**](#alcance) **9**
 
-> [Contenido Cubierto por el Manual](#_heading=) 9
+> [Contenido Cubierto por el Manual](#contenido-cubierto-por-el-manual) 9
 >
-> [Contenido No Cubierto por el Manual](#_heading=) 9
+> [Contenido No Cubierto por el Manual](#contenido-no-cubierto-por-el-manual) 9
 
-[**Perfil del Instalador**](#_heading=) **10**
+[**Perfil del Instalador**](#perfil-del-instalador) **10**
 
-> [Conocimientos Requeridos](#_heading=) 10
+> [Conocimientos Requeridos](#conocimientos-requeridos) 10
 >
-> [Responsabilidades del Instalador](#_heading=) 10
+> [Responsabilidades del Instalador](#responsabilidades-del-instalador) 10
 >
-> [Límites del Rol](#_heading=) 11
+> [Límites del Rol](#límites-del-rol) 11
 
-[**Descripción General del Sistema**](#_heading=) **12**
+[**Descripción General del Sistema**](#descripción-general-del-sistema) **12**
 
-> [Naturaleza de la Instalación](#_heading=) 12
+> [Naturaleza de la Instalación](#naturaleza-de-la-instalación) 12
 >
-> [Componentes del Sistema](#_heading=) 13
+> [Componentes del Sistema](#componentes-del-sistema) 13
 >
-> [Organización en Redes](#_heading=) 14
+> [Organización en Redes](#organización-en-redes) 14
 
-[**Requisitos Previos**](#_heading=) **15**
+[**Requisitos Previos**](#requisitos-previos) **15**
 
-> [Requisitos de Hardware](#_heading=) 15
+> [Requisitos de Hardware](#requisitos-de-hardware) 15
 >
-> [Sistema Operativo](#_heading=) 16
+> [Sistema Operativo](#sistema-operativo) 16
 >
-> [Software Requerido](#_heading=) 16
+> [Software Requerido](#software-requerido) 16
 >
-> [Herramientas Opcionales](#_heading=) 17
+> [Herramientas Opcionales](#herramientas-opcionales) 17
 >
-> [Disponibilidad de Puertos](#_heading=) 17
+> [Disponibilidad de Puertos](#disponibilidad-de-puertos) 17
 >
-> [Comprobación de la Disponibilidad de un Puerto](#_heading=) 18
+> [Comprobación de la Disponibilidad de un Puerto](#comprobación-de-la-disponibilidad-de-un-puerto) 18
 >
-> [Conectividad de Red](#_heading=) 18
+> [Conectividad de Red](#conectividad-de-red) 18
 
-[**Descarga e Instalación**](#_heading=) **19**
+[**Descarga e Instalación**](#descarga-e-instalación) **19**
 
-> [Instalación de Docker](#_heading=) 19
+> [Instalación de Docker](#instalación-de-docker) 19
 >
-> [Procedimiento en Windows](#_heading=) 19
+> [Procedimiento en Windows](#procedimiento-en-windows) 19
 >
-> [Procedimiento en Ubuntu y Debian](#_heading=) 19
+> [Procedimiento en Ubuntu y Debian](#procedimiento-en-ubuntu-y-debian) 19
 >
-> [Procedimiento en macOS](#_heading=) 19
+> [Procedimiento en macOS](#procedimiento-en-macos) 19
 >
-> [Verificación de la Instalación de Docker](#_heading=) 20
+> [Verificación de la Instalación de Docker](#verificación-de-la-instalación-de-docker) 20
 >
-> [Instalación de Git](#_heading=) 20
+> [Instalación de Git](#instalación-de-git) 20
 >
-> [Obtención del Proyecto](#_heading=) 20
+> [Obtención del Proyecto](#obtención-del-proyecto) 20
 >
-> [Primera Vía: Clonación del Repositorio](#_heading=) 20
+> [Primera Vía: Clonación del Repositorio](#primera-vía-clonación-del-repositorio) 20
 >
-> [Segunda Vía: Archivo Comprimido](#_heading=) 21
+> [Segunda Vía: Archivo Comprimido](#segunda-vía-archivo-comprimido) 21
 >
-> [Verificación de la Estructura del Proyecto](#_heading=) 21
+> [Verificación de la Estructura del Proyecto](#verificación-de-la-estructura-del-proyecto) 21
 
-[**Configuración Inicial**](#_heading=) **23**
+[**Configuración Inicial**](#configuración-inicial) **23**
 
-> [Creación del Archivo de Configuración](#_heading=) 23
+> [Creación del Archivo de Configuración](#creación-del-archivo-de-configuración) 23
 >
-> [Variables de Entorno](#_heading=) 23
+> [Variables de Entorno](#variables-de-entorno) 23
 >
-> [Casos de Personalización](#_heading=) 25
+> [Casos de Personalización](#casos-de-personalización) 25
 >
-> [Primer Caso: El Puerto de la Base de Datos Está Ocupado](#_heading=) 25
+> [Primer Caso: El Puerto de la Base de Datos Está Ocupado](#primer-caso-el-puerto-de-la-base-de-datos-está-ocupado) 25
 >
-> [Segundo Caso: Prueba desde un Dispositivo Móvil](#_heading=) 26
+> [Segundo Caso: Prueba desde un Dispositivo Móvil](#segundo-caso-prueba-desde-un-dispositivo-móvil) 26
 >
-> [Tercer Caso: El Puerto de la Puerta de Enlace Está Ocupado](#_heading=) 26
+> [Tercer Caso: El Puerto de la Puerta de Enlace Está Ocupado](#tercer-caso-el-puerto-de-la-puerta-de-enlace-está-ocupado) 26
 >
-> [Canal de Correo Electrónico](#_heading=) 26
+> [Canal de Correo Electrónico](#canal-de-correo-electrónico) 26
 
-[**Puesta en Marcha**](#_heading=) **28**
+[**Puesta en Marcha**](#puesta-en-marcha) **28**
 
-> [Despliegue del Sistema](#_heading=) 28
+> [Despliegue del Sistema](#despliegue-del-sistema) 28
 >
-> [Orden de Arranque](#_heading=) 29
+> [Orden de Arranque](#orden-de-arranque) 29
 >
-> [Base de Datos y Migraciones](#_heading=) 29
+> [Base de Datos y Migraciones](#base-de-datos-y-migraciones) 29
 >
-> [Creación de los Esquemas](#_heading=) 29
+> [Creación de los Esquemas](#creación-de-los-esquemas) 29
 >
-> [Creación de Tablas y Datos de Catálogo](#_heading=) 30
+> [Creación de Tablas y Datos de Catálogo](#creación-de-tablas-y-datos-de-catálogo) 30
 >
-> [Datos Iniciales del Sistema](#_heading=) 30
+> [Datos Iniciales del Sistema](#datos-iniciales-del-sistema) 30
 >
-> [Carga de Datos de Prueba](#_heading=) 31
+> [Carga de Datos de Prueba](#carga-de-datos-de-prueba) 31
 
-[**Verificación de la Instalación**](#_heading=) **33**
+[**Verificación de la Instalación**](#verificación-de-la-instalación) **33**
 
-> [Lista de Comprobación](#_heading=) 33
+> [Lista de Comprobación](#lista-de-comprobación) 33
 >
-> [Primera Prueba: Estado de los Contenedores](#_heading=) 33
+> [Primera Prueba: Estado de los Contenedores](#primera-prueba-estado-de-los-contenedores) 33
 >
-> [Segunda Prueba: Salud de los Servicios](#_heading=) 34
+> [Segunda Prueba: Salud de los Servicios](#segunda-prueba-salud-de-los-servicios) 34
 >
-> [Tercera Prueba: Autenticación](#_heading=) 34
+> [Tercera Prueba: Autenticación](#tercera-prueba-autenticación) 34
 >
-> [Cuarta Prueba: Interfaz Web](#_heading=) 35
+> [Cuarta Prueba: Interfaz Web](#cuarta-prueba-interfaz-web) 35
 >
-> [Quinta Prueba: Aislamiento de Red](#_heading=) 36
+> [Quinta Prueba: Aislamiento de Red](#quinta-prueba-aislamiento-de-red) 36
 
-[**Instalación de la Aplicación Móvil**](#_heading=) **37**
+[**Instalación de la Aplicación Móvil**](#instalación-de-la-aplicación-móvil) **37**
 
-> [Requisitos Adicionales](#_heading=) 37
+> [Requisitos Adicionales](#requisitos-adicionales) 37
 >
-> [Procedimiento de Instalación](#_heading=) 37
+> [Procedimiento de Instalación](#procedimiento-de-instalación) 37
 
-[**Operación Cotidiana**](#_heading=) **39**
+[**Operación Cotidiana**](#operación-cotidiana) **39**
 
-> [Comandos de Uso Frecuente](#_heading=) 39
+> [Comandos de Uso Frecuente](#comandos-de-uso-frecuente) 39
 >
-> [Detención y Reinicio del Sistema](#_heading=) 39
+> [Detención y Reinicio del Sistema](#detención-y-reinicio-del-sistema) 39
 >
-> [Actualización a una Versión Nueva](#_heading=) 39
+> [Actualización a una Versión Nueva](#actualización-a-una-versión-nueva) 39
 >
-> [Desinstalación](#_heading=) 40
+> [Desinstalación](#desinstalación) 40
 
-[**Solución de Problemas**](#_heading=) **41**
+[**Solución de Problemas**](#solución-de-problemas) **41**
 
-> [Diagnóstico Inicial](#_heading=) 41
+> [Diagnóstico Inicial](#diagnóstico-inicial) 41
 >
-> [Problemas Durante la Instalación](#_heading=) 41
+> [Problemas Durante la Instalación](#problemas-durante-la-instalación) 41
 >
-> [Problemas al Desplegar el Sistema](#_heading=) 41
+> [Problemas al Desplegar el Sistema](#problemas-al-desplegar-el-sistema) 41
 >
-> [La Dirección del Puerto ya Está Asignada](#_heading=) 41
+> [La Dirección del Puerto ya Está Asignada](#la-dirección-del-puerto-ya-está-asignada) 41
 >
-> [Un Servicio Declara una Dependencia No Definida](#_heading=) 42
+> [Un Servicio Declara una Dependencia No Definida](#un-servicio-declara-una-dependencia-no-definida) 42
 >
-> [Un Contenedor Permanece en Reinicio Indefinido](#_heading=) 42
+> [Un Contenedor Permanece en Reinicio Indefinido](#un-contenedor-permanece-en-reinicio-indefinido) 42
 >
-> [La Interfaz Web Figura en Estado de Salud Deficiente](#_heading=) 42
+> [La Interfaz Web Figura en Estado de Salud Deficiente](#la-interfaz-web-figura-en-estado-de-salud-deficiente) 42
 >
-> [Problemas con las Migraciones](#_heading=) 43
+> [Problemas con las Migraciones](#problemas-con-las-migraciones) 43
 >
-> [Una Migración Concluye con Error](#_heading=) 43
+> [Una Migración Concluye con Error](#una-migración-concluye-con-error) 43
 >
-> [El Sistema Informa que una Tabla o un Esquema No Existe](#_heading=) 43
+> [El Sistema Informa que una Tabla o un Esquema No Existe](#el-sistema-informa-que-una-tabla-o-un-esquema-no-existe) 43
 >
-> [Problemas de Conexión y Uso](#_heading=) 43
+> [Problemas de Conexión y Uso](#problemas-de-conexión-y-uso) 43
 >
-> [Problemas de Rendimiento](#_heading=) 44
+> [Problemas de Rendimiento](#problemas-de-rendimiento) 44
 >
-> [Procedimiento de Reinicio Limpio](#_heading=) 44
+> [Procedimiento de Reinicio Limpio](#procedimiento-de-reinicio-limpio) 44
 >
-> [Escalamiento de Incidencias](#_heading=) 45
+> [Escalamiento de Incidencias](#escalamiento-de-incidencias) 45
 
-[**Instalación sin Contenedores**](#_heading=) **46**
+[**Instalación sin Contenedores**](#instalación-sin-contenedores) **46**
 
-> [Herramientas Requeridas por Lenguaje de Programación](#_heading=) 46
+> [Herramientas Requeridas por Lenguaje de Programación](#herramientas-requeridas-por-lenguaje-de-programación) 46
 >
-> [Enfoque Recomendado: Modo Híbrido](#_heading=) 46
+> [Enfoque Recomendado: Modo Híbrido](#enfoque-recomendado-modo-híbrido) 46
 >
-> [Interfaz Web en Modo de Desarrollo](#_heading=) 47
+> [Interfaz Web en Modo de Desarrollo](#interfaz-web-en-modo-de-desarrollo) 47
 
-[**Recomendaciones de Seguridad**](#_heading=) **48**
+[**Recomendaciones de Seguridad**](#recomendaciones-de-seguridad) **48**
 
-> [Credenciales](#_heading=) 48
+> [Credenciales](#credenciales) 48
 >
-> [Exposición en Red](#_heading=) 48
+> [Exposición en Red](#exposición-en-red) 48
 >
-> [Conservación de la Información](#_heading=) 49
+> [Conservación de la Información](#conservación-de-la-información) 49
 >
-> [Entrega al Administrador del Sistema](#_heading=) 49
+> [Entrega al Administrador del Sistema](#entrega-al-administrador-del-sistema) 49
 
-[**Glosario**](#_heading=) **50**
+[**Glosario**](#glosario) **50**
 
-[**Referencias**](#_heading=) **52**
+[**Referencias**](#referencias) **52**
 
-[**Apéndice A**](#_heading=) **54**
+[**Apéndice A**](#apéndice-a) **54**
 
-[**Apéndice B**](#_heading=) **55**
+[**Apéndice B**](#apéndice-b) **55**
 
-[**Apéndice C**](#_heading=) **56**
+[**Apéndice C**](#apéndice-c) **56**
 
-[**Apéndice D**](#_heading=) **57**
+[**Apéndice D**](#apéndice-d) **57**
 
-[**Apéndice E**](#_heading=) **58**
+[**Apéndice E**](#apéndice-e) **58**
 
 # Introducción
 
